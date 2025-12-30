@@ -15,19 +15,21 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build and Verify (iOS)
+      - name: Build and Archive (iOS Simulator)
         run: |
-          xcodebuild build \
+          xcodebuild archive \
             -scheme Pulse \
             -destination "generic/platform=iOS Simulator" \
             -sdk iphonesimulator \
-            -derivedDataPath ./build \
+            -archivePath build/Pulse.xcarchive \
+            SKIP_INSTALL=NO \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Package Artifact (app.zip)
         run: |
           mkdir -p Payload
-          cp -r build/Build/Products/Debug-iphonesimulator/Pulse_Pulse.bundle/../Pulse.app Payload/ || cp -r build/Build/Products/Debug-iphonesimulator/Pulse.app Payload/
+          # Locate .app inside the xcarchive structure
+          cp -r build/Pulse.xcarchive/Products/Applications/Pulse.app Payload/
           zip -r app.zip Payload
           
       - name: Upload app.zip
@@ -35,3 +37,4 @@ jobs:
         with:
           name: app-simulator
           path: app.zip
+          retention-days: 7
