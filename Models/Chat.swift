@@ -1,6 +1,6 @@
 import Foundation
 
-struct Chat: Identifiable {
+struct Chat: Identifiable, Equatable {
     let id: UUID
     let name: String
     let messagePreview: String

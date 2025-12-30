@@ -44,6 +44,10 @@ final class GlassButtonComponent: Node {
         // For simplicity in Node architecture, we often use touchesBegan/Ended if strictly UIView based
     }
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func setup() {
         blurView.layer.cornerRadius = 12
         blurView.layer.masksToBounds = true

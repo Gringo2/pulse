@@ -20,6 +20,10 @@ final class SwitchComponent: Node {
     // Physics
     private lazy var spring = SpringAnimator(damping: 0.7, response: 0.4)
     
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func setup() {
         // Track
         trackView.backgroundColor = .systemGray5
