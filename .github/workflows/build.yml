@@ -1,23 +1,58 @@
-name: Pulse Continuous Integration
+name: Pulse CI
 
 on:
   push:
-    branches: [ "**" ]
-  pull_request:
-    branches: [ "**" ]
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  verify:
-    name: Verify Compilation
+  build:
     runs-on: macos-latest
+    timeout-minutes: 60
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set active Xcode path
+        run: |
+          XCODE_VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["xcode"]);')
+          
+          if [ -d "/Applications/Xcode_$XCODE_VERSION.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_$XCODE_VERSION.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_${XCODE_VERSION}_beta.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_${XCODE_VERSION}_beta.app/Contents/Developer
+          elif [ -d "/Applications/Xcode_${XCODE_VERSION%%.*}.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_${XCODE_VERSION%%.*}.app/Contents/Developer
+          else
+            echo "ERROR: Xcode $XCODE_VERSION not found"
+            ls -la /Applications/ | grep Xcode
+            exit 1
+          fi
+          
+          xcodebuild -version
+
+      - name: Free up disk space
+        run: |
+          echo "=== Disk space BEFORE cleanup ==="
+          df -h
+          sudo rm -rf /Applications/Xcode_15*.app || true
+          sudo rm -rf /Applications/Xcode_14*.app || true
+          sudo rm -rf ~/Library/Android || true
+          sudo rm -rf /usr/local/Homebrew/Library/Taps || true
+          echo "=== Disk space AFTER cleanup ==="
+          df -h
 
       - name: Build (iOS Simulator)
         id: build
         run: |
+          export APP_VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["app"]);')
+          export BUILD_NUMBER=${{ github.run_number }}
+          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
+          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
+
           xcodebuild build \
             -scheme Pulse \
             -destination "generic/platform=iOS Simulator" \
@@ -25,34 +60,23 @@ jobs:
             -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO
           
-          # Export build settings to find the executable path
+          # Export build settings
           xcodebuild -scheme Pulse -destination "generic/platform=iOS Simulator" -sdk iphonesimulator -derivedDataPath ./build -showBuildSettings > settings.txt
-          echo "EXECUTABLE_PATH=$(grep -m 1 " EXECUTABLE_PATH = " settings.txt | cut -d'=' -f2 | xargs)" >> $GITHUB_ENV
           echo "CODESIGNING_FOLDER_PATH=$(grep -m 1 " CODESIGNING_FOLDER_PATH = " settings.txt | cut -d'=' -f2 | xargs)" >> $GITHUB_ENV
 
       - name: Package Artifact (Pulse.app.zip)
         run: |
           mkdir -p Payload
-          
-          # Strategy 1: Check if xcodebuild produced a .app folder already (unlikely for raw SPM)
           if [ -d "$CODESIGNING_FOLDER_PATH" ]; then
             echo "Found .app folder at $CODESIGNING_FOLDER_PATH"
             cp -r "$CODESIGNING_FOLDER_PATH" Payload/
           else
-            # Strategy 2: Manual bundling from binary
             echo "Creating manual .app bundle..."
-            # Find the actual Mach-O binary named Pulse
             BINARY_PATH=$(find build -name "Pulse" -type f | xargs file | grep "Mach-O" | cut -d: -f1 | head -n 1)
-            if [ -z "$BINARY_PATH" ]; then
-                echo "ERROR: Could not find Mach-O binary 'Pulse' in build directory"
-                find build -maxdepth 5
-                exit 1
-            fi
-            echo "Found binary at: $BINARY_PATH"
+            if [ -z "$BINARY_PATH" ]; then exit 1; fi
             mkdir -p Payload/Pulse.app
             cp "$BINARY_PATH" Payload/Pulse.app/Pulse
             
-            # Create a minimal Info.plist
             cat <<EOF > Payload/Pulse.app/Info.plist
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -67,9 +91,9 @@ jobs:
               <key>CFBundlePackageType</key>
               <string>APPL</string>
               <key>CFBundleShortVersionString</key>
-              <string>1.0</string>
+              <string>${{ env.APP_VERSION }}</string>
               <key>CFBundleVersion</key>
-              <string>1</string>
+              <string>${{ env.BUILD_NUMBER }}</string>
               <key>LSRequiresIPhoneOS</key>
               <true/>
           </dict>
@@ -78,10 +102,24 @@ jobs:
           fi
           
           zip -r Pulse.app.zip Payload
-          
-      - name: Upload Pulse.app.zip
+
+      - name: Upload Action Artifact
         uses: actions/upload-artifact@v4
         with:
           name: Pulse.app.zip
           path: Pulse.app.zip
           retention-days: 7
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: build-${{ env.BUILD_NUMBER }}
+          name: Pulse ${{ env.APP_VERSION }} (Build ${{ env.BUILD_NUMBER }})
+          body: |
+            Pulse Simulator Build
+            Version: ${{ env.APP_VERSION }}
+            Build: ${{ env.BUILD_NUMBER }}
+          files: Pulse.app.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
