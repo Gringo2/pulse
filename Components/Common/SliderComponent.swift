@@ -26,6 +26,10 @@ final class SliderComponent: Node {
         super.init(frame: frame)
     }
     
+    convenience init() {
+        self.init(frame: .zero)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
