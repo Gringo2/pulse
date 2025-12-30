@@ -21,4 +21,17 @@ jobs:
             -scheme Pulse \
             -destination "generic/platform=iOS Simulator" \
             -sdk iphonesimulator \
+            -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO
+
+      - name: Package Artifact (app.zip)
+        run: |
+          mkdir -p Payload
+          cp -r build/Build/Products/Debug-iphonesimulator/Pulse_Pulse.bundle/../Pulse.app Payload/ || cp -r build/Build/Products/Debug-iphonesimulator/Pulse.app Payload/
+          zip -r app.zip Payload
+          
+      - name: Upload app.zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-simulator
+          path: app.zip
