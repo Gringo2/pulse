@@ -20,6 +20,10 @@ final class SwitchComponent: Node {
     // Physics
     private lazy var spring = SpringAnimator(damping: 0.7, response: 0.4)
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
