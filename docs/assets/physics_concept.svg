@@ -1,0 +1,24 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#0F0F12"/>
+
+  <!-- Plot Area -->
+  <path d="M100 350 L700 350" stroke="#30363D" stroke-width="2"/> <!-- Time -->
+  <path d="M100 350 L100 50" stroke="#30363D" stroke-width="2"/> <!-- Value -->
+  <text x="100" y="40" font-family="Inter, sans-serif" font-size="12" fill="#8B949E">Target Value</text>
+  <text x="700" y="370" font-family="Inter, sans-serif" font-size="12" fill="#8B949E" text-anchor="end">Time (FPS Ticks)</text>
+
+  <!-- High Damping (Pulse Default) -->
+  <path d="M100 350 C 150 50, 200 120, 300 100 L 700 100" stroke="#4C9EEB" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <text x="250" y="80" font-family="Inter, sans-serif" font-size="12" fill="#4C9EEB">Damped (Fluid)</text>
+
+  <!-- Underdamped (Bouncy) -->
+  <path d="M100 350 Q 150 -50, 200 250 T 300 50 T 400 150 T 500 100 L 700 100" stroke="#FFB454" stroke-width="2" fill="none" stroke-dasharray="4 2"/>
+  <text x="450" y="165" font-family="Inter, sans-serif" font-size="12" fill="#FFB454">Bouncy (High Stiffness)</text>
+
+  <!-- Target line -->
+  <line x1="100" y1="100" x2="700" y2="100" stroke="#FFFFFF" stroke-opacity="0.2" stroke-dasharray="2 2"/>
+
+  <!-- Legend Title -->
+  <text x="400" y="30" font-family="Inter, sans-serif" font-size="18" fill="white" font-weight="bold" text-anchor="middle">Animation Physics Concept</text>
+  <text x="400" y="320" font-family="Inter, sans-serif" font-size="13" fill="#8B949E" text-anchor="middle">The SpringAnimator computes these curves real-time using F = -kx - cv</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg width="800" height="400" viewBox="0 0 800 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="400" fill="#0F0F12"/>
+
+  <!-- Main Thread -->
+  <rect x="50" y="50" width="700" height="120" rx="12" fill="#1C2128" stroke="#3FB950" stroke-width="2"/>
+  <text x="70" y="80" font-family="Inter, sans-serif" font-size="16" fill="#3FB950" font-weight="bold">Main Thread (UI)</text>
+  
+  <rect x="70" y="100" width="100" height="40" rx="6" fill="#0D1117" stroke="#3FB950" stroke-opacity="0.5"/>
+  <text x="120" y="125" font-family="Inter, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle">Render Buffer</text>
+
+  <rect x="180" y="100" width="100" height="40" rx="6" fill="#0D1117" stroke="#3FB950" stroke-opacity="0.5"/>
+  <text x="230" y="125" font-family="Inter, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle">Input Events</text>
+
+  <rect x="580" y="100" width="150" height="40" rx="6" fill="#3FB950" fill-opacity="0.1" stroke="#3FB950"/>
+  <text x="655" y="125" font-family="Inter, sans-serif" font-size="12" fill="#3FB950" font-weight="bold" text-anchor="middle">60 FPS SOLID</text>
+
+  <!-- Background Thread -->
+  <rect x="50" y="230" width="700" height="120" rx="12" fill="#1C2128" stroke="#4C9EEB" stroke-width="2"/>
+  <text x="70" y="260" font-family="Inter, sans-serif" font-size="16" fill="#4C9EEB" font-weight="bold">Background Worker</text>
+
+  <rect x="70" y="280" width="140" height="40" rx="6" fill="#0D1117" stroke="#4C9EEB" stroke-opacity="0.5"/>
+  <text x="140" y="305" font-family="Inter, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle">State Diffing</text>
+
+  <rect x="230" y="280" width="140" height="40" rx="6" fill="#0D1117" stroke="#4C9EEB" stroke-opacity="0.5"/>
+  <text x="300" y="305" font-family="Inter, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle">Layout Measurment</text>
+
+  <rect x="390" y="280" width="140" height="40" rx="6" fill="#0D1117" stroke="#4C9EEB" stroke-opacity="0.5"/>
+  <text x="460" y="305" font-family="Inter, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle">Image Decoding</text>
+
+  <!-- Connectivity -->
+  <path d="M230 170 L300 230" stroke="#8B949E" stroke-width="2" marker-end="url(#arrowhead-blue)"/>
+  <path d="M300 230 L170 140" stroke="#3FB950" stroke-width="2" stroke-dasharray="4 2" marker-end="url(#arrowhead-green)"/>
+
+  <text x="400" y="205" font-family="Inter, sans-serif" font-size="13" fill="#8B949E" text-anchor="middle">Asynchronous Handshake</text>
+
+  <defs>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4C9EEB"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3FB950"/>
+    </marker>
+  </defs>
+</svg>

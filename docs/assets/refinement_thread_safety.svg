@@ -1,0 +1,36 @@
+<svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="450" fill="#0F0F12"/>
+
+  <!-- Background Thread -->
+  <rect x="50" y="50" width="700" height="150" rx="12" fill="#1C2128" stroke="#4C9EEB" stroke-width="2"/>
+  <text x="70" y="80" font-family="Inter, sans-serif" font-size="16" fill="#4C9EEB" font-weight="bold">Background Thread (Measurement)</text>
+  
+  <rect x="100" y="100" width="160" height="70" rx="8" fill="#14191F" stroke="#4C9EEB" stroke-opacity="0.5"/>
+  <text x="180" y="130" font-family="Inter, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle">Text Measurement</text>
+  <text x="180" y="150" font-family="Inter, sans-serif" font-size="10" fill="#8B949E" text-anchor="middle">(Heavy I/O &amp; CPU)</text>
+
+  <text x="350" y="140" font-family="Inter, sans-serif" font-size="24" fill="#4C9EEB" text-anchor="middle">→</text>
+
+  <rect x="440" y="100" width="260" height="70" rx="8" fill="#4C9EEB" fill-opacity="0.2" stroke="#4C9EEB"/>
+  <text x="570" y="130" font-family="Inter, sans-serif" font-size="14" fill="#FFFFFF" font-weight="bold" text-anchor="middle">LayoutSpec (Immutable)</text>
+  <text x="570" y="150" font-family="Inter, sans-serif" font-size="11" fill="#4C9EEB" text-anchor="middle">{ frames: [CGRect], size: CGSize }</text>
+
+  <!-- Main Thread -->
+  <rect x="50" y="270" width="700" height="120" rx="12" fill="#1C2128" stroke="#3FB950" stroke-width="2"/>
+  <text x="70" y="300" font-family="Inter, sans-serif" font-size="16" fill="#3FB950" font-weight="bold">Main Thread (Display)</text>
+  
+  <rect x="100" y="320" width="600" height="45" rx="8" fill="#14191F" stroke="#3FB950" stroke-opacity="0.5"/>
+  <text x="400" y="347" font-family="Inter, sans-serif" font-size="14" fill="#FFFFFF" text-anchor="middle">display(spec: LayoutSpec) &lt;-- Ultra Fast Assignment</text>
+
+  <!-- Connection -->
+  <path d="M570 170 L570 260" stroke="#4C9EEB" stroke-width="3" stroke-dasharray="8 4" marker-end="url(#arrowhead-blue)"/>
+  <text x="580" y="225" font-family="Inter, sans-serif" font-size="13" fill="#8B949E">Thread Handshake</text>
+
+  <text x="400" y="425" font-family="Inter, sans-serif" font-size="14" fill="#8B949E" text-anchor="middle">"Final Evolution": The Main Thread only assigns already-computed values.</text>
+
+  <defs>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4C9EEB"/>
+    </marker>
+  </defs>
+</svg>

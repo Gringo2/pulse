@@ -1,0 +1,55 @@
+<svg width="800" height="450" viewBox="0 0 800 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="800" height="450" fill="#0F0F12"/>
+  
+  <!-- Lifelines -->
+  <line x1="150" y1="80" x2="150" y2="400" stroke="#30363D" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="400" y1="80" x2="400" y2="400" stroke="#30363D" stroke-width="2" stroke-dasharray="4 4"/>
+  <line x1="650" y1="80" x2="650" y2="400" stroke="#30363D" stroke-width="2" stroke-dasharray="4 4"/>
+  
+  <!-- Headers -->
+  <rect x="100" y="30" width="100" height="40" rx="8" fill="#1C2128" stroke="#30363D"/>
+  <text x="150" y="55" font-family="Inter, sans-serif" font-size="14" fill="#FFFFFF" font-weight="bold" text-anchor="middle">User/UI</text>
+  
+  <rect x="350" y="30" width="100" height="40" rx="8" fill="#1C2128" stroke="#30363D"/>
+  <text x="400" y="55" font-family="Inter, sans-serif" font-size="14" fill="#4C9EEB" font-weight="bold" text-anchor="middle">Controller</text>
+  
+  <rect x="600" y="30" width="100" height="40" rx="8" fill="#1C2128" stroke="#30363D"/>
+  <text x="650" y="55" font-family="Inter, sans-serif" font-size="14" fill="#FFFFFF" font-weight="bold" text-anchor="middle">Node</text>
+
+  <!-- Step 1: User Action -->
+  <path d="M150 120 L395 120" stroke="#FFFFFF" stroke-width="2" marker-end="url(#arrowhead-white)"/>
+  <text x="275" y="110" font-family="Inter, sans-serif" font-size="12" fill="#FFFFFF" text-anchor="middle">1. Tap Send Button</text>
+  
+  <!-- Step 2: Event Emission -->
+  <path d="M400 150 L645 150" stroke="#4C9EEB" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="525" y="140" font-family="Inter, sans-serif" font-size="12" fill="#4C9EEB" text-anchor="middle">2. Emit .sendMessage(text)</text>
+  
+  <!-- Step 3: logic/State Mutation -->
+  <rect x="380" y="180" width="40" height="60" rx="4" fill="#14191F" stroke="#4C9EEB"/>
+  <text x="370" y="215" font-family="Inter, sans-serif" font-size="12" fill="#8B949E" text-anchor="end">3. Mutate State</text>
+  
+  <!-- Step 4: State Update Down -->
+  <path d="M400 270 L645 270" stroke="#4C9EEB" stroke-width="2" marker-end="url(#arrowhead)"/>
+  <text x="525" y="260" font-family="Inter, sans-serif" font-size="12" fill="#4C9EEB" text-anchor="middle">4. update(state: ChatState)</text>
+  
+  <!-- Step 5: Render/Layout -->
+  <rect x="630" y="300" width="40" height="60" rx="4" fill="#14191F" stroke="#FFFFFF"/>
+  <text x="680" y="335" font-family="Inter, sans-serif" font-size="12" fill="#8B949E" text-anchor="start">5. Manual Layout</text>
+  
+  <!-- Step 6: Visual Feedback -->
+  <path d="M650 380 L155 380" stroke="#3FB950" stroke-width="2" stroke-dasharray="4 2" marker-end="url(#arrowhead-green)"/>
+  <text x="400" y="370" font-family="Inter, sans-serif" font-size="12" fill="#3FB950" text-anchor="middle">6. Result Visible to User</text>
+
+  <!-- Arrowheads -->
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#4C9EEB"/>
+    </marker>
+    <marker id="arrowhead-white" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#FFFFFF"/>
+    </marker>
+    <marker id="arrowhead-green" markerWidth="10" markerHeight="7" refX="0" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3FB950"/>
+    </marker>
+  </defs>
+</svg>

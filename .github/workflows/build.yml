@@ -1,0 +1,24 @@
+name: Pulse Continuous Integration
+
+on:
+  push:
+    branches: [ "**" ]
+  pull_request:
+    branches: [ "**" ]
+
+jobs:
+  verify:
+    name: Verify Compilation
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Build and Verify
+        run: |
+          swift build -v
+        
+      - name: iOS Build (Simulator Check)
+        run: |
+          xcodebuild -scheme Pulse -destination 'platform=iOS Simulator,name=iPhone 15' build
