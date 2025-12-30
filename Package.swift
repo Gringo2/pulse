@@ -14,12 +14,9 @@ let package = Package(
             name: "Pulse",
             path: ".",
             exclude: [
-                "insight.md",
-                "specification.md",
-                "architecture.md",
-                "task.md",
-                "implementation_plan.md",
-                "walkthrough.md"
+                "docs",
+                "README.md",
+                "logo.png"
             ],
             sources: [
                 "App",
