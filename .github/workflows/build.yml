@@ -28,8 +28,15 @@ jobs:
       - name: Package Artifact (app.zip)
         run: |
           mkdir -p Payload
-          # Locate .app inside the xcarchive structure
-          cp -r build/Pulse.xcarchive/Products/Applications/Pulse.app Payload/
+          # Discover the .app bundle dynamically
+          APP_PATH=$(find build/Pulse.xcarchive -name "*.app" | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "ERROR: No .app bundle found in the archive"
+            find build/Pulse.xcarchive -maxdepth 4
+            exit 1
+          fi
+          echo "Found app at: $APP_PATH"
+          cp -r "$APP_PATH" Payload/
           zip -r app.zip Payload
           
       - name: Upload app.zip
