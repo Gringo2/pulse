@@ -22,18 +22,6 @@ final class SliderComponent: Node {
     // Animation
     private lazy var highlightAnimator = HighlightAnimator(view: knobView)
     
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    convenience init() {
-        self.init(frame: .zero)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func setup() {
         trackView.backgroundColor = .systemGray5
         trackView.layer.cornerRadius = 2

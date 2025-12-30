@@ -7,10 +7,10 @@ let package = Package(
         .iOS(.v16)
     ],
     products: [
-        .library(name: "Pulse", targets: ["Pulse"]),
+        .executable(name: "Pulse", targets: ["Pulse"]),
     ],
     targets: [
-        .target(
+        .executableTarget(
             name: "Pulse",
             path: ".",
             exclude: [
