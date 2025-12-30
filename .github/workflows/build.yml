@@ -30,7 +30,7 @@ jobs:
           echo "EXECUTABLE_PATH=$(grep -m 1 " EXECUTABLE_PATH = " settings.txt | cut -d'=' -f2 | xargs)" >> $GITHUB_ENV
           echo "CODESIGNING_FOLDER_PATH=$(grep -m 1 " CODESIGNING_FOLDER_PATH = " settings.txt | cut -d'=' -f2 | xargs)" >> $GITHUB_ENV
 
-      - name: Package Artifact (app.zip)
+      - name: Package Artifact (Pulse.app.zip)
         run: |
           mkdir -p Payload
           
@@ -41,9 +41,10 @@ jobs:
           else
             # Strategy 2: Manual bundling from binary
             echo "Creating manual .app bundle..."
-            BINARY_PATH=$(find build -name "Pulse" -type f -perm +111 | head -n 1)
+            # Find the actual Mach-O binary named Pulse
+            BINARY_PATH=$(find build -name "Pulse" -type f | xargs file | grep "Mach-O" | cut -d: -f1 | head -n 1)
             if [ -z "$BINARY_PATH" ]; then
-                echo "ERROR: Could not find binary 'Pulse' in build directory"
+                echo "ERROR: Could not find Mach-O binary 'Pulse' in build directory"
                 find build -maxdepth 5
                 exit 1
             fi
@@ -53,44 +54,34 @@ jobs:
             
             # Create a minimal Info.plist
             cat <<EOF > Payload/Pulse.app/Info.plist
-            <?xml version="1.0" encoding="UTF-8"?>
-            <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-            <plist version="1.0">
-            <dict>
-                <key>CFBundleExecutable</key>
-                <string>Pulse</string>
-                <key>CFBundleIdentifier</key>
-                <string>com.pulse.app</string>
-                <key>CFBundleName</key>
-                <string>Pulse</string>
-                <key>CFBundlePackageType</key>
-                <string>APPL</string>
-                <key>CFBundleShortVersionString</key>
-                <string>1.0</string>
-                <key>CFBundleVersion</key>
-                <string>1</string>
-                <key>LSRequiresIPhoneOS</key>
-                <true/>
-                <key>UILaunchStoryboardName</key>
-                <string>LaunchScreen</string>
-                <key>UIRequiredDeviceCapabilities</key>
-                <array>
-                    <string>arm64</string>
-                </array>
-                <key>UISupportedInterfaceOrientations</key>
-                <array>
-                    <string>UIInterfaceOrientationPortrait</string>
-                </array>
-            </dict>
-            </plist>
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+              <key>CFBundleExecutable</key>
+              <string>Pulse</string>
+              <key>CFBundleIdentifier</key>
+              <string>com.pulse.app</string>
+              <key>CFBundleName</key>
+              <string>Pulse</string>
+              <key>CFBundlePackageType</key>
+              <string>APPL</string>
+              <key>CFBundleShortVersionString</key>
+              <string>1.0</string>
+              <key>CFBundleVersion</key>
+              <string>1</string>
+              <key>LSRequiresIPhoneOS</key>
+              <true/>
+          </dict>
+          </plist>
           EOF
           fi
           
-          zip -r app.zip Payload
+          zip -r Pulse.app.zip Payload
           
-      - name: Upload app.zip
+      - name: Upload Pulse.app.zip
         uses: actions/upload-artifact@v4
         with:
-          name: app-simulator
-          path: app.zip
+          name: Pulse.app.zip
+          path: Pulse.app.zip
           retention-days: 7
