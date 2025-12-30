@@ -15,24 +15,23 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Build and Archive (iOS Simulator)
+      - name: Build (iOS Simulator)
         run: |
-          xcodebuild archive \
+          xcodebuild build \
             -scheme Pulse \
             -destination "generic/platform=iOS Simulator" \
             -sdk iphonesimulator \
-            -archivePath build/Pulse.xcarchive \
-            SKIP_INSTALL=NO \
+            -derivedDataPath ./build \
             CODE_SIGNING_ALLOWED=NO
 
       - name: Package Artifact (app.zip)
         run: |
           mkdir -p Payload
-          # Discover the .app bundle dynamically
-          APP_PATH=$(find build/Pulse.xcarchive -name "*.app" | head -n 1)
+          # Exhaustive search for the .app bundle in the build products
+          APP_PATH=$(find build/Build/Products -name "*.app" -type d | head -n 1)
           if [ -z "$APP_PATH" ]; then
-            echo "ERROR: No .app bundle found in the archive"
-            find build/Pulse.xcarchive -maxdepth 4
+            echo "ERROR: No .app bundle found in build products"
+            find build -maxdepth 5
             exit 1
           fi
           echo "Found app at: $APP_PATH"
