@@ -1,0 +1,84 @@
+<svg width="393" height="852" viewBox="0 0 393 852" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Glow -->
+    <radialGradient id="topGlow" cx="50%" cy="0%" r="60%">
+      <stop offset="0%" stop-color="#007AFF" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+    
+    <!-- Wave Gradient -->
+    <linearGradient id="waveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#007AFF" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#007AFF" stop-opacity="0.8" />
+    </linearGradient>
+
+    <!-- Glass Fill -->
+    <linearGradient id="glassFill" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.04" />
+    </linearGradient>
+
+    <!-- Glow Filter -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="393" height="852" fill="#050505" />
+  <rect width="393" height="400" fill="url(#topGlow)" />
+
+  <text x="196" y="65" fill="#FFFFFF" text-anchor="middle" font-family="Inter, sans-serif" font-size="17" font-weight="700">Settings</text>
+
+  <!-- SECTIONS -->
+  <g transform="translate(16, 110)">
+    <!-- Liquid Switch Row -->
+    <g>
+      <rect width="361" height="84" rx="22" fill="url(#glassFill)" stroke="#FFFFFF" stroke-opacity="0.08" />
+      <text x="20" y="48" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="700">Liquid Glass Switch</text>
+      
+      <g transform="translate(265, 26)">
+        <rect width="70" height="34" rx="17" fill="#000000" fill-opacity="0.4" stroke="#007AFF" stroke-opacity="0.4" stroke-width="1.5" />
+        <!-- Wave Simulation -->
+        <path d="M0,17 Q17.5,0 35,17 T70,17 V34 H0 Z" fill="url(#waveGrad)" transform="translate(0, -4)" />
+        <circle cx="53" cy="17" r="14" fill="#FFFFFF" filter="url(#glow)" />
+      </g>
+    </g>
+
+    <!-- Haptic Strength Slider Row -->
+    <g transform="translate(0, 100)">
+      <rect width="361" height="120" rx="22" fill="url(#glassFill)" stroke="#FFFFFF" stroke-opacity="0.08" />
+      <text x="20" y="38" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="700">Haptic Strength</text>
+      <text x="20" y="62" fill="#8E8E93" font-family="sans-serif" font-size="11" font-weight="600">Low</text>
+      <text x="341" y="62" fill="#8E8E93" text-anchor="end" font-family="sans-serif" font-size="11" font-weight="600">High</text>
+      
+      <!-- Wave Slider Track -->
+      <path d="M30,85 Q50,65 70,85 T110,85 T150,85 T190,85 T230,85 T270,85 T310,85 T330,85" stroke="#1C1C1E" stroke-width="6" fill="none" stroke-linecap="round" />
+      <path d="M30,85 Q50,65 70,85 T110,85 T150,85 T180,85" stroke="#007AFF" stroke-width="6" fill="none" stroke-linecap="round" filter="url(#glow)" />
+      <circle cx="180" cy="85" r="14" fill="#FFFFFF" filter="url(#glow)" />
+    </g>
+
+    <!-- Menu Items -->
+    <g transform="translate(0, 235)">
+      <rect width="361" height="56" rx="16" fill="#FFFFFF" fill-opacity="0.04" />
+      <text x="20" y="34" fill="#FFFFFF" font-family="sans-serif" font-size="15">Profile</text>
+      <path d="M335,24 L343,30 L335,36" stroke="#48484A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+      
+      <rect y="68" width="361" height="56" rx="16" fill="#FFFFFF" fill-opacity="0.04" />
+      <text x="20" y="102" fill="#FFFFFF" font-family="sans-serif" font-size="15" font-weight="400">Privacy &amp; Security</text>
+      <path d="M335,92 L343,98 L335,104" stroke="#48484A" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+    </g>
+
+    <!-- Log Out Button -->
+    <g transform="translate(0, 385)">
+      <rect width="361" height="64" rx="32" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.12" />
+      <text x="180.5" y="40" fill="#FFFFFF" text-anchor="middle" font-family="Inter, sans-serif" font-size="17" font-weight="800">Log Out</text>
+    </g>
+  </g>
+
+  <!-- iOS Dynamic Island -->
+  <rect x="133" y="11" width="126" height="37" rx="18.5" fill="#000000" stroke="#FFFFFF" stroke-opacity="0.05" />
+</svg>

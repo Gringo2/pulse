@@ -1,0 +1,116 @@
+<svg width="393" height="852" viewBox="0 0 393 852" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Background Gradient -->
+    <linearGradient id="mainBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0F1115" />
+      <stop offset="100%" stop-color="#050505" />
+    </linearGradient>
+    
+    <!-- Sophisticated Blue Glow -->
+    <radialGradient id="headerGlow" cx="50%" cy="0%" r="80%">
+      <stop offset="0%" stop-color="#007AFF" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
+    </radialGradient>
+
+    <!-- Glassmorphism Filter -->
+    <filter id="glassBlur" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="12" />
+    </filter>
+
+    <!-- Drop Shadow -->
+    <filter id="dropShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="4" />
+      <feOffset dx="0" dy="4" result="offsetblur" />
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.4" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Glass Gradient -->
+    <linearGradient id="glassGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.02" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="393" height="852" fill="url(#mainBg)" />
+  <rect width="393" height="400" fill="url(#headerGlow)" />
+
+  <!-- HEADER -->
+  <g transform="translate(0, 0)">
+    <rect width="393" height="130" fill="url(#glassGrad)" />
+    <text x="24" y="95" fill="#FFFFFF" font-family="Inter, -apple-system, sans-serif" font-size="34" font-weight="800" style="letter-spacing: -1px;">Chats</text>
+    
+    <g transform="translate(315, 68)">
+      <rect width="58" height="30" rx="15" fill="#FFFFFF" fill-opacity="0.08" stroke="#FFFFFF" stroke-opacity="0.1" />
+      <text x="29" y="20" fill="#007AFF" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="600">Edit</text>
+    </g>
+  </g>
+
+  <!-- LIST CONTENT -->
+  <g transform="translate(16, 145)">
+    <!-- Row 1 -->
+    <g transform="translate(0, 0)">
+      <!-- Avatar Glow -->
+      <circle cx="28" cy="28" r="30" fill="#007AFF" fill-opacity="0.1" filter="url(#glassBlur)" />
+      <circle cx="28" cy="28" r="28" fill="#1C1C1E" stroke="#007AFF" stroke-width="1.5" />
+      <!-- Initials or Image Simulation -->
+      <text x="28" y="34" fill="#007AFF" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700">AR</text>
+      
+      <text x="72" y="22" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="600">Alex Rivera</text>
+      <text x="72" y="44" fill="#8E8E93" font-family="sans-serif" font-size="14">Hey, are we still on for the 7 PM meet...</text>
+      <text x="320" y="22" fill="#636366" text-anchor="end" font-family="sans-serif" font-size="11">10:30 AM</text>
+      <line x1="72" y1="68" x2="361" y2="68" stroke="#FFFFFF" stroke-opacity="0.06" />
+    </g>
+
+    <!-- Row 2 -->
+    <g transform="translate(0, 85)">
+      <circle cx="28" cy="28" r="28" fill="#1C1C1E" stroke="#FFFFFF" stroke-opacity="0.1" />
+      <text x="28" y="34" fill="#888" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700">SC</text>
+      
+      <text x="72" y="22" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="600">Sarah Chen</text>
+      <text x="72" y="44" fill="#8E8E93" font-family="sans-serif" font-size="14">Got the files, thanks!</text>
+      <text x="320" y="22" fill="#636366" text-anchor="end" font-family="sans-serif" font-size="11">Yesterday</text>
+      <line x1="72" y1="68" x2="361" y2="68" stroke="#FFFFFF" stroke-opacity="0.06" />
+    </g>
+
+    <!-- Row 3 -->
+    <g transform="translate(0, 170)">
+      <circle cx="28" cy="28" r="28" fill="#1C1C1E" stroke="#FFFFFF" stroke-opacity="0.1" />
+      <text x="28" y="34" fill="#888" text-anchor="middle" font-family="sans-serif" font-size="20" font-weight="700">MD</text>
+      
+      <text x="72" y="22" fill="#FFFFFF" font-family="sans-serif" font-size="16" font-weight="600">Mark Davis</text>
+      <text x="72" y="44" fill="#8E8E93" font-family="sans-serif" font-size="14">Missed your call, can we speak later?</text>
+      <text x="320" y="22" fill="#636366" text-anchor="end" font-family="sans-serif" font-size="11">Mon</text>
+    </g>
+  </g>
+
+  <!-- PREMIUM TAB BAR -->
+  <g transform="translate(20, 755)">
+    <!-- Blur Layer Simulation -->
+    <rect width="353" height="66" rx="33" fill="#000000" fill-opacity="0.4" filter="url(#dropShadow)" />
+    <rect width="353" height="66" rx="33" fill="url(#glassGrad)" stroke="#FFFFFF" stroke-opacity="0.12" />
+    
+    <g transform="translate(58, 33)">
+      <circle r="22" fill="#007AFF" fill-opacity="0.15" />
+      <path d="M-8,-4 H8 V8 H-8 Z" fill="none" stroke="#007AFF" stroke-width="2" /> <!-- Icon Placeholder -->
+      <text y="24" fill="#007AFF" text-anchor="middle" font-family="sans-serif" font-size="10" font-weight="600">Chats</text>
+    </g>
+    
+    <g transform="translate(176, 33)">
+      <text y="24" fill="#8E8E93" text-anchor="middle" font-family="sans-serif" font-size="10">Calls</text>
+    </g>
+    
+    <g transform="translate(294, 33)">
+      <text y="24" fill="#8E8E93" text-anchor="middle" font-family="sans-serif" font-size="10">Settings</text>
+    </g>
+  </g>
+
+  <!-- iOS Dynamic Island -->
+  <rect x="133" y="11" width="126" height="37" rx="18.5" fill="#000000" stroke="#FFFFFF" stroke-opacity="0.05" />
+</svg>
