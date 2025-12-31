@@ -1,0 +1,60 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="800" fill="#0A0A0A" />
+
+  <!-- SCREEN 1: CHAT LIST -->
+  <g transform="translate(50, 50)">
+    <rect width="300" height="600" rx="40" fill="#000000" stroke="#333333" stroke-width="2" />
+    <text x="150" y="40" fill="#FFFFFF" text-anchor="middle" font-family="sans-serif" font-size="24">Chats</text>
+    
+    <!-- Chat Items -->
+    <g transform="translate(20, 100)">
+      <circle cx="20" cy="20" r="20" fill="#333333" />
+      <rect x="50" y="10" width="150" height="10" rx="5" fill="#555555" />
+      <rect x="50" y="25" width="200" height="8" rx="4" fill="#333333" />
+      
+      <g transform="translate(0, 70)">
+        <circle cx="20" cy="20" r="20" fill="#007AFF" />
+        <rect x="50" y="10" width="150" height="10" rx="5" fill="#555555" />
+        <rect x="50" y="25" width="200" height="8" rx="4" fill="#333333" />
+      </g>
+    </g>
+
+    <!-- Tab Bar -->
+    <rect x="20" y="540" width="260" height="40" rx="20" fill="#1C1C1E" />
+    <circle cx="65" cy="560" r="12" fill="#007AFF" />
+    <circle cx="150" cy="560" r="12" fill="#555555" />
+    <circle cx="235" cy="560" r="12" fill="#555555" />
+  </g>
+
+  <!-- SCREEN 2: CHAT SCREEN -->
+  <g transform="translate(425, 50)">
+    <rect width="300" height="600" rx="40" fill="#000000" stroke="#333333" stroke-width="2" />
+    <text x="150" y="40" fill="#FFFFFF" text-anchor="middle" font-family="sans-serif" font-size="16">DeepMind</text>
+
+    <!-- Bubbles -->
+    <rect x="20" y="100" width="180" height="40" rx="15" fill="#2C2C2E" />
+    <rect x="100" y="160" width="180" height="40" rx="15" fill="#007AFF" />
+    
+    <!-- Input -->
+    <rect x="20" y="540" width="260" height="40" rx="20" fill="#1C1C1E" />
+    <circle cx="250" cy="560" r="12" fill="#007AFF" />
+  </g>
+
+  <!-- SCREEN 3: SETTINGS -->
+  <g transform="translate(800, 50)">
+    <rect width="300" height="600" rx="40" fill="#000000" stroke="#333333" stroke-width="2" />
+    <text x="150" y="40" fill="#FFFFFF" text-anchor="middle" font-family="sans-serif" font-size="16">Settings</text>
+
+    <!-- Components -->
+    <rect x="20" y="100" width="260" height="44" rx="10" fill="#1C1C1E" />
+    <text x="40" y="128" fill="#FFFFFF" font-family="sans-serif" font-size="14">Liquid Switch</text>
+    <rect x="220" y="112" width="40" height="20" rx="10" fill="#007AFF" />
+    <circle cx="245" cy="122" r="8" fill="#FFFFFF" />
+
+    <rect x="20" y="160" width="260" height="60" rx="10" fill="#1C1C1E" />
+    <text x="40" y="185" fill="#FFFFFF" font-family="sans-serif" font-size="14">Slider</text>
+    <rect x="40" y="200" width="220" height="4" rx="2" fill="#333333" />
+    <rect x="40" y="200" width="110" height="4" rx="2" fill="#007AFF" />
+    <circle cx="150" cy="202" r="10" fill="#FFFFFF" />
+  </g>
+</svg>
