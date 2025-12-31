@@ -5,6 +5,8 @@ Pulse is a performance-focused iOS communication UI playground built on industry
 ## 📖 Documentation Portal
 For a detailed architectural deep-dive, system design diagrams, and the official audit report, visit our:
 👉 **[Pulse Technical Documentation Portal](docs/index.html)**
+<br/><br/>
+![Pulse Premium UI Showcase](pulse_premium_ui_showcase.png)
 
 ## 🚀 Key Features
 - **Node-Based Rendering**: Lightweight `UIView` subclasses with manual layout for maximum performance.
