@@ -27,6 +27,10 @@ final class ChatListCellNode: Node {
         
         // Avatar Container (Liquid effect)
         avatarContainer.clipsToBounds = false
+        avatarContainer.layer.shadowColor = Theme.Colors.accent.cgColor
+        avatarContainer.layer.shadowOpacity = 0.3
+        avatarContainer.layer.shadowOffset = .zero
+        avatarContainer.layer.shadowRadius = 8
         
         avatarGradient.cornerRadius = 24
         avatarGradient.startPoint = CGPoint(x: 0, y: 0)
@@ -40,8 +44,8 @@ final class ChatListCellNode: Node {
         avatarView.layer.masksToBounds = true
         avatarView.backgroundColor = .clear
         
-        avatarBorder.layer.borderColor = Theme.Colors.glassBorder.cgColor
-        avatarBorder.layer.borderWidth = 0.5
+        avatarBorder.layer.borderColor = UIColor.white.withAlphaComponent(0.15).cgColor
+        avatarBorder.layer.borderWidth = 1.0
         avatarBorder.layer.cornerRadius = 24
         avatarBorder.isUserInteractionEnabled = false
         
@@ -50,14 +54,14 @@ final class ChatListCellNode: Node {
         nameLabel.textColor = .white
         
         messageLabel.font = .systemFont(ofSize: 15, weight: .regular)
-        messageLabel.textColor = Theme.Colors.secondaryText
+        messageLabel.textColor = UIColor.white.withAlphaComponent(0.6)
         messageLabel.numberOfLines = 1
         
         timeLabel.font = .systemFont(ofSize: 13, weight: .regular)
-        timeLabel.textColor = Theme.Colors.secondaryText.withAlphaComponent(0.6)
+        timeLabel.textColor = UIColor.white.withAlphaComponent(0.4)
         
         // Separator - Glassmorphic style
-        separator.backgroundColor = Theme.Colors.glassBorder.withAlphaComponent(0.06)
+        separator.backgroundColor = UIColor.white.withAlphaComponent(0.08)
         
         addSubnodes([avatarContainer, avatarView, avatarBorder, nameLabel, messageLabel, timeLabel, separator])
         
@@ -71,14 +75,15 @@ final class ChatListCellNode: Node {
         timeLabel.text = chat.timeString
         
         if let avatar = chat.avatarName {
-            avatarView.image = UIImage(systemName: avatar)?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold))
+            avatarView.image = UIImage(systemName: avatar)?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .bold))
         }
         
-        // Randomize avatar gradient for variety in demo
+        // Randomize avatar gradient and shadow for variety in demo
         let hash = chat.name.hash
-        let color1 = (hash % 2 == 0) ? Theme.Colors.accent : UIColor(hex: "#8E5AFF")
-        let color2 = (hash % 2 == 0) ? UIColor(hex: "#00A2FF") : UIColor(hex: "#A284FF")
+        let color1 = (hash % 2 == 0) ? Theme.Colors.accent : UIColor(hex: "#A259FF")
+        let color2 = (hash % 2 == 0) ? UIColor(hex: "#00E0FF") : UIColor(hex: "#6B29FF")
         avatarGradient.colors = [color1.cgColor, color2.cgColor]
+        avatarContainer.layer.shadowColor = color1.cgColor
     }
     
     override func layoutSubviews() {
@@ -99,10 +104,10 @@ final class ChatListCellNode: Node {
         // Time
         timeLabel.sizeToFit()
         let timeWidth = timeLabel.frame.width
-        timeLabel.frame = CGRect(x: bounds.width - horizontalPadding - timeWidth, y: 18, width: timeWidth, height: 18)
+        timeLabel.frame = CGRect(x: bounds.width - horizontalPadding - timeWidth, y: 20, width: timeWidth, height: 18)
         
         // Name
-        nameLabel.frame = CGRect(x: textLeft, y: 16, width: timeLabel.frame.minX - textLeft - 8, height: 22)
+        nameLabel.frame = CGRect(x: textLeft, y: 18, width: timeLabel.frame.minX - textLeft - 8, height: 22)
         
         // Message
         messageLabel.frame = CGRect(x: textLeft, y: nameLabel.frame.maxY + 2, width: textRight - textLeft, height: 20)

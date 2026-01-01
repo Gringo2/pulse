@@ -17,10 +17,12 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         // Vibrant background gradient to make glass pop
         backgroundLayer.colors = [
             UIColor(hex: "#050505").cgColor,
-            UIColor(hex: "#0A0A10").cgColor,
+            UIColor(hex: "#121424").cgColor,
             UIColor(hex: "#050505").cgColor
         ]
-        backgroundLayer.locations = [0.0, 0.5, 1.0]
+        backgroundLayer.startPoint = CGPoint(x: 0, y: 0)
+        backgroundLayer.endPoint = CGPoint(x: 1, y: 1)
+        backgroundLayer.locations = [0.0, 0.4, 1.0]
         layer.insertSublayer(backgroundLayer, at: 0)
         
         tableView.delegate = self
@@ -74,6 +76,9 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: reuseIdentifier)
+            backgroundColor = .clear
+            contentView.backgroundColor = .clear
+            selectionStyle = .none
             contentView.addSubview(node)
         }
         
