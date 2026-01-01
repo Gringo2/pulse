@@ -120,7 +120,7 @@ final class CallCellNode: UITableViewCell {
     private let statusIcon = UIImageView()
     private let statusLabel = UILabel()
     private let timeLabel = UILabel()
-    private let timeLabel = UILabel()
+
     private let phoneButton = UIButton(type: .system)
     private let videoButton = UIButton(type: .system)
     
@@ -165,11 +165,7 @@ final class CallCellNode: UITableViewCell {
         statusLabel.font = .systemFont(ofSize: 15, weight: .regular)
         statusLabel.textColor = UIColor.white.withAlphaComponent(0.6)
         
-        timeLabel.font = .systemFont(ofSize: 15, weight: .regular)
-        timeLabel.textColor = UIColor.white.withAlphaComponent(0.4)
-        
-        timeLabel.font = .systemFont(ofSize: 15, weight: .regular)
-        timeLabel.textColor = UIColor.white.withAlphaComponent(0.4)
+
         
         phoneButton.setImage(UIImage(systemName: "phone.fill"), for: .normal)
         phoneButton.tintColor = UIColor.white.withAlphaComponent(0.6)
