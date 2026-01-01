@@ -12,18 +12,31 @@ final class SettingsNode: Node {
     private let logoutCard = GlassNode()
     private let logoutLabel = UILabel()
     
+    private let backgroundLayer = CAGradientLayer()
+    
     override func setup() {
         backgroundColor = Theme.Colors.background
+        
+        // Vibrant background gradient
+        backgroundLayer.colors = [
+            UIColor(hex: "#050505").cgColor,
+            UIColor(hex: "#121424").cgColor,
+            UIColor(hex: "#050505").cgColor
+        ]
+        backgroundLayer.startPoint = CGPoint(x: 0, y: 0)
+        backgroundLayer.endPoint = CGPoint(x: 1, y: 1)
+        backgroundLayer.locations = [0.0, 0.4, 1.0]
+        layer.insertSublayer(backgroundLayer, at: 0)
         
         // Glass Container for items
         glassContainer.setBlurStyle(.systemUltraThinMaterialDark)
         
         // Labels
-        switchLabel.text = "Liquid Switch"
+        switchLabel.text = "Dark Theme"
         switchLabel.font = .systemFont(ofSize: 17, weight: .regular)
         switchLabel.textColor = .white
         
-        sliderLabel.text = "Physics Slider"
+        sliderLabel.text = "Sound Effects"
         sliderLabel.font = .systemFont(ofSize: 17, weight: .regular)
         sliderLabel.textColor = .white
         
@@ -44,6 +57,7 @@ final class SettingsNode: Node {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        backgroundLayer.frame = bounds
         
         let padding: CGFloat = 16
         let itemHeight: CGFloat = 44

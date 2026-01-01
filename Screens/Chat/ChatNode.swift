@@ -10,8 +10,21 @@ final class ChatNode: Node {
     
     private var bottomInset: CGFloat = 0
     
+    private let backgroundLayer = CAGradientLayer()
+    
     override func setup() {
         backgroundColor = Theme.Colors.background
+        
+        // Vibrant background gradient
+        backgroundLayer.colors = [
+            UIColor(hex: "#050505").cgColor,
+            UIColor(hex: "#121424").cgColor,
+            UIColor(hex: "#050505").cgColor
+        ]
+        backgroundLayer.startPoint = CGPoint(x: 0, y: 0)
+        backgroundLayer.endPoint = CGPoint(x: 1, y: 1)
+        backgroundLayer.locations = [0.0, 0.4, 1.0]
+        layer.insertSublayer(backgroundLayer, at: 0)
         
         addSubnodes([messageListNode, inputPanelNode])
         
@@ -29,6 +42,7 @@ final class ChatNode: Node {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        backgroundLayer.frame = bounds
         
         let safeBottom = safeAreaInsets.bottom
         let inputHeaderHeight: CGFloat = 52

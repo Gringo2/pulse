@@ -18,16 +18,16 @@ final class InputPanelNode: Node, UITextFieldDelegate {
     var onSendMessage: ((String) -> Void)?
     
     override func setup() {
-        // Glass Background (Full width at bottom)
-        glassBackground.layer.cornerRadius = 0
-        glassBackground.layer.borderWidth = 0 // Handled by top border if needed
+        // Glass Background (Floating Pill)
+        glassBackground.layer.cornerRadius = 28
+        glassBackground.layer.cornerCurve = .continuous
+        glassBackground.layer.borderWidth = 0.5
+        glassBackground.layer.borderColor = UIColor.white.withAlphaComponent(0.18).cgColor
         glassBackground.setBlurStyle(.systemUltraThinMaterialDark)
+        glassBackground.clipsToBounds = true
         
-        let topBorder = UIView()
-        topBorder.backgroundColor = Theme.Colors.glassBorder
-        topBorder.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-        topBorder.frame = CGRect(x: 0, y: 0, width: 2000, height: 0.5)
-        glassBackground.addSubview(topBorder)
+        // Remove old top border
+        // let topBorder = UIView() ...
         
         // Buttons
         configureButton(attachButton, icon: "plus")
@@ -73,34 +73,47 @@ final class InputPanelNode: Node, UITextFieldDelegate {
         super.layoutSubviews()
         
         let safeBottom = safeAreaInsets.bottom
-        let panelHeight: CGFloat = 52
+        let panelHeight: CGFloat = 56 // Matches SVG height
         
-        glassBackground.frame = bounds
+        // Floating Layout
+        let horizontalPadding: CGFloat = 32
+        let verticalPadding: CGFloat = 8
+        
+        // Calculate frame for the pill
+        // It should be centered horizontally, and positioned inside the bounds
+        let pillWidth = bounds.width - (horizontalPadding * 2)
+        
+        glassBackground.frame = CGRect(x: horizontalPadding, y: verticalPadding, width: pillWidth, height: panelHeight)
         
         let buttonSize: CGFloat = 44
         let sidePadding: CGFloat = 8
         
+        // Text Field (Relative to glassBackground or adjusted for floating layout)
+        // Since buttons and text field are subnodes of `self` (not glassBackground), we must offset them
+        // relative to the glassBackground position
+        
+        let pillFrame = glassBackground.frame
+        
+        // Update subviews to be relative to the floating pill
         // Attach Button
-        attachButton.frame = CGRect(x: sidePadding, y: 4, width: buttonSize, height: buttonSize)
+        attachButton.frame = CGRect(x: pillFrame.minX + sidePadding, y: pillFrame.minY + 6, width: buttonSize, height: buttonSize)
         
-        // Voice / Send Button Logic
-        let showSend = !(textField.text?.isEmpty ?? true)
-        voiceButton.alpha = showSend ? 0 : 1
-        sendButton.alpha = showSend ? 1 : 0
-        sendButton.isHidden = !showSend
-        voiceButton.isHidden = showSend
+        // Voice Button
+        let rightButtonX = pillFrame.maxX - buttonSize - sidePadding
+        voiceButton.frame = CGRect(x: rightButtonX, y: pillFrame.minY + 6, width: buttonSize, height: buttonSize)
         
-        let rightButtonX = bounds.width - buttonSize - sidePadding
-        voiceButton.frame = CGRect(x: rightButtonX, y: 4, width: buttonSize, height: buttonSize)
-        
-        // Send Button is slightly smaller and circular
-        let sendSize: CGFloat = 32
-        sendButton.frame = CGRect(x: bounds.width - sendSize - 12, y: 4 + (buttonSize - sendSize)/2, width: sendSize, height: sendSize)
+        // Send Button
+        sendButton.frame = CGRect(x: pillFrame.maxX - sendSize - 12, y: pillFrame.minY + 6 + (buttonSize - sendSize)/2, width: sendSize, height: sendSize)
         
         // Text Field
+        // Update styling for transparency inside the glass
+        textField.backgroundColor = .clear
+        textField.layer.borderWidth = 0
+        
         let tfX = attachButton.frame.maxX + 4
         let tfWidth = (showSend ? sendButton.frame.minX : voiceButton.frame.minX) - tfX - 8
-        textField.frame = CGRect(x: tfX, y: 6, width: tfWidth, height: 40)
+        let tfHeight: CGFloat = 40
+        textField.frame = CGRect(x: tfX, y: pillFrame.minY + (panelHeight - tfHeight)/2, width: tfWidth, height: tfHeight)
     }
     
     @objc private func textFieldDidChange() {
