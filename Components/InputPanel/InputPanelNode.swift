@@ -88,13 +88,17 @@ final class InputPanelNode: Node, UITextFieldDelegate {
         let buttonSize: CGFloat = 44
         let sidePadding: CGFloat = 8
         
-        // Text Field (Relative to glassBackground or adjusted for floating layout)
-        // Since buttons and text field are subnodes of `self` (not glassBackground), we must offset them
-        // relative to the glassBackground position
+        // Voice / Send Button Logic (Restored)
+        let showSend = !(textField.text?.isEmpty ?? true)
+        voiceButton.alpha = showSend ? 0 : 1
+        sendButton.alpha = showSend ? 1 : 0
+        sendButton.isHidden = !showSend
+        voiceButton.isHidden = showSend
+        
+        let sendSize: CGFloat = 32
         
         let pillFrame = glassBackground.frame
         
-        // Update subviews to be relative to the floating pill
         // Attach Button
         attachButton.frame = CGRect(x: pillFrame.minX + sidePadding, y: pillFrame.minY + 6, width: buttonSize, height: buttonSize)
         
