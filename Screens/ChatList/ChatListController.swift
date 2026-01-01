@@ -79,12 +79,12 @@ final class ChatListController: UIViewController {
                 // Duplicate to fill list
                 mockChats.append(contentsOf: mockChats.map { 
                     var copy = $0
-                    copy.id = $0.id + " copy"
+                    copy.id = UUID()
                     return copy 
                 })
                 mockChats.append(contentsOf: mockChats.map { 
                     var copy = $0
-                    copy.id = $0.id + " copy 2"
+                    copy.id = UUID()
                     return copy 
                 })
                 

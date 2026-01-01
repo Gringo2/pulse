@@ -1,7 +1,7 @@
 import Foundation
 
 struct Chat: Identifiable, Equatable {
-    let id: UUID
+    var id: UUID
     let name: String
     let messagePreview: String
     let timestamp: Date
