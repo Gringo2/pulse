@@ -24,7 +24,7 @@ final class ChatListCellNode: Node {
     
     override func setup() {
         backgroundColor = UIColor.white.withAlphaComponent(0.02)
-        layer.cornerRadius = 16
+        layer.cornerRadius = 24
         layer.borderWidth = 0.5
         layer.borderColor = UIColor.white.withAlphaComponent(0.08).cgColor
         clipsToBounds = true
