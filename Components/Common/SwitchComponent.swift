@@ -22,17 +22,21 @@ final class SwitchComponent: Node {
     
     override func setup() {
         // Track
-        trackView.backgroundColor = .systemGray5
+        trackView.backgroundColor = Theme.Colors.glassBackground
         trackView.layer.cornerRadius = 16
+        trackView.layer.borderColor = Theme.Colors.glassBorder.cgColor
+        trackView.layer.borderWidth = 0.5
         trackView.isUserInteractionEnabled = false
         
         // Knob
         knobView.backgroundColor = .white
         knobView.layer.shadowColor = UIColor.black.cgColor
-        knobView.layer.shadowOpacity = 0.2
-        knobView.layer.shadowOffset = CGSize(width: 0, height: 2)
-        knobView.layer.shadowRadius = 4
+        knobView.layer.shadowOpacity = 0.15
+        knobView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        knobView.layer.shadowRadius = 3
         knobView.layer.cornerRadius = 14
+        knobView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        knobView.layer.borderWidth = 0.5
         
         addSubnodes([trackView, knobView])
         
@@ -66,7 +70,8 @@ final class SwitchComponent: Node {
         
         // Color transition
         UIView.animate(withDuration: 0.3) {
-            self.trackView.backgroundColor = self.isOn ? .systemBlue : .systemGray5
+            self.trackView.backgroundColor = self.isOn ? Theme.Colors.accent : Theme.Colors.glassBackground
+            self.trackView.layer.borderColor = (self.isOn ? Theme.Colors.accent : Theme.Colors.glassBorder).cgColor
         }
     }
     

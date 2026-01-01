@@ -11,11 +11,14 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
     var onSelectChat: ((Chat) -> Void)?
     
     override func setup() {
+        self.backgroundColor = Theme.Colors.background
+        
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CellWrapper.self, forCellReuseIdentifier: "Cell")
-        tableView.rowHeight = 72
+        tableView.rowHeight = 74 // Slightly increased for breathability
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .clear
         
         addSubview(tableView)
     }

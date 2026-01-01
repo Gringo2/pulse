@@ -23,17 +23,22 @@ final class SliderComponent: Node {
     private lazy var highlightAnimator = HighlightAnimator(view: knobView)
     
     override func setup() {
-        trackView.backgroundColor = .systemGray5
+        trackView.backgroundColor = Theme.Colors.glassBackground
         trackView.layer.cornerRadius = 2
+        trackView.layer.borderColor = Theme.Colors.glassBorder.cgColor
+        trackView.layer.borderWidth = 0.5
         
-        fillView.backgroundColor = .systemBlue
+        fillView.backgroundColor = Theme.Colors.accent
         fillView.layer.cornerRadius = 2
         
         knobView.backgroundColor = .white
         knobView.layer.shadowColor = UIColor.black.cgColor
-        knobView.layer.shadowOpacity = 0.2
-        knobView.layer.shadowRadius = 4
+        knobView.layer.shadowOpacity = 0.15
+        knobView.layer.shadowOffset = CGSize(width: 0, height: 1)
+        knobView.layer.shadowRadius = 3
         knobView.layer.cornerRadius = 14
+        knobView.layer.borderColor = UIColor.white.withAlphaComponent(0.2).cgColor
+        knobView.layer.borderWidth = 0.5
         
         addSubnodes([trackView, fillView, knobView])
         

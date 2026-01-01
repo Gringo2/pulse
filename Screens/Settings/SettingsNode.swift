@@ -2,45 +2,72 @@ import UIKit
 
 final class SettingsNode: Node {
     
+    let glassContainer = GlassNode()
     let switchComponent = SwitchComponent()
     let sliderComponent = SliderComponent()
     
     private let switchLabel = UILabel()
     private let sliderLabel = UILabel()
     
+    private let logoutCard = GlassNode()
+    private let logoutLabel = UILabel()
+    
     override func setup() {
-        backgroundColor = .systemBackground
+        backgroundColor = Theme.Colors.background
+        
+        // Glass Container for items
+        glassContainer.setBlurStyle(.systemUltraThinMaterialDark)
         
         // Labels
         switchLabel.text = "Liquid Switch"
-        switchLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        switchLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        switchLabel.textColor = .white
         
         sliderLabel.text = "Physics Slider"
-        sliderLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        sliderLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        sliderLabel.textColor = .white
+        
+        // Logout Card
+        logoutLabel.text = "Log Out"
+        logoutLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        logoutLabel.textColor = .systemRed
+        logoutLabel.textAlignment = .center
+        
+        addSubnodes([glassContainer, logoutCard])
+        glassContainer.contentView.addSubnodes([switchLabel, switchComponent, sliderLabel, sliderComponent])
+        logoutCard.contentView.addSubview(logoutLabel)
         
         // Config Components
         switchComponent.isOn = true
         sliderComponent.value = 0.5
-        
-        addSubnodes([switchLabel, switchComponent, sliderLabel, sliderComponent])
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let padding: CGFloat = 20
+        let padding: CGFloat = 16
         let itemHeight: CGFloat = 44
         
-        // Switch Row
-        switchLabel.frame = CGRect(x: padding, y: 120, width: 200, height: itemHeight)
+        // Container
+        let containerHeight: CGFloat = 140
+        glassContainer.frame = CGRect(x: padding, y: 120, width: bounds.width - (padding * 2), height: containerHeight)
         
-        let switchWidth: CGFloat = 50
-        let switchHeight: CGFloat = 30
-        switchComponent.frame = CGRect(x: bounds.width - switchWidth - padding, y: 120 + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
+        let innerPadding: CGFloat = 16
+        let innerWidth = glassContainer.bounds.width - (innerPadding * 2)
+        
+        // Switch Row
+        switchLabel.frame = CGRect(x: innerPadding, y: 20, width: 200, height: itemHeight)
+        let switchWidth: CGFloat = 51
+        let switchHeight: CGFloat = 31
+        switchComponent.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: 20 + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
         
         // Slider Row
-        sliderLabel.frame = CGRect(x: padding, y: switchLabel.frame.maxY + 30, width: 200, height: itemHeight)
+        sliderLabel.frame = CGRect(x: innerPadding, y: switchLabel.frame.maxY + 10, width: 200, height: 20)
+        sliderComponent.frame = CGRect(x: innerPadding, y: sliderLabel.frame.maxY + 10, width: innerWidth, height: 30)
         
-        sliderComponent.frame = CGRect(x: padding, y: sliderLabel.frame.maxY + 10, width: bounds.width - (padding * 2), height: 44)
+        // Logout Card
+        let logoutHeight: CGFloat = 54
+        logoutCard.frame = CGRect(x: padding, y: glassContainer.frame.maxY + 20, width: bounds.width - (padding * 2), height: logoutHeight)
+        logoutLabel.frame = logoutCard.contentView.bounds
     }
 }

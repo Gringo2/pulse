@@ -18,23 +18,38 @@ final class ChatListController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Pulse"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        
         setupNavigation()
         setupNodeCallbacks()
-        
-        // Initial Effect
         handle(.loadData)
     }
     
     private func setupNavigation() {
+        title = "Chats"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        
+        // Premium Transparent Appearance
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.largeTitleTextAttributes = [
+            .foregroundColor: UIColor.white,
+            .font: UIFont.systemFont(ofSize: 34, weight: .bold)
+        ]
+        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        navigationController?.navigationBar.standardAppearance = appearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.tintColor = Theme.Colors.accent
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: UIImage(systemName: "gear"),
+            title: "Edit",
             style: .plain,
             target: self,
-            action: #selector(didTapSettings)
+            action: #selector(didTapEdit)
         )
+    }
+    
+    @objc private func didTapEdit() {
+        // Implement edit logic
     }
     
     private func setupNodeCallbacks() {

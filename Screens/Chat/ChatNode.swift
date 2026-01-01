@@ -11,7 +11,7 @@ final class ChatNode: Node {
     private var bottomInset: CGFloat = 0
     
     override func setup() {
-        backgroundColor = .systemBackground
+        backgroundColor = Theme.Colors.background
         
         addSubnodes([messageListNode, inputPanelNode])
         
@@ -20,12 +20,6 @@ final class ChatNode: Node {
             self?.onEvent?(.sendMessage(text))
         }
         
-        // Setup Keyboard (This technically might belong in Controller or an infrastructure helper,
-        // but Node handling layout is acceptable if Controller passes down the inset.
-        // For strictly passive node, Controller should tell Node "setBottomInset(y)".
-        // We'll leave keyboard observing in Controller ideally, but for now we keep it simple or move it.)
-        // Refactoring plan says: "Nodes render state". Keyboard height is ephemeral UI state.
-        // Let's self-manage for now to keep Controller clean of layout math.
         setupKeyboardObservers()
     }
     
@@ -36,10 +30,15 @@ final class ChatNode: Node {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let inputHeight: CGFloat = 50 + bottomInset
+        let safeBottom = safeAreaInsets.bottom
+        let inputHeaderHeight: CGFloat = 52
+        let inputTotalHeight = inputHeaderHeight + bottomInset + (bottomInset > 0 ? 0 : safeBottom)
         
-        inputPanelNode.frame = CGRect(x: 0, y: bounds.height - inputHeight, width: bounds.width, height: inputHeight)
-        messageListNode.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height - inputHeight)
+        inputPanelNode.frame = CGRect(x: 0, y: bounds.height - inputTotalHeight, width: bounds.width, height: inputTotalHeight)
+        
+        // Ensure message list is below any header blur if we add one, 
+        // but for now, it fills the remaining space.
+        messageListNode.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height - inputTotalHeight)
     }
     
     // MARK: - Update

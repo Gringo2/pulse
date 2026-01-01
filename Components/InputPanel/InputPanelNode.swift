@@ -9,79 +9,115 @@ import UIKit
 final class InputPanelNode: Node, UITextFieldDelegate {
     
     // UI Elements
-    private let backgroundView = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
-    private let inputsContainer = UIView()
+    private let glassBackground = GlassNode()
     private let textField = UITextField()
     private let voiceButton = UIButton(type: .system)
     private let attachButton = UIButton(type: .system)
+    private let sendButton = UIButton(type: .system)
     
     var onSendMessage: ((String) -> Void)?
     
     override func setup() {
-        // Background
-        backgroundView.layer.masksToBounds = true
-        // Top border
-        let border = UIView()
-        border.backgroundColor = UIColor.separator
-        border.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
-        border.frame = CGRect(x: 0, y: 0, width: 1000, height: 0.5)
-        backgroundView.contentView.addSubview(border)
+        // Glass Background (Full width at bottom)
+        glassBackground.layer.cornerRadius = 0
+        glassBackground.layer.borderWidth = 0 // Handled by top border if needed
+        glassBackground.setBlurStyle(.systemUltraThinMaterialDark)
+        
+        let topBorder = UIView()
+        topBorder.backgroundColor = Theme.Colors.glassBorder
+        topBorder.autoresizingMask = [.flexibleWidth, .flexibleBottomMargin]
+        topBorder.frame = CGRect(x: 0, y: 0, width: 2000, height: 0.5)
+        glassBackground.addSubview(topBorder)
         
         // Buttons
-        configureButton(attachButton, icon: "paperclip")
-        configureButton(voiceButton, icon: "mic.fill")
+        configureButton(attachButton, icon: "plus")
+        configureButton(voiceButton, icon: "mic")
+        
+        // Send Button (Premium Circular blue)
+        sendButton.backgroundColor = Theme.Colors.accent
+        sendButton.setImage(UIImage(systemName: "arrow.up")?.withConfiguration(UIImage.SymbolConfiguration(weight: .bold)), for: .normal)
+        sendButton.tintColor = .white
+        sendButton.layer.cornerRadius = 16
+        sendButton.isHidden = true
+        sendButton.addTarget(self, action: #selector(didTapSend), for: .touchUpInside)
         
         // Text Field
         textField.placeholder = "Message"
+        textField.attributedPlaceholder = NSAttributedString(
+            string: "Message",
+            attributes: [.foregroundColor: Theme.Colors.secondaryText]
+        )
         textField.borderStyle = .none
-        textField.backgroundColor = .systemGray6
-        textField.layer.cornerRadius = 18
-        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 12, height: 1))
+        textField.textColor = .white
+        textField.font = .systemFont(ofSize: 17)
+        textField.backgroundColor = UIColor.white.withAlphaComponent(0.05)
+        textField.layer.cornerRadius = 20
+        textField.layer.borderColor = Theme.Colors.glassBorder.cgColor
+        textField.layer.borderWidth = 0.5
+        textField.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 14, height: 1))
         textField.leftViewMode = .always
         textField.delegate = self
         textField.returnKeyType = .send
+        textField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         
-        addSubnodes([backgroundView, attachButton, textField, voiceButton])
+        addSubnodes([glassBackground, attachButton, textField, voiceButton, sendButton])
     }
     
     private func configureButton(_ button: UIButton, icon: String) {
-        button.setImage(UIImage(systemName: icon), for: .normal)
-        button.tintColor = .systemBlue
+        let config = UIImage.SymbolConfiguration(pointSize: 20, weight: .medium)
+        button.setImage(UIImage(systemName: icon, withConfiguration: config), for: .normal)
+        button.tintColor = Theme.Colors.accent
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundView.frame = bounds
+        
+        let safeBottom = safeAreaInsets.bottom
+        let panelHeight: CGFloat = 52
+        
+        glassBackground.frame = bounds
         
         let buttonSize: CGFloat = 44
-        let padding: CGFloat = 8
+        let sidePadding: CGFloat = 8
         
         // Attach Button
-        attachButton.frame = CGRect(x: 0, y: bounds.height - buttonSize - padding, width: buttonSize, height: buttonSize)
+        attachButton.frame = CGRect(x: sidePadding, y: 4, width: buttonSize, height: buttonSize)
         
-        // Voice Button
-        voiceButton.frame = CGRect(x: bounds.width - buttonSize, y: bounds.height - buttonSize - padding, width: buttonSize, height: buttonSize)
+        // Voice / Send Button Logic
+        let showSend = !(textField.text?.isEmpty ?? true)
+        voiceButton.alpha = showSend ? 0 : 1
+        sendButton.alpha = showSend ? 1 : 0
+        sendButton.isHidden = !showSend
+        voiceButton.isHidden = showSend
+        
+        let rightButtonX = bounds.width - buttonSize - sidePadding
+        voiceButton.frame = CGRect(x: rightButtonX, y: 4, width: buttonSize, height: buttonSize)
+        
+        // Send Button is slightly smaller and circular
+        let sendSize: CGFloat = 32
+        sendButton.frame = CGRect(x: bounds.width - sendSize - 12, y: 4 + (buttonSize - sendSize)/2, width: sendSize, height: sendSize)
         
         // Text Field
-        let textFieldHeight: CGFloat = 36
-        let textFieldY = bounds.height - textFieldHeight - ((bounds.height - textFieldHeight)/2) // centered vertically if single line
-        // Actually, improved layout:
-        let bottomOffset = buttonSize + padding
-        let tfY = bounds.height - buttonSize - padding + (buttonSize - textFieldHeight)/2
-        
-        textField.frame = CGRect(
-            x: attachButton.frame.maxX + 4,
-            y: tfY,
-            width: voiceButton.frame.minX - attachButton.frame.maxX - 8,
-            height: textFieldHeight
-        )
+        let tfX = attachButton.frame.maxX + 4
+        let tfWidth = (showSend ? sendButton.frame.minX : voiceButton.frame.minX) - tfX - 8
+        textField.frame = CGRect(x: tfX, y: 6, width: tfWidth, height: 40)
     }
     
-    // Text Field Delegate
+    @objc private func textFieldDidChange() {
+        UIView.animate(withDuration: 0.2) {
+            self.setNeedsLayout()
+        }
+    }
+    
+    @objc private func didTapSend() {
+        _ = textFieldShouldReturn(textField)
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         guard let text = textField.text, !text.isEmpty else { return false }
         onSendMessage?(text)
         textField.text = ""
+        textFieldDidChange()
         return true
     }
 }

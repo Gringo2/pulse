@@ -9,6 +9,7 @@ final class MessageBubbleNode: Node {
     
     private let textLabel = UILabel()
     private let bubbleBackground = UIView()
+    private let gradientLayer = CAGradientLayer()
     private let timeLabel = UILabel()
     
     var message: Message? {
@@ -21,17 +22,20 @@ final class MessageBubbleNode: Node {
     
     override func setup() {
         // Bubble
-        bubbleBackground.layer.cornerRadius = 16
-        // To simulate a "tail", usually we'd use a CAShapeLayer or a specific corner radius config
-        // For Pulse v1, we used varying corner radii
+        bubbleBackground.layer.cornerRadius = Theme.Spacing.bubbleRadius
+        bubbleBackground.clipsToBounds = true
+        
+        // Gradient
+        gradientLayer.startPoint = CGPoint(x: 0, y: 0)
+        gradientLayer.endPoint = CGPoint(x: 1, y: 1)
+        bubbleBackground.layer.addSublayer(gradientLayer)
         
         // Text
         textLabel.numberOfLines = 0
-        textLabel.font = .systemFont(ofSize: 16)
+        textLabel.font = .systemFont(ofSize: 17, weight: .regular)
         
         // Time
-        timeLabel.font = .systemFont(ofSize: 11)
-        timeLabel.textColor = UIColor(white: 1, alpha: 0.7)
+        timeLabel.font = .systemFont(ofSize: 11, weight: .medium)
         timeLabel.textAlignment = .right
         
         addSubnodes([bubbleBackground, textLabel, timeLabel])
@@ -52,56 +56,53 @@ final class MessageBubbleNode: Node {
         timeLabel.text = formatter.string(from: message.timestamp)
         
         if message.isOutgoing {
-            bubbleBackground.backgroundColor = .systemBlue
+            bubbleBackground.backgroundColor = .clear
+            gradientLayer.isHidden = false
+            gradientLayer.colors = Theme.Colors.bubbleOutgoing.map { $0.cgColor }
             textLabel.textColor = .white
+            timeLabel.textColor = UIColor.white.withAlphaComponent(0.7)
             bubbleBackground.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner]
+            bubbleBackground.layer.borderWidth = 0
         } else {
-            bubbleBackground.backgroundColor = .systemGray5
-            textLabel.textColor = .label
-            timeLabel.textColor = .secondaryLabel
+            bubbleBackground.backgroundColor = Theme.Colors.glassBackground
+            gradientLayer.isHidden = true
+            textLabel.textColor = .white
+            timeLabel.textColor = Theme.Colors.secondaryText
             bubbleBackground.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
+            bubbleBackground.layer.borderColor = Theme.Colors.glassBorder.cgColor
+            bubbleBackground.layer.borderWidth = 0.5
         }
+        setNeedsLayout()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        // Manual Layout for Bubble
-        // 1. Measure text
         let maxBubbleWidth = bounds.width * 0.75
-        let padding = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        let padding = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
         
         let availableTextWidth = maxBubbleWidth - padding.left - padding.right
         let textSize = textLabel.sizeThatFits(CGSize(width: availableTextWidth, height: .greatestFiniteMagnitude))
         
-        let bubbleWidth = textSize.width + padding.left + padding.right
-        let bubbleHeight = textSize.height + padding.top + padding.bottom + 12 // extra space for time
+        let bubbleWidth = max(textSize.width + padding.left + padding.right, 60)
+        let bubbleHeight = textSize.height + padding.top + padding.bottom + 14
         
-        // Position
-        let x: CGFloat
-        if let msg = message, msg.isOutgoing {
-            x = bounds.width - bubbleWidth - 10
-        } else {
-            x = 10
-        }
+        let x: CGFloat = (message?.isOutgoing ?? true) ? (bounds.width - bubbleWidth - 12) : 12
         
         bubbleBackground.frame = CGRect(x: x, y: 4, width: bubbleWidth, height: bubbleHeight)
+        gradientLayer.frame = bubbleBackground.bounds
         
         textLabel.frame = CGRect(x: x + padding.left, y: 4 + padding.top, width: textSize.width, height: textSize.height)
-        
-        timeLabel.frame = CGRect(x: x + bubbleWidth - 40 - padding.right, y: 4 + bubbleHeight - 18, width: 40, height: 12)
+        timeLabel.frame = CGRect(x: x + bubbleWidth - 46 - padding.right, y: 4 + bubbleHeight - 20, width: 46, height: 14)
     }
     
-    // Size Calc helper for the List
     static func calculateHeight(for message: Message, width: CGFloat) -> CGFloat {
-        // Simplified height calc
-        // Real implementation would reuse layout logic
         let maxBubbleWidth = width * 0.75
-        let padding = UIEdgeInsets(top: 8, left: 12, bottom: 8, right: 12)
+        let padding = UIEdgeInsets(top: 10, left: 14, bottom: 10, right: 14)
         let constraintRect = CGSize(width: maxBubbleWidth - padding.left - padding.right, height: .greatestFiniteMagnitude)
-        let boundingBox = message.text.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, context: nil)
+        let boundingBox = message.text.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: UIFont.systemFont(ofSize: 17)], context: nil)
         
-        return boundingBox.height + padding.top + padding.bottom + 12 + 8 // +8 margin
+        return ceil(boundingBox.height) + padding.top + padding.bottom + 14 + 10
     }
     
     // Interactions
@@ -122,12 +123,11 @@ final class MessageBubbleNode: Node {
     
     @objc private func handleLongPress(_ gesture: UILongPressGestureRecognizer) {
         if gesture.state == .began {
-            // Context Menu Trigger (Mock)
             let generator = UIImpactFeedbackGenerator(style: .medium)
             generator.impactOccurred()
             
             UIView.animate(withDuration: 0.2, animations: {
-                self.bubbleBackground.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+                self.bubbleBackground.transform = CGAffineTransform(scaleX: 0.96, y: 0.96)
             }) { _ in
                 UIView.animate(withDuration: 0.4, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 0.5, options: [], animations: {
                     self.bubbleBackground.transform = .identity

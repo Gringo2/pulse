@@ -13,11 +13,8 @@ final class MessageListNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.register(MessageCellWrapper.self, forCellReuseIdentifier: "MessageCell")
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
-        tableView.backgroundColor = .systemBackground
-        
-        // Transform to facilitate bottom-aligned messaging
-        // Often in chat apps, we flip the tableview upside down OR just scroll to bottom.
-        // For simple Pulse v1, we will just scroll to bottom on update.
+        tableView.backgroundColor = .clear
+        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         
         addSubview(tableView)
     }
@@ -61,6 +58,7 @@ final class MessageListNode: Node, UITableViewDelegate, UITableViewDataSource {
         
         override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: reuseIdentifier)
+            backgroundColor = .clear
             contentView.addSubview(node)
             selectionStyle = .none
         }
