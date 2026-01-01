@@ -42,7 +42,9 @@ final class PerformanceMonitor {
         label.textAlignment = .center
         label.numberOfLines = 2
         
-        w.addSubview(label)
+        let vc = UIViewController()
+        vc.view.addSubview(label)
+        w.rootViewController = vc
         w.isHidden = false
         self.window = w
         

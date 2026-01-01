@@ -57,13 +57,15 @@ jobs:
 
           xcodebuild build \
             -scheme Pulse \
+            -configuration Debug \
             -destination "generic/platform=iOS Simulator" \
             -sdk iphonesimulator \
             -derivedDataPath ./build \
+            ONLY_ACTIVE_ARCH=NO \
             CODE_SIGNING_ALLOWED=NO
           
           # Export build settings
-          xcodebuild -scheme Pulse -destination "generic/platform=iOS Simulator" -sdk iphonesimulator -derivedDataPath ./build -showBuildSettings > settings.txt
+          xcodebuild -scheme Pulse -configuration Debug -destination "generic/platform=iOS Simulator" -sdk iphonesimulator -derivedDataPath ./build -showBuildSettings > settings.txt
           echo "CODESIGNING_FOLDER_PATH=$(grep -m 1 " CODESIGNING_FOLDER_PATH = " settings.txt | cut -d'=' -f2 | xargs)" >> $GITHUB_ENV
 
       - name: Package Artifact (Pulse.app.zip)
@@ -99,6 +101,7 @@ jobs:
             echo '    <true/>' >> Payload/Pulse.app/Info.plist
             echo '</dict>' >> Payload/Pulse.app/Info.plist
             echo '</plist>' >> Payload/Pulse.app/Info.plist
+            echo 'APPL????' > Payload/Pulse.app/PkgInfo
           fi
           
           zip -r Pulse.app.zip Payload
