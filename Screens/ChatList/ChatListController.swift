@@ -74,7 +74,21 @@ final class ChatListController: UIViewController {
             
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
                 guard let self = self else { return }
-                self.state.chats = Chat.mockData()
+                // Generate more data for scrolling
+                var mockChats = Chat.mockData()
+                // Duplicate to fill list
+                mockChats.append(contentsOf: mockChats.map { 
+                    var copy = $0
+                    copy.id = $0.id + " copy"
+                    return copy 
+                })
+                mockChats.append(contentsOf: mockChats.map { 
+                    var copy = $0
+                    copy.id = $0.id + " copy 2"
+                    return copy 
+                })
+                
+                self.state.chats = mockChats
                 self.state.isLoading = false
                 self.updateUI()
             }

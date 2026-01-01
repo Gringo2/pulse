@@ -23,7 +23,11 @@ final class ChatListCellNode: Node {
     private lazy var highlightAnimator = HighlightAnimator(view: self)
     
     override func setup() {
-        backgroundColor = .clear
+        backgroundColor = UIColor.white.withAlphaComponent(0.02)
+        layer.cornerRadius = 16
+        layer.borderWidth = 0.5
+        layer.borderColor = UIColor.white.withAlphaComponent(0.08).cgColor
+        clipsToBounds = true
         layer.cornerRadius = 16
         clipsToBounds = true
         
