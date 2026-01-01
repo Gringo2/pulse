@@ -35,7 +35,8 @@ final class RootController: UITabBarController {
         let icons = ["message.fill", "phone.fill", "gearshape.fill"]
         for (index, icon) in icons.enumerated() {
             let button = UIButton(type: .system)
-            button.setImage(UIImage(systemName: icon), for: .normal)
+            let image = UIImage(systemName: icon)?.withRenderingMode(.alwaysTemplate)
+            button.setImage(image, for: .normal)
             button.tintColor = index == 0 ? Theme.Colors.accent : Theme.Colors.secondaryText
             button.tag = index
             button.addTarget(self, action: #selector(didSelectTab(_:)), for: .touchUpInside)
@@ -65,12 +66,12 @@ final class RootController: UITabBarController {
         let barHeight: CGFloat = 64
         let bottomPadding: CGFloat = view.safeAreaInsets.bottom > 0 ? view.safeAreaInsets.bottom : 20
         
-        glassTabBar.frame = CGRect(
-            x: Theme.Spacing.horizontalPadding,
-            y: view.bounds.height - barHeight - bottomPadding,
             width: barWidth,
             height: barHeight
         )
+        
+        // Force layout update so glassTabBar.contentView has valid bounds
+        glassTabBar.layoutIfNeeded()
         
         stackView.frame = glassTabBar.contentView.bounds
         

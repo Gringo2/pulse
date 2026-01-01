@@ -1,0 +1,111 @@
+<svg width="393" height="852" viewBox="0 0 393 852" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050505"/>
+      <stop offset="40%" stop-color="#121424"/>
+      <stop offset="100%" stop-color="#050505"/>
+    </linearGradient>
+    <linearGradient id="avatar1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#007AFF"/>
+      <stop offset="100%" stop-color="#00E0FF"/>
+    </linearGradient>
+    <linearGradient id="avatar2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#A259FF"/>
+      <stop offset="100%" stop-color="#6B29FF"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="393" height="852" fill="url(#bgGradient)"/>
+  
+  <!-- Status Bar -->
+  <text x="20" y="30" fill="white" font-size="15" font-weight="600">13:01</text>
+  <text x="350" y="30" fill="white" font-size="15">⚡ 📶</text>
+  
+  <!-- Navigation Bar -->
+  <text x="20" y="140" fill="white" font-size="34" font-weight="700">Chats</text>
+  <text x="343" y="120" fill="#007AFF" font-size="17" font-weight="500">Edit</text>
+  
+  <!-- Chat Cell 1 -->
+  <g transform="translate(0, 180)">
+    <rect x="16" y="0" width="361" height="82" rx="50" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+    <circle cx="40" cy="41" r="24" fill="url(#avatar1)" filter="url(#glow)"/>
+    <circle cx="40" cy="41" r="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text x="40" y="46" fill="white" font-size="18" font-weight="700" text-anchor="middle">👤</text>
+    
+    <text x="78" y="28" fill="white" font-size="17" font-weight="600">Architecture is key 🔑</text>
+    <text x="78" y="50" fill="rgba(255,255,255,0.6)" font-size="15">New plan looks solid</text>
+    <text x="340" y="28" fill="rgba(255,255,255,0.4)" font-size="13" text-anchor="end">15:00</text>
+  </g>
+  
+  <!-- Chat Cell 2 -->
+  <g transform="translate(0, 268)">
+    <rect x="16" y="0" width="361" height="82" rx="50" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+    <circle cx="40" cy="41" r="24" fill="url(#avatar2)" filter="url(#glow)"/>
+    <circle cx="40" cy="41" r="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text x="40" y="46" fill="white" font-size="18" font-weight="700" text-anchor="middle">🎨</text>
+    
+    <text x="78" y="28" fill="white" font-size="17" font-weight="600">New assets for Pulse V1</text>
+    <text x="78" y="50" fill="rgba(255,255,255,0.6)" font-size="15">Glassmorphism is perfect</text>
+    <text x="340" y="28" fill="rgba(255,255,255,0.4)" font-size="13" text-anchor="end">14:45</text>
+  </g>
+  
+  <!-- Chat Cell 3 -->
+  <g transform="translate(0, 356)">
+    <rect x="16" y="0" width="361" height="82" rx="50" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+    <circle cx="40" cy="41" r="24" fill="url(#avatar1)" filter="url(#glow)"/>
+    <circle cx="40" cy="41" r="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    <text x="40" y="46" fill="white" font-size="18" font-weight="700" text-anchor="middle">📹</text>
+    
+    <text x="78" y="28" fill="white" font-size="17" font-weight="600">Video_2025.mov</text>
+    <text x="78" y="50" fill="rgba(255,255,255,0.6)" font-size="15">Ready for review</text>
+    <text x="340" y="28" fill="rgba(255,255,255,0.4)" font-size="13" text-anchor="end">12:30</text>
+  </g>
+  
+  <!-- iOS Standard Tab Bar -->
+  <g transform="translate(0, 769)">
+    <!-- Tab Bar Background (Standard iOS blur effect) -->
+    <rect width="393" height="83" fill="rgba(28,28,30,0.85)"/>
+    <rect width="393" height="0.5" fill="rgba(255,255,255,0.08)"/>
+    
+    <!-- Tab Items (131px width each = 393/3) -->
+    
+    <!-- Messages Tab (Active) -->
+    <g transform="translate(65.5, 20)">
+      <!-- SF Symbol: message.fill -->
+      <g transform="translate(0, 0)">
+        <path d="M -10 -6 L 10 -6 C 11.1 -6 12 -5.1 12 -4 L 12 4 C 12 5.1 11.1 6 10 6 L 2 6 L -2 10 L -2 6 L -10 6 C -11.1 6 -12 5.1 -12 4 L -12 -4 C -12 -5.1 -11.1 -6 -10 -6 Z" 
+              fill="#007AFF" stroke="none"/>
+      </g>
+      <text y="22" fill="#007AFF" font-size="10" font-weight="500" text-anchor="middle">Chats</text>
+    </g>
+    
+    <!-- Calls Tab -->
+    <g transform="translate(196.5, 20)">
+      <!-- SF Symbol: phone.fill -->
+      <g transform="translate(0, 0)">
+        <path d="M -6 -8 C -7 -9 -8.5 -9 -9.5 -8 L -10.5 -7 C -11.5 -6 -11.5 -4.5 -10.5 -3.5 L -9 -2 C -8 -1 -8 0.5 -9 1.5 C -10 2.5 -10.5 3.5 -9.5 4.5 L -8 6 C -7 7 -5.5 7 -4.5 6 L -3.5 5 C -2.5 4 -2.5 2.5 -3.5 1.5 L -5 0 C -6 -1 -6 -2.5 -5 -3.5 L -3 -5.5 C -2 -6.5 -0.5 -6.5 0.5 -5.5 L 2 -4 C 3 -3 4.5 -3 5.5 -4 L 6.5 -5 C 7.5 -6 7.5 -7.5 6.5 -8.5 L 5 -10 C 4 -11 2.5 -11 1.5 -10 C 0.5 -9 -1 -8.5 -2 -7.5 C -3 -6.5 -4.5 -6.5 -5.5 -7.5 Z" 
+              fill="rgba(142,142,147,1)" stroke="none" transform="scale(0.8) rotate(-135)"/>
+      </g>
+      <text y="22" fill="rgba(142,142,147,1)" font-size="10" font-weight="500" text-anchor="middle">Calls</text>
+    </g>
+    
+    <!-- Settings Tab -->
+    <g transform="translate(327.5, 20)">
+      <!-- SF Symbol: gearshape.fill -->
+      <g transform="translate(0, 0)">
+        <path d="M 0 -10 L 1.5 -7 L 4.5 -6.5 L 6.5 -4.5 L 7 -1.5 L 10 0 L 7 1.5 L 6.5 4.5 L 4.5 6.5 L 1.5 7 L 0 10 L -1.5 7 L -4.5 6.5 L -6.5 4.5 L -7 1.5 L -10 0 L -7 -1.5 L -6.5 -4.5 L -4.5 -6.5 L -1.5 -7 Z" 
+              fill="rgba(142,142,147,1)" stroke="none"/>
+        <circle r="3.5" fill="rgba(28,28,30,1)"/>
+      </g>
+      <text y="22" fill="rgba(142,142,147,1)" font-size="10" font-weight="500" text-anchor="middle">Settings</text>
+    </g>
+  </g>
+</svg>
