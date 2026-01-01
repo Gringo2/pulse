@@ -28,7 +28,6 @@ final class ChatListCellNode: Node {
         layer.borderWidth = 0.5
         layer.borderColor = UIColor.white.withAlphaComponent(0.08).cgColor
         clipsToBounds = true
-        layer.cornerRadius = 16
         clipsToBounds = true
         
         // Avatar Container (Liquid effect)
@@ -135,7 +134,7 @@ final class ChatListCellNode: Node {
         super.touchesEnded(touches, with: event)
         highlightAnimator.animateHighlight(false)
         UIView.animate(withDuration: 0.3) {
-            self.backgroundColor = .clear
+            self.backgroundColor = UIColor.white.withAlphaComponent(0.02)
         }
     }
     
@@ -143,7 +142,7 @@ final class ChatListCellNode: Node {
         super.touchesCancelled(touches, with: event)
         highlightAnimator.animateHighlight(false)
         UIView.animate(withDuration: 0.3) {
-            self.backgroundColor = .clear
+            self.backgroundColor = UIColor.white.withAlphaComponent(0.02)
         }
     }
 }
