@@ -66,6 +66,9 @@ final class RootController: UITabBarController {
         let barHeight: CGFloat = 64
         let bottomPadding: CGFloat = view.safeAreaInsets.bottom > 0 ? view.safeAreaInsets.bottom : 20
         
+        glassTabBar.frame = CGRect(
+            x: Theme.Spacing.horizontalPadding,
+            y: view.bounds.height - barHeight - bottomPadding,
             width: barWidth,
             height: barHeight
         )
