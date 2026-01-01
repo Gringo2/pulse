@@ -4,6 +4,7 @@ import UIKit
 /// Passive Renderer: Receives State, Updates View.
 final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
     
+    private let backgroundLayer = CAGradientLayer()
     private let tableView = UITableView()
     private var chats: [Chat] = []
     
@@ -11,20 +12,33 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
     var onSelectChat: ((Chat) -> Void)?
     
     override func setup() {
-        self.backgroundColor = Theme.Colors.background
+        backgroundColor = Theme.Colors.background
+        
+        // Vibrant background gradient to make glass pop
+        backgroundLayer.colors = [
+            UIColor(hex: "#050505").cgColor,
+            UIColor(hex: "#0A0A10").cgColor,
+            UIColor(hex: "#050505").cgColor
+        ]
+        backgroundLayer.locations = [0.0, 0.5, 1.0]
+        layer.insertSublayer(backgroundLayer, at: 0)
         
         tableView.delegate = self
         tableView.dataSource = self
         tableView.register(CellWrapper.self, forCellReuseIdentifier: "Cell")
-        tableView.rowHeight = 74 // Slightly increased for breathability
+        tableView.rowHeight = 82 // Increased for premium feel
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
+        
+        // Padding for floating tab bar
+        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 100, right: 0)
         
         addSubview(tableView)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        backgroundLayer.frame = bounds
         tableView.frame = bounds
     }
     
