@@ -55,7 +55,7 @@ final class SpringAnimator {
         // In a real engine, we'd integrate velocity.
         // For this demo, we use a basic interpolation that feels "springy".
         
-        let t = CGFloat(elapsed) / response
+        _ = CGFloat(elapsed) / response
         
         // This is a basic viscous fluid damping approximation for demo
         // Real implementation would use: F = -kx - cv

@@ -13,14 +13,18 @@ final class SettingsController: UIViewController {
         title = "Playground"
         
         // Callbacks
-        settingsNode.switchComponent.onValueChanged = { isOn in
-            print("Switch: \(isOn)")
+        settingsNode.fluidSwitch.onValueChanged = { isOn in
+            print("Fluid: \(isOn)")
             let generator = UIImpactFeedbackGenerator(style: .light)
             generator.impactOccurred()
         }
         
-        settingsNode.sliderComponent.onValueChanged = { val in
-            // print("Slider: \(val)") // Noisy log
+        settingsNode.soundsSwitch.onValueChanged = { isOn in
+            print("Sounds: \(isOn)")
+        }
+        
+        settingsNode.vibrationSwitch.onValueChanged = { isOn in
+            print("Vibration: \(isOn)")
         }
     }
 }

@@ -72,7 +72,7 @@ final class InputPanelNode: Node, UITextFieldDelegate {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let safeBottom = safeAreaInsets.bottom
+        _ = safeAreaInsets.bottom
         let panelHeight: CGFloat = 56 // Matches SVG height
         
         // Floating Layout

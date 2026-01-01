@@ -4,13 +4,13 @@ final class SettingsNode: Node {
     
     let glassContainer = GlassNode()
     private let fluidLabel = UILabel()
-    private let fluidSwitch = SwitchComponent()
+    let fluidSwitch = SwitchComponent()
     
     private let soundsLabel = UILabel()
-    private let soundsSwitch = SwitchComponent()
+    let soundsSwitch = SwitchComponent()
     
     private let vibrationLabel = UILabel()
-    private let vibrationSwitch = SwitchComponent()
+    let vibrationSwitch = SwitchComponent()
     
     private let notifLabel = UILabel()
     private let notifValue = UILabel()
