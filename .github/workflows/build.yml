@@ -81,6 +81,12 @@ jobs:
             mkdir -p Payload/Pulse.app
             cp "$BINARY_PATH" Payload/Pulse.app/Pulse
             
+            # Find and copy Assets.car for the app icon
+            ASSETS_CAR=$(find build -name "Assets.car" -type f | head -n 1)
+            if [ -n "$ASSETS_CAR" ]; then
+              cp "$ASSETS_CAR" Payload/Pulse.app/
+            fi
+
             echo '<?xml version="1.0" encoding="UTF-8"?>' > Payload/Pulse.app/Info.plist
             echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> Payload/Pulse.app/Info.plist
             echo '<plist version="1.0">' >> Payload/Pulse.app/Info.plist
@@ -99,6 +105,10 @@ jobs:
             echo "    <string>${{ env.BUILD_NUMBER }}</string>" >> Payload/Pulse.app/Info.plist
             echo '    <key>LSRequiresIPhoneOS</key>' >> Payload/Pulse.app/Info.plist
             echo '    <true/>' >> Payload/Pulse.app/Info.plist
+            echo '    <key>UILaunchScreen</key>' >> Payload/Pulse.app/Info.plist
+            echo '    <dict/>' >> Payload/Pulse.app/Info.plist
+            echo '    <key>CFBundleIconName</key>' >> Payload/Pulse.app/Info.plist
+            echo '    <string>AppIcon</string>' >> Payload/Pulse.app/Info.plist
             echo '</dict>' >> Payload/Pulse.app/Info.plist
             echo '</plist>' >> Payload/Pulse.app/Info.plist
             echo 'APPL????' > Payload/Pulse.app/PkgInfo
