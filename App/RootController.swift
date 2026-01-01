@@ -18,7 +18,7 @@ final class RootController: UITabBarController {
     
     private func setupTabs() {
         let chats = UINavigationController(rootViewController: ChatListController())
-        let calls = UINavigationController(rootViewController: UIViewController()) // Placeholder
+        let calls = UINavigationController(rootViewController: CallsController())
         let settings = UINavigationController(rootViewController: SettingsController())
         
         // Hide native tab bars

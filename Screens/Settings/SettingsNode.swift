@@ -9,6 +9,12 @@ final class SettingsNode: Node {
     private let switchLabel = UILabel()
     private let sliderLabel = UILabel()
     
+    private let notificationsLabel = UILabel()
+    private let notificationsSwitch = SwitchComponent()
+    
+    private let hapticsLabel = UILabel()
+    private let hapticsSlider = SliderComponent()
+    
     private let logoutCard = GlassNode()
     private let logoutLabel = UILabel()
     
@@ -40,6 +46,14 @@ final class SettingsNode: Node {
         sliderLabel.font = .systemFont(ofSize: 17, weight: .regular)
         sliderLabel.textColor = .white
         
+        notificationsLabel.text = "Notifications"
+        notificationsLabel.font = .systemFont(ofSize: 17, weight: .semibold) // Using semi-bold to match SVG text style often seen
+        notificationsLabel.textColor = .white
+        
+        hapticsLabel.text = "Haptics"
+        hapticsLabel.font = .systemFont(ofSize: 17, weight: .semibold)
+        hapticsLabel.textColor = .white
+        
         // Logout Card
         logoutLabel.text = "Log Out"
         logoutLabel.font = .systemFont(ofSize: 17, weight: .semibold)
@@ -47,12 +61,20 @@ final class SettingsNode: Node {
         logoutLabel.textAlignment = .center
         
         addSubnodes([glassContainer, logoutCard])
-        glassContainer.contentView.addSubnodes([switchLabel, switchComponent, sliderLabel, sliderComponent])
+        addSubnodes([glassContainer, logoutCard])
+        glassContainer.contentView.addSubnodes([
+            switchLabel, switchComponent,
+            notificationsLabel, notificationsSwitch,
+            sliderLabel, sliderComponent,
+            hapticsLabel, hapticsSlider
+        ])
         logoutCard.contentView.addSubview(logoutLabel)
         
         // Config Components
         switchComponent.isOn = true
+        notificationsSwitch.isOn = false
         sliderComponent.value = 0.5
+        hapticsSlider.value = 0.8
     }
     
     override func layoutSubviews() {
@@ -62,22 +84,33 @@ final class SettingsNode: Node {
         let padding: CGFloat = 16
         let itemHeight: CGFloat = 44
         
-        // Container
-        let containerHeight: CGFloat = 140
+        // Container - Increased height for 4 items
+        let containerHeight: CGFloat = 280
         glassContainer.frame = CGRect(x: padding, y: 120, width: bounds.width - (padding * 2), height: containerHeight)
         
         let innerPadding: CGFloat = 16
         let innerWidth = glassContainer.bounds.width - (innerPadding * 2)
         
-        // Switch Row
+        // Dark Theme (Switch)
         switchLabel.frame = CGRect(x: innerPadding, y: 20, width: 200, height: itemHeight)
         let switchWidth: CGFloat = 51
         let switchHeight: CGFloat = 31
         switchComponent.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: 20 + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
         
-        // Slider Row
-        sliderLabel.frame = CGRect(x: innerPadding, y: switchLabel.frame.maxY + 10, width: 200, height: 20)
-        sliderComponent.frame = CGRect(x: innerPadding, y: sliderLabel.frame.maxY + 10, width: innerWidth, height: 30)
+        // Notifications (Switch)
+        let notifY = switchLabel.frame.maxY + 10
+        notificationsLabel.frame = CGRect(x: innerPadding, y: notifY, width: 200, height: itemHeight)
+        notificationsSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: notifY + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
+        
+        // Sound Effects (Slider)
+        let soundY = notificationsLabel.frame.maxY + 10
+        sliderLabel.frame = CGRect(x: innerPadding, y: soundY, width: 200, height: 20)
+        sliderComponent.frame = CGRect(x: innerPadding, y: sliderLabel.frame.maxY + 8, width: innerWidth, height: 30)
+        
+        // Haptics (Slider)
+        let hapticsY = sliderComponent.frame.maxY + 16
+        hapticsLabel.frame = CGRect(x: innerPadding, y: hapticsY, width: 200, height: 20)
+        hapticsSlider.frame = CGRect(x: innerPadding, y: hapticsLabel.frame.maxY + 8, width: innerWidth, height: 30)
         
         // Logout Card
         let logoutHeight: CGFloat = 54
