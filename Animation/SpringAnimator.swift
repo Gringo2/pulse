@@ -59,7 +59,6 @@ final class SpringAnimator {
         
         // This is a basic viscous fluid damping approximation for demo
         // Real implementation would use: F = -kx - cv
-        let progress = 1.0 - exp(-t * 5.0) // Simple exponential approach
         
         // Interpolate
         let nextValue = value + (targetValue - value) * 0.15 // rapid convergence

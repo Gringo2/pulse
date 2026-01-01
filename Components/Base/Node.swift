@@ -34,8 +34,11 @@ class Node: UIView {
         // Subclasses should implement their specific layout logic here
     }
     
-    // Helper to add multiple subnodes
+// MARK: - UIView Extension
+extension UIView {
+    /// Helper to add multiple subviews
     func addSubnodes(_ nodes: [UIView]) {
         nodes.forEach { addSubview($0) }
     }
 }
+
