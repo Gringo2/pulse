@@ -1,0 +1,75 @@
+<svg width="393" height="852" viewBox="0 0 393 852" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#050505"/>
+      <stop offset="40%" stop-color="#121424"/>
+      <stop offset="100%" stop-color="#050505"/>
+    </linearGradient>
+    <linearGradient id="outgoingBubble" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00A2FF"/>
+      <stop offset="100%" stop-color="#0062FF"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="393" height="852" fill="url(#bgGradient)"/>
+  
+  <!-- Status Bar -->
+  <text x="20" y="30" fill="white" font-size="15" font-weight="600">13:01</text>
+  <text x="350" y="30" fill="white" font-size="15">⚡ 📶</text>
+  
+  <!-- Navigation Bar -->
+  <text x="20" y="90" fill="#007AFF" font-size="28">‹</text>
+  <circle cx="60" cy="78" r="18" fill="url(#outgoingBubble)"/>
+  <text x="60" y="83" fill="white" font-size="14" font-weight="700" text-anchor="middle">👤</text>
+  <text x="88" y="84" fill="white" font-size="17" font-weight="600">Design Team</text>
+  
+  <!-- Incoming Message 1 -->
+  <g transform="translate(16, 140)">
+    <rect width="260" height="60" rx="18" fill="rgba(44,44,46,1)"/>
+    <text x="16" y="25" fill="white" font-size="15">Hey! Check out this new</text>
+    <text x="16" y="45" fill="white" font-size="15">glassmorphic design 🎨</text>
+  </g>
+  
+  <!-- Incoming Message 2 -->
+  <g transform="translate(16, 210)">
+    <rect width="200" height="40" rx="18" fill="rgba(44,44,46,1)"/>
+    <text x="16" y="27" fill="white" font-size="15">The blur is perfect!</text>
+  </g>
+  
+  <!-- Outgoing Message 1 -->
+  <g transform="translate(117, 270)">
+    <rect width="260" height="60" rx="18" fill="url(#outgoingBubble)"/>
+    <text x="16" y="25" fill="white" font-size="15">Absolutely love it! The premium</text>
+    <text x="16" y="45" fill="white" font-size="15">aesthetic is exactly what we need</text>
+  </g>
+  
+  <!-- Outgoing Message 2 -->
+  <g transform="translate(177, 340)">
+    <rect width="200" height="60" rx="18" fill="url(#outgoingBubble)"/>
+    <text x="16" y="25" fill="white" font-size="15">Shipping this week?</text>
+    <text x="16" y="45" fill="white" font-size="15">Ready to launch! 🚀</text>
+  </g>
+  
+  <!-- iOS Standard Input Accessory Bar -->
+  <g transform="translate(0, 769)">
+    <!-- Background -->
+    <rect width="393" height="83" fill="rgba(28,28,30,0.85)"/>
+    <rect width="393" height="0.5" fill="rgba(255,255,255,0.08)"/>
+    
+    <!-- Input Field Container -->
+    <rect x="12" y="10" width="310" height="36" rx="18" fill="rgba(58,58,60,1)" stroke="rgba(82,82,84,1)" stroke-width="0.5"/>
+    <text x="28" y="32" fill="rgba(142,142,147,1)" font-size="16">Message</text>
+    
+    <!-- Send Button (iOS style) -->
+    <circle cx="349" cy="28" r="18" fill="#007AFF"/>
+    <path d="M 346 28 L 353 24.5 L 353 31.5 Z" fill="white"/>
+  </g>
+</svg>

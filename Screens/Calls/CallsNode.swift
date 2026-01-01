@@ -4,7 +4,9 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
     
     private let backgroundLayer = CAGradientLayer()
     private let tableView = UITableView()
-    private var calls: [Call] = []
+    private let segmentControl = UISegmentedControl(items: ["All", "Missed"])
+    private var allCalls: [Call] = []
+    private var filteredCalls: [Call] = []
     
     var onSelectCall: ((Call) -> Void)?
     
@@ -30,24 +32,51 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.backgroundColor = .clear
         tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 100, right: 0)
         
+        // Segment Control
+        segmentControl.selectedSegmentIndex = 0
+        segmentControl.backgroundColor = UIColor.white.withAlphaComponent(0.1)
+        segmentControl.selectedSegmentTintColor = Theme.Colors.accent
+        segmentControl.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        segmentControl.setTitleTextAttributes([.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 13, weight: .semibold)], for: .selected)
+        segmentControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
+        
+        addSubview(segmentControl)
         addSubview(tableView)
+        
+        tableView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 100, right: 0)
+    }
+    
+    @objc private func segmentChanged() {
+        filterCalls()
+    }
+    
+    private func filterCalls() {
+        if segmentControl.selectedSegmentIndex == 1 {
+            filteredCalls = allCalls.filter { $0.status == .missed }
+        } else {
+            filteredCalls = allCalls
+        }
+        tableView.reloadData()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         tableView.frame = bounds
+        
+        let segmentWidth: CGFloat = 200
+        segmentControl.frame = CGRect(x: (bounds.width - segmentWidth)/2, y: safeAreaInsets.top + 10, width: segmentWidth, height: 32)
     }
     
     func update(calls: [Call]) {
-        self.calls = calls
-        tableView.reloadData()
+        self.allCalls = calls
+        filterCalls()
     }
     
     // MARK: - TableView
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return calls.count
+        return filteredCalls.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -66,13 +95,13 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CallCell", for: indexPath) as! CallCellNode
-        cell.call = calls[indexPath.section]
+        cell.call = filteredCalls[indexPath.section]
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        onSelectCall?(calls[indexPath.section])
+        onSelectCall?(filteredCalls[indexPath.section])
     }
 }
 
@@ -91,7 +120,9 @@ final class CallCellNode: UITableViewCell {
     private let statusIcon = UIImageView()
     private let statusLabel = UILabel()
     private let timeLabel = UILabel()
-    private let infoButton = UIButton(type: .infoLight)
+    private let timeLabel = UILabel()
+    private let phoneButton = UIButton(type: .system)
+    private let videoButton = UIButton(type: .system)
     
     private lazy var highlightAnimator = HighlightAnimator(view: container)
     
@@ -137,7 +168,14 @@ final class CallCellNode: UITableViewCell {
         timeLabel.font = .systemFont(ofSize: 15, weight: .regular)
         timeLabel.textColor = UIColor.white.withAlphaComponent(0.4)
         
-        infoButton.tintColor = Theme.Colors.accent
+        timeLabel.font = .systemFont(ofSize: 15, weight: .regular)
+        timeLabel.textColor = UIColor.white.withAlphaComponent(0.4)
+        
+        phoneButton.setImage(UIImage(systemName: "phone.fill"), for: .normal)
+        phoneButton.tintColor = UIColor.white.withAlphaComponent(0.6)
+        
+        videoButton.setImage(UIImage(systemName: "video.fill"), for: .normal)
+        videoButton.tintColor = UIColor.white.withAlphaComponent(0.6)
         
         contentView.addSubview(container)
         container.addSubview(avatarContainer)
@@ -146,7 +184,8 @@ final class CallCellNode: UITableViewCell {
         container.addSubview(statusIcon)
         container.addSubview(statusLabel)
         container.addSubview(timeLabel)
-        container.addSubview(infoButton)
+        container.addSubview(phoneButton)
+        container.addSubview(videoButton)
     }
     
     private func updateContent() {
@@ -193,10 +232,13 @@ final class CallCellNode: UITableViewCell {
         statusIcon.frame = CGRect(x: textLeft, y: nameLabel.frame.maxY + 4, width: 14, height: 14)
         statusLabel.frame = CGRect(x: statusIcon.frame.maxX + 4, y: nameLabel.frame.maxY + 2, width: 100, height: 18)
         
-        infoButton.frame = CGRect(x: bounds.width - infoWidth - 8, y: (bounds.height - infoWidth)/2, width: infoWidth, height: infoWidth)
+        let iconSize: CGFloat = 36
+        
+        videoButton.frame = CGRect(x: bounds.width - horizontalPadding - iconSize, y: (bounds.height - iconSize)/2, width: iconSize, height: iconSize)
+        phoneButton.frame = CGRect(x: videoButton.frame.minX - iconSize - 8, y: (bounds.height - iconSize)/2, width: iconSize, height: iconSize)
         
         timeLabel.sizeToFit()
-        timeLabel.frame = CGRect(x: infoButton.frame.minX - timeLabel.frame.width - 8, y: (bounds.height - 18)/2, width: timeLabel.frame.width, height: 18)
+        timeLabel.frame = CGRect(x: phoneButton.frame.minX - timeLabel.frame.width - 12, y: (bounds.height - 18)/2, width: timeLabel.frame.width, height: 18)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

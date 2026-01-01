@@ -3,17 +3,20 @@ import UIKit
 final class SettingsNode: Node {
     
     let glassContainer = GlassNode()
-    let switchComponent = SwitchComponent()
-    let sliderComponent = SliderComponent()
+    private let fluidLabel = UILabel()
+    private let fluidSwitch = SwitchComponent()
     
-    private let switchLabel = UILabel()
-    private let sliderLabel = UILabel()
+    private let soundsLabel = UILabel()
+    private let soundsSwitch = SwitchComponent()
     
-    private let notificationsLabel = UILabel()
-    private let notificationsSwitch = SwitchComponent()
+    private let vibrationLabel = UILabel()
+    private let vibrationSwitch = SwitchComponent()
     
-    private let hapticsLabel = UILabel()
-    private let hapticsSlider = SliderComponent()
+    private let notifLabel = UILabel()
+    private let notifValue = UILabel()
+    
+    private let appearanceLabel = UILabel()
+    private let appearanceValue = UILabel()
     
     private let logoutCard = GlassNode()
     private let logoutLabel = UILabel()
@@ -37,22 +40,40 @@ final class SettingsNode: Node {
         // Glass Container for items
         glassContainer.setBlurStyle(.systemUltraThinMaterialDark)
         
-        // Labels
-        switchLabel.text = "Dark Theme"
-        switchLabel.font = .systemFont(ofSize: 17, weight: .regular)
-        switchLabel.textColor = .white
+        // Fluid Toggle
+        fluidLabel.text = "Fluid Toggle"
+        fluidLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        fluidLabel.textColor = .white
         
-        sliderLabel.text = "Sound Effects"
-        sliderLabel.font = .systemFont(ofSize: 17, weight: .regular)
-        sliderLabel.textColor = .white
+        // In-App Sounds
+        soundsLabel.text = "In-App Sounds"
+        soundsLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        soundsLabel.textColor = .white
         
-        notificationsLabel.text = "Notifications"
-        notificationsLabel.font = .systemFont(ofSize: 17, weight: .semibold) // Using semi-bold to match SVG text style often seen
-        notificationsLabel.textColor = .white
+        // Vibration
+        vibrationLabel.text = "Vibration"
+        vibrationLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        vibrationLabel.textColor = .white
         
-        hapticsLabel.text = "Haptics"
-        hapticsLabel.font = .systemFont(ofSize: 17, weight: .semibold)
-        hapticsLabel.textColor = .white
+        // Notification Sound
+        notifLabel.text = "Notification Sound"
+        notifLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        notifLabel.textColor = .white
+        
+        notifValue.text = "Default >"
+        notifValue.font = .systemFont(ofSize: 15, weight: .regular)
+        notifValue.textColor = UIColor.white.withAlphaComponent(0.5)
+        notifValue.textAlignment = .right
+        
+        // Appearance
+        appearanceLabel.text = "Appearance"
+        appearanceLabel.font = .systemFont(ofSize: 17, weight: .regular)
+        appearanceLabel.textColor = .white
+        
+        appearanceValue.text = ">"
+        appearanceValue.font = .systemFont(ofSize: 17, weight: .regular)
+        appearanceValue.textColor = UIColor.white.withAlphaComponent(0.5)
+        appearanceValue.textAlignment = .right
         
         // Logout Card
         logoutLabel.text = "Log Out"
@@ -61,20 +82,19 @@ final class SettingsNode: Node {
         logoutLabel.textAlignment = .center
         
         addSubnodes([glassContainer, logoutCard])
-        addSubnodes([glassContainer, logoutCard])
         glassContainer.contentView.addSubnodes([
-            switchLabel, switchComponent,
-            notificationsLabel, notificationsSwitch,
-            sliderLabel, sliderComponent,
-            hapticsLabel, hapticsSlider
+            fluidLabel, fluidSwitch,
+            soundsLabel, soundsSwitch,
+            vibrationLabel, vibrationSwitch,
+            notifLabel, notifValue,
+            appearanceLabel, appearanceValue
         ])
         logoutCard.contentView.addSubview(logoutLabel)
         
         // Config Components
-        switchComponent.isOn = true
-        notificationsSwitch.isOn = false
-        sliderComponent.value = 0.5
-        hapticsSlider.value = 0.8
+        fluidSwitch.isOn = true
+        soundsSwitch.isOn = true
+        vibrationSwitch.isOn = true
     }
     
     override func layoutSubviews() {
@@ -85,32 +105,38 @@ final class SettingsNode: Node {
         let itemHeight: CGFloat = 44
         
         // Container - Increased height for 4 items
+        // Container - Height for 5 items
         let containerHeight: CGFloat = 280
         glassContainer.frame = CGRect(x: padding, y: 120, width: bounds.width - (padding * 2), height: containerHeight)
         
         let innerPadding: CGFloat = 16
         let innerWidth = glassContainer.bounds.width - (innerPadding * 2)
-        
-        // Dark Theme (Switch)
-        switchLabel.frame = CGRect(x: innerPadding, y: 20, width: 200, height: itemHeight)
         let switchWidth: CGFloat = 51
         let switchHeight: CGFloat = 31
-        switchComponent.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: 20 + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
         
-        // Notifications (Switch)
-        let notifY = switchLabel.frame.maxY + 10
-        notificationsLabel.frame = CGRect(x: innerPadding, y: notifY, width: 200, height: itemHeight)
-        notificationsSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: notifY + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
+        // 1. Fluid Toggle
+        fluidLabel.frame = CGRect(x: innerPadding, y: 20, width: 200, height: itemHeight)
+        fluidSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: 20 + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
         
-        // Sound Effects (Slider)
-        let soundY = notificationsLabel.frame.maxY + 10
-        sliderLabel.frame = CGRect(x: innerPadding, y: soundY, width: 200, height: 20)
-        sliderComponent.frame = CGRect(x: innerPadding, y: sliderLabel.frame.maxY + 8, width: innerWidth, height: 30)
+        // 2. In-App Sounds
+        let soundsY = fluidLabel.frame.maxY + 8
+        soundsLabel.frame = CGRect(x: innerPadding, y: soundsY, width: 200, height: itemHeight)
+        soundsSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: soundsY + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
         
-        // Haptics (Slider)
-        let hapticsY = sliderComponent.frame.maxY + 16
-        hapticsLabel.frame = CGRect(x: innerPadding, y: hapticsY, width: 200, height: 20)
-        hapticsSlider.frame = CGRect(x: innerPadding, y: hapticsLabel.frame.maxY + 8, width: innerWidth, height: 30)
+        // 3. Vibration
+        let vibY = soundsLabel.frame.maxY + 8
+        vibrationLabel.frame = CGRect(x: innerPadding, y: vibY, width: 200, height: itemHeight)
+        vibrationSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: vibY + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
+        
+        // 4. Notification Sound
+        let notifY = vibrationLabel.frame.maxY + 8
+        notifLabel.frame = CGRect(x: innerPadding, y: notifY, width: 200, height: itemHeight)
+        notifValue.frame = CGRect(x: glassContainer.bounds.width - 120 - innerPadding, y: notifY, width: 120, height: itemHeight)
+        
+        // 5. Appearance
+        let appY = notifLabel.frame.maxY + 8
+        appearanceLabel.frame = CGRect(x: innerPadding, y: appY, width: 200, height: itemHeight)
+        appearanceValue.frame = CGRect(x: glassContainer.bounds.width - 40 - innerPadding, y: appY, width: 40, height: itemHeight)
         
         // Logout Card
         let logoutHeight: CGFloat = 54
