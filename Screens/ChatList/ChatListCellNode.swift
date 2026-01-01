@@ -24,6 +24,8 @@ final class ChatListCellNode: Node {
     
     override func setup() {
         backgroundColor = .clear
+        layer.cornerRadius = 16
+        clipsToBounds = true
         
         // Avatar Container (Liquid effect)
         avatarContainer.clipsToBounds = false
