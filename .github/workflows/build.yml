@@ -79,28 +79,26 @@ jobs:
             mkdir -p Payload/Pulse.app
             cp "$BINARY_PATH" Payload/Pulse.app/Pulse
             
-            cat <<EOF > Payload/Pulse.app/Info.plist
-          <?xml version="1.0" encoding="UTF-8"?>
-          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-          <plist version="1.0">
-          <dict>
-              <key>CFBundleExecutable</key>
-              <string>Pulse</string>
-              <key>CFBundleIdentifier</key>
-              <string>com.pulse.app</string>
-              <key>CFBundleName</key>
-              <string>Pulse</string>
-              <key>CFBundlePackageType</key>
-              <string>APPL</string>
-              <key>CFBundleShortVersionString</key>
-              <string>${{ env.APP_VERSION }}</string>
-              <key>CFBundleVersion</key>
-              <string>${{ env.BUILD_NUMBER }}</string>
-              <key>LSRequiresIPhoneOS</key>
-              <true/>
-          </dict>
-          </plist>
-          EOF
+            echo '<?xml version="1.0" encoding="UTF-8"?>' > Payload/Pulse.app/Info.plist
+            echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> Payload/Pulse.app/Info.plist
+            echo '<plist version="1.0">' >> Payload/Pulse.app/Info.plist
+            echo '<dict>' >> Payload/Pulse.app/Info.plist
+            echo '    <key>CFBundleExecutable</key>' >> Payload/Pulse.app/Info.plist
+            echo '    <string>Pulse</string>' >> Payload/Pulse.app/Info.plist
+            echo '    <key>CFBundleIdentifier</key>' >> Payload/Pulse.app/Info.plist
+            echo '    <string>com.pulse.app</string>' >> Payload/Pulse.app/Info.plist
+            echo '    <key>CFBundleName</key>' >> Payload/Pulse.app/Info.plist
+            echo '    <string>Pulse</string>' >> Payload/Pulse.app/Info.plist
+            echo '    <key>CFBundlePackageType</key>' >> Payload/Pulse.app/Info.plist
+            echo '    <string>APPL</string>' >> Payload/Pulse.app/Info.plist
+            echo "    <key>CFBundleShortVersionString</key>" >> Payload/Pulse.app/Info.plist
+            echo "    <string>${{ env.APP_VERSION }}</string>" >> Payload/Pulse.app/Info.plist
+            echo "    <key>CFBundleVersion</key>" >> Payload/Pulse.app/Info.plist
+            echo "    <string>${{ env.BUILD_NUMBER }}</string>" >> Payload/Pulse.app/Info.plist
+            echo '    <key>LSRequiresIPhoneOS</key>' >> Payload/Pulse.app/Info.plist
+            echo '    <true/>' >> Payload/Pulse.app/Info.plist
+            echo '</dict>' >> Payload/Pulse.app/Info.plist
+            echo '</plist>' >> Payload/Pulse.app/Info.plist
           fi
           
           zip -r Pulse.app.zip Payload

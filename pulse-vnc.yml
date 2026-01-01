@@ -1,0 +1,59 @@
+workflows:
+  pulse-vnc:
+    name: Pulse Simulator (VNC)
+    max_build_duration: 120
+
+    environment:
+      vars:
+        # Replace 'build-LAST' with the actual build tag from GitHub Releases
+        APP_URL: https://github.com/Gringo2/pulse/releases/download/build-LAST/Pulse.app.zip
+      xcode: latest
+
+    scripts:
+      - name: Download Pulse Simulator build
+        script: |
+          echo "Downloading Pulse Simulator build..."
+          curl -L "$APP_URL" -o Pulse.app.zip
+          unzip Pulse.app.zip
+          # The zip contains Payload/Pulse.app
+          ls -l Payload/Pulse.app
+
+      - name: Boot iOS Simulator
+        script: |
+          echo "Shutting down all simulators..."
+          xcrun simctl shutdown all || true
+
+          echo "Booting iPhone 15 simulator..."
+          xcrun simctl boot "iPhone 15"
+          open -a Simulator
+
+          echo "Waiting for simulator to fully boot..."
+          until xcrun simctl list | grep -q "Booted"; do
+              sleep 5
+          done
+          echo "Simulator is ready."
+
+      - name: Install and launch Pulse
+        script: |
+          APP_PATH="Payload/Pulse.app"
+          INFO_PLIST="$APP_PATH/Info.plist"
+          
+          if [ ! -d "$APP_PATH" ]; then
+            echo "ERROR: App bundle not found at $APP_PATH"
+            exit 1
+          fi
+
+          if [ ! -f "$INFO_PLIST" ]; then
+            echo "ERROR: Info.plist not found at $INFO_PLIST"
+            exit 1
+          fi
+
+          echo "Installing Pulse build..."
+          xcrun simctl install booted "$APP_PATH"
+
+          # Ensure the binary is executable and give the simulator time to register
+          chmod +x "$APP_PATH/Pulse"
+          sleep 2
+
+          echo "Launching Pulse..."
+          xcrun simctl launch booted com.pulse.app
