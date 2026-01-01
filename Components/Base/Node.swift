@@ -33,7 +33,8 @@ class Node: UIView {
         super.layoutSubviews()
         // Subclasses should implement their specific layout logic here
     }
-    
+}
+
 // MARK: - UIView Extension
 extension UIView {
     /// Helper to add multiple subviews
@@ -41,4 +42,5 @@ extension UIView {
         nodes.forEach { addSubview($0) }
     }
 }
+
 
