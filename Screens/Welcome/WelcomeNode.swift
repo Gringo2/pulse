@@ -74,7 +74,7 @@ final class WelcomeNode: Node {
         )
         
         // Layout inside card
-        let contentWidth = glassCard.contentView.bounds.width
+        let contentWidth = cardWidth // Use calculated width directly
         
         let logoSize: CGFloat = 80
         logoImageView.frame = CGRect(x: (contentWidth - logoSize)/2, y: 60, width: logoSize, height: logoSize)
@@ -84,6 +84,6 @@ final class WelcomeNode: Node {
         
         let buttonHeight: CGFloat = 54
         let buttonWidth = contentWidth - 60
-        actionButton.frame = CGRect(x: 30, y: glassCard.contentView.bounds.height - buttonHeight - 40, width: buttonWidth, height: buttonHeight)
+        actionButton.frame = CGRect(x: 30, y: cardHeight - buttonHeight - 40, width: buttonWidth, height: buttonHeight)
     }
 }
