@@ -19,7 +19,7 @@ final class OTPNode: Node {
     private let inputUnderline = UIView()
     
     // Actions
-    let actionButton = GlassButtonComponent()
+    let actionButton = GlassButtonComponent(title: "Send Code", iconName: "arrow.right")
     
     override func setup() {
         backgroundColor = Theme.Colors.background
@@ -57,7 +57,7 @@ final class OTPNode: Node {
         inputUnderline.backgroundColor = UIColor.white.withAlphaComponent(0.2)
         
         // Button
-        actionButton.setImage(UIImage(systemName: "arrow.right"), for: .normal)
+
         
         glassCard.contentView.addSubnodes([titleLabel, subtitleLabel, inputField, inputUnderline, actionButton])
         

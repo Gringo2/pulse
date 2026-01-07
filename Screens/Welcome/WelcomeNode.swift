@@ -12,7 +12,7 @@ final class WelcomeNode: Node {
     private let subtitleLabel = UILabel()
     
     // Actions
-    let actionButton = GlassButtonComponent()
+    let actionButton = GlassButtonComponent(title: "Get Started", iconName: "arrow.right")
     
     override func setup() {
         backgroundColor = Theme.Colors.background
@@ -48,8 +48,7 @@ final class WelcomeNode: Node {
         subtitleLabel.textAlignment = .center
         
         // Button
-        actionButton.setTitle("Get Started", for: .normal)
-        actionButton.setImage(UIImage(systemName: "arrow.right"), for: .normal)
+        // Configured in init
         
         // Hierarchy
         glassCard.contentView.addSubview(logoImageView)
