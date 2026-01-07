@@ -105,7 +105,7 @@ final class OTPNode: Node {
             height: cardHeight
         )
         
-        let contentWidth = glassCard.contentView.bounds.width
+        let contentWidth = cardWidth // Use calculated width directly
         
         titleLabel.frame = CGRect(x: 0, y: 40, width: contentWidth, height: 34)
         subtitleLabel.frame = CGRect(x: 20, y: titleLabel.frame.maxY + 8, width: contentWidth - 40, height: 40)
@@ -115,6 +115,6 @@ final class OTPNode: Node {
         inputUnderline.frame = CGRect(x: 30, y: inputField.frame.maxY + 2, width: inputWidth, height: 1)
         
         let buttonHeight: CGFloat = 54
-        actionButton.frame = CGRect(x: 30, y: glassCard.contentView.bounds.height - buttonHeight - 30, width: inputWidth, height: buttonHeight)
+        actionButton.frame = CGRect(x: 30, y: cardHeight - buttonHeight - 30, width: inputWidth, height: buttonHeight)
     }
 }
