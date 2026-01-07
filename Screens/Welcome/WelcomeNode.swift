@@ -31,10 +31,11 @@ final class WelcomeNode: Node {
         addSubview(glassCard)
         
         // Logo (System image for now, matching style)
-        logoImageView.image = UIImage(systemName: "waveform.circle.fill")
-        logoImageView.tintColor = Theme.Colors.accent
+        // Logo
+        logoImageView.image = UIImage(named: "logo_high_res")
+        // logoImageView.tintColor = Theme.Colors.accent // Disable tint for full color logo
         logoImageView.contentMode = .scaleAspectFit
-        // logoImageView.addSymbolEffect(.pulse.byLayer) // iOS 17 animation commented out due to build ambiguity
+        // logoImageView.addSymbolEffect(.pulse.byLayer)
         
         // Text
         titleLabel.text = "Pulse"
