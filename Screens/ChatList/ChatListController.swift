@@ -67,7 +67,6 @@ final class ChatListController: UIViewController {
         // Ideally state should hold 'all' and 'filtered' separate
         // For this simple mock, we might lose data if we overwrite state.chats.
         // Let's assume we reload for now or need a better state model.
-        // Actually, let's keep a local copy of "all data" if state doesn't support it, 
         // OR better: Request a filter event.
         
         // Since we don't have a full redux/store here, let's just do inline filtering on a shadow copy
