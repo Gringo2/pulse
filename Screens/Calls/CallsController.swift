@@ -39,7 +39,7 @@ final class CallsController: UIViewController {
     }
     
     private func setupNodeCallbacks() {
-        node.onSelectCall = { [weak self] call in
+        node.onSelectCall = { call in
             // Handle call selection (e.g. show details or call)
             print("Selected call: \(call.name)")
         }

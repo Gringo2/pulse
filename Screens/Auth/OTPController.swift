@@ -12,7 +12,10 @@ final class OTPController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        node.actionButton.addTarget(self, action: #selector(didTapAction), for: .touchUpInside)
+        // node.actionButton.addTarget(self, action: #selector(didTapAction), for: .touchUpInside)
+        node.actionButton.onTap = { [weak self] in
+            self?.didTapAction()
+        }
         node.inputField.becomeFirstResponder()
     }
     

@@ -11,7 +11,10 @@ final class WelcomeController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        node.actionButton.addTarget(self, action: #selector(didTapStart), for: .touchUpInside)
+        // node.actionButton.addTarget(self, action: #selector(didTapStart), for: .touchUpInside)
+        node.actionButton.onTap = { [weak self] in
+            self?.didTapStart()
+        }
     }
     
     @objc private func didTapStart() {

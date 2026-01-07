@@ -74,7 +74,7 @@ final class OTPNode: Node {
                 string: "+1 555 000 0000",
                 attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.2)]
             )
-            actionButton.setTitle("Send Code", for: .normal)
+            actionButton.setTitle("Send Code")
             
         case .code:
             titleLabel.text = "Verify Code"
@@ -85,7 +85,7 @@ final class OTPNode: Node {
                 string: "000000",
                 attributes: [.foregroundColor: UIColor.white.withAlphaComponent(0.2)]
             )
-            actionButton.setTitle("Start Pulse", for: .normal)
+            actionButton.setTitle("Start Pulse")
         }
     }
     

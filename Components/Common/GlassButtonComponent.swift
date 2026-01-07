@@ -16,6 +16,11 @@ final class GlassButtonComponent: Node {
     
     var onTap: (() -> Void)?
     
+    func setTitle(_ title: String) {
+        titleLabel.text = title
+        setNeedsLayout()
+    }
+    
     init(title: String, iconName: String? = nil) {
         let effect = UIBlurEffect(style: .systemThinMaterial)
         self.blurView = UIVisualEffectView(effect: effect)
