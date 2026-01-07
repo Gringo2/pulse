@@ -34,7 +34,7 @@ final class WelcomeNode: Node {
         logoImageView.image = UIImage(systemName: "waveform.circle.fill")
         logoImageView.tintColor = Theme.Colors.accent
         logoImageView.contentMode = .scaleAspectFit
-        logoImageView.addSymbolEffect(.pulse.byLayer) // iOS 17 animation if available, safe purely visual
+        // logoImageView.addSymbolEffect(.pulse.byLayer) // iOS 17 animation commented out due to build ambiguity
         
         // Text
         titleLabel.text = "Pulse"

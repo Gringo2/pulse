@@ -45,7 +45,7 @@ final class ProfileNode: Node, UICollectionViewDelegate, UICollectionViewDataSou
         
         avatarImageView.image = UIImage(systemName: "person.circle.fill")
         avatarImageView.tintColor = .white
-        avatarImageView.contentMode = .scaleAspectKey
+        avatarImageView.contentMode = .scaleAspectFill
         avatarImageView.layer.cornerRadius = 60
         avatarImageView.clipsToBounds = true
         

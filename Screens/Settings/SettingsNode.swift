@@ -110,7 +110,7 @@ final class SettingsNode: Node {
         glassContainer.frame = CGRect(x: padding, y: 120, width: bounds.width - (padding * 2), height: containerHeight)
         
         let innerPadding: CGFloat = 16
-        let innerWidth = glassContainer.bounds.width - (innerPadding * 2)
+        // let innerWidth = glassContainer.bounds.width - (innerPadding * 2) // Unused
         let switchWidth: CGFloat = 51
         let switchHeight: CGFloat = 31
         
