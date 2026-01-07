@@ -21,9 +21,19 @@ final class RootController: UITabBarController {
         }
     }
     
+    private weak var onboardingFlow: UINavigationController?
+
     func transitionToMainApp() {
         // Find the onboarding nav
         guard let window = self.view.window else { return }
+        
+        // Cleanup Onboarding
+        if let onboarding = onboardingFlow {
+            onboarding.willMove(toParent: nil)
+            onboarding.view.removeFromSuperview()
+            onboarding.removeFromParent()
+            self.onboardingFlow = nil
+        }
         
         // Setup main app structure (in background)
         setupTabs()
@@ -56,6 +66,8 @@ final class RootController: UITabBarController {
         view.addSubview(nav.view)
         nav.view.frame = view.bounds
         nav.didMove(toParent: self)
+        
+        self.onboardingFlow = nav
     }
     
     private func startMainApp() {
