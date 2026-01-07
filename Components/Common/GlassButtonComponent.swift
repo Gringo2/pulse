@@ -21,6 +21,12 @@ final class GlassButtonComponent: Node {
         setNeedsLayout()
     }
     
+    func setIcon(_ iconName: String) {
+        iconView.image = UIImage(systemName: iconName)
+        iconView.isHidden = false
+        setNeedsLayout()
+    }
+    
     init(title: String, iconName: String? = nil) {
         let effect = UIBlurEffect(style: .systemThinMaterial)
         self.blurView = UIVisualEffectView(effect: effect)

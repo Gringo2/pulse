@@ -39,9 +39,12 @@ final class CallsController: UIViewController {
     }
     
     private func setupNodeCallbacks() {
-        node.onSelectCall = { call in
-            // Handle call selection (e.g. show details or call)
-            print("Selected call: \(call.name)")
+        node.onSelectCall = { [weak self] call in
+            // Handle call selection
+            let activeCall = ActiveCallController()
+            activeCall.modalPresentationStyle = .overFullScreen
+            activeCall.modalTransitionStyle = .crossDissolve
+            self?.present(activeCall, animated: true)
         }
     }
     
