@@ -26,5 +26,15 @@ final class SettingsController: UIViewController {
         settingsNode.vibrationSwitch.onValueChanged = { isOn in
             print("Vibration: \(isOn)")
         }
+        
+        // Premium Tap
+        let premiumTap = UITapGestureRecognizer(target: self, action: #selector(didTapPremium))
+        settingsNode.premiumCard.addGestureRecognizer(premiumTap)
+    }
+    
+    @objc private func didTapPremium() {
+        let premiumVC = PremiumController()
+        premiumVC.modalPresentationStyle = .overFullScreen
+        present(premiumVC, animated: true)
     }
 }

@@ -21,6 +21,9 @@ final class SettingsNode: Node {
     private let logoutCard = GlassNode()
     private let logoutLabel = UILabel()
     
+    let premiumCard = GlassNode()
+    private let premiumLabel = UILabel()
+    
     private let backgroundLayer = CAGradientLayer()
     
     override func setup() {
@@ -81,7 +84,14 @@ final class SettingsNode: Node {
         logoutLabel.textColor = .systemRed
         logoutLabel.textAlignment = .center
         
-        addSubnodes([glassContainer, logoutCard])
+        // Premium Card
+        premiumCard.setBlurStyle(.systemThinMaterial) // Slightly lighter/gold?
+        premiumLabel.text = "✨ Upgrade to Premium"
+        premiumLabel.font = .systemFont(ofSize: 17, weight: .bold)
+        premiumLabel.textColor = .systemYellow
+        premiumLabel.textAlignment = .center
+        
+        addSubnodes([premiumCard, glassContainer, logoutCard])
         glassContainer.contentView.addSubnodes([
             fluidLabel, fluidSwitch,
             soundsLabel, soundsSwitch,
@@ -90,6 +100,7 @@ final class SettingsNode: Node {
             appearanceLabel, appearanceValue
         ])
         logoutCard.contentView.addSubview(logoutLabel)
+        premiumCard.contentView.addSubview(premiumLabel)
         
         // Config Components
         fluidSwitch.isOn = true
@@ -107,38 +118,14 @@ final class SettingsNode: Node {
         // Container - Increased height for 4 items
         // Container - Height for 5 items
         let containerHeight: CGFloat = 280
-        glassContainer.frame = CGRect(x: padding, y: 120, width: bounds.width - (padding * 2), height: containerHeight)
+        // Premium Card
+        let premiumHeight: CGFloat = 60
+        premiumCard.frame = CGRect(x: padding, y: 120, width: bounds.width - (padding * 2), height: premiumHeight)
+        premiumLabel.frame = CGRect(x: 20, y: 0, width: premiumCard.bounds.width - 40, height: premiumHeight)
         
-        let innerPadding: CGFloat = 16
-        // let innerWidth = glassContainer.bounds.width - (innerPadding * 2) // Unused
-        let switchWidth: CGFloat = 51
-        let switchHeight: CGFloat = 31
+        let containerY: CGFloat = premiumCard.frame.maxY + 20
+        glassContainer.frame = CGRect(x: padding, y: containerY, width: bounds.width - (padding * 2), height: containerHeight)
         
-        // 1. Fluid Toggle
-        fluidLabel.frame = CGRect(x: innerPadding, y: 20, width: 200, height: itemHeight)
-        fluidSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: 20 + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
-        
-        // 2. In-App Sounds
-        let soundsY = fluidLabel.frame.maxY + 8
-        soundsLabel.frame = CGRect(x: innerPadding, y: soundsY, width: 200, height: itemHeight)
-        soundsSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: soundsY + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
-        
-        // 3. Vibration
-        let vibY = soundsLabel.frame.maxY + 8
-        vibrationLabel.frame = CGRect(x: innerPadding, y: vibY, width: 200, height: itemHeight)
-        vibrationSwitch.frame = CGRect(x: glassContainer.bounds.width - switchWidth - innerPadding, y: vibY + (itemHeight - switchHeight)/2, width: switchWidth, height: switchHeight)
-        
-        // 4. Notification Sound
-        let notifY = vibrationLabel.frame.maxY + 8
-        notifLabel.frame = CGRect(x: innerPadding, y: notifY, width: 200, height: itemHeight)
-        notifValue.frame = CGRect(x: glassContainer.bounds.width - 120 - innerPadding, y: notifY, width: 120, height: itemHeight)
-        
-        // 5. Appearance
-        let appY = notifLabel.frame.maxY + 8
-        appearanceLabel.frame = CGRect(x: innerPadding, y: appY, width: 200, height: itemHeight)
-        appearanceValue.frame = CGRect(x: glassContainer.bounds.width - 40 - innerPadding, y: appY, width: 40, height: itemHeight)
-        
-        // Logout Card
         let logoutHeight: CGFloat = 54
         logoutCard.frame = CGRect(x: padding, y: glassContainer.frame.maxY + 20, width: bounds.width - (padding * 2), height: logoutHeight)
         logoutLabel.frame = logoutCard.contentView.bounds
