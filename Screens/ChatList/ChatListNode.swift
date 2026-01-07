@@ -6,6 +6,7 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
     
     private let backgroundLayer = CAGradientLayer()
     private let tableView = UITableView()
+    let searchBar = GlassSearchBar()
     private var chats: [Chat] = []
     
     // Output Events (Closures to Controller)
@@ -33,15 +34,28 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.backgroundColor = .clear
         
         // Padding for floating tab bar
-        tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 100, right: 0)
+        tableView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 100, right: 0)
         
         addSubview(tableView)
+        addSubview(searchBar)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         tableView.frame = bounds
+        
+        // Search Bar Layout
+        let padding: CGFloat = 16
+        // Safe area top + nav bar height approx or just under large title
+        // For simplicity, placing it under the large title area (approx 140pt down if large title)
+        // Or fixed at top safe area if we want it pinned.
+        // Let's pin it just below safe area for now.
+        let searchY = safeAreaInsets.top
+        searchBar.frame = CGRect(x: padding, y: searchY, width: bounds.width - (padding * 2), height: 44)
+        
+        // Adjust table inset to account for search bar
+        tableView.contentInset = UIEdgeInsets(top: searchY + 44 + 10, left: 0, bottom: 100, right: 0)
     }
     
     // MARK: - State Update

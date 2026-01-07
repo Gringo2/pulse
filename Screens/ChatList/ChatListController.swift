@@ -57,6 +57,35 @@ final class ChatListController: UIViewController {
         node.onSelectChat = { [weak self] chat in
             self?.handle(.didSelectChat(chat))
         }
+        
+        node.searchBar.onTextChanged = { [weak self] query in
+            self?.filterChats(query: query)
+        }
+    }
+    
+    private func filterChats(query: String) {
+        let allChats = state.chats // Ideally state should hold 'all' and 'filtered' separate, or re-filter source
+        // For this simple mock, we might lose data if we overwrite state.chats.
+        // Let's assume we reload for now or need a better state model.
+        // Actually, let's keep a local copy of "all data" if state doesn't support it, 
+        // OR better: Request a filter event.
+        
+        // Since we don't have a full redux/store here, let's just do inline filtering on a shadow copy
+        // Or just re-trigger load if empty. 
+        // Quickest path: Filter visible items.
+        // But wait, the standard way is:
+        // handle(.filter(query)) -> update state -> update UI
+        
+        // Let's implement basic local filtering on the current dataset for the demo
+        if query.isEmpty {
+            // Restore? We need the original source.
+            handle(.loadData) // Re-fetch (mock)
+        } else {
+            let filtered = state.chats.filter { $0.name.lowercased().contains(query.lowercased()) }
+            var newState = state
+            newState.chats = filtered
+            node.update(state: newState)
+        }
     }
     
     @objc private func didTapSettings() {

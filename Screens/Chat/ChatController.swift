@@ -32,7 +32,22 @@ final class ChatController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCallbacks()
+        setupNavigation()
         updateUI() // Initial render
+    }
+    
+    private func setupNavigation() {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: UIImage(systemName: "person.circle"),
+            style: .plain,
+            target: self,
+            action: #selector(didTapProfile)
+        )
+    }
+    
+    @objc private func didTapProfile() {
+        let profile = ProfileController()
+        navigationController?.pushViewController(profile, animated: true)
     }
     
     private func setupCallbacks() {
