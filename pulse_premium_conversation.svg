@@ -58,18 +58,11 @@
     <text x="16" y="45" fill="white" font-size="15">Ready to launch! 🚀</text>
   </g>
   
-  <!-- iOS Standard Input Accessory Bar -->
-  <g transform="translate(0, 769)">
-    <!-- Background -->
-    <rect width="393" height="83" fill="rgba(28,28,30,0.85)"/>
-    <rect width="393" height="0.5" fill="rgba(255,255,255,0.08)"/>
-    
-    <!-- Input Field Container -->
-    <rect x="12" y="10" width="310" height="36" rx="18" fill="rgba(58,58,60,1)" stroke="rgba(82,82,84,1)" stroke-width="0.5"/>
-    <text x="28" y="32" fill="rgba(142,142,147,1)" font-size="16">Message</text>
-    
-    <!-- Send Button (iOS style) -->
-    <circle cx="349" cy="28" r="18" fill="#007AFF"/>
-    <path d="M 346 28 L 353 24.5 L 353 31.5 Z" fill="white"/>
+  <!-- Input Panel -->
+  <g transform="translate(0, 752)">
+    <rect x="16" y="0" width="361" height="64" rx="20" fill="rgba(255,255,255,0.08)" stroke="rgba(255,255,255,0.12)" stroke-width="1" filter="url(#glow)"/>
+    <text x="56" y="40" fill="rgba(255,255,255,0.5)" font-size="16">Message</text>
+    <circle cx="340" cy="32" r="20" fill="#007AFF"/>
+    <text x="340" y="38" fill="white" font-size="18" font-weight="700" text-anchor="middle">↑</text>
   </g>
 </svg>

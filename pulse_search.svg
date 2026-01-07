@@ -1,0 +1,71 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definitions -->
+  <defs>
+    <radialGradient id="bgGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(196.5 426) rotate(90) scale(426 196.5)">
+      <stop offset="0" stop-color="#121424"/>
+      <stop offset="1" stop-color="#050505"/>
+    </radialGradient>
+    <linearGradient id="btnGrad" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#0055BB"/>
+        <stop offset="1" stop-color="#007AFF"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="393" height="852" fill="#050505"/>
+  <rect width="393" height="852" fill="url(#bgGradient)" opacity="0.6"/>
+
+  <!-- Title -->
+  <text x="20" y="60" fill="white" font-family="system-ui" font-size="28" font-weight="700">Search Chats</text>
+  <text x="350" y="60" fill="white" font-size="20">🔍</text>
+
+  <!-- Search Bar -->
+  <g transform="translate(20, 90)">
+    <rect width="353" height="40" rx="12" fill="rgba(255,255,255,0.08)"/>
+    <text x="12" y="26" fill="rgba(255,255,255,0.4)" font-size="14">🔍 project</text>
+  </g>
+
+  <!-- Results -->
+  <g transform="translate(24, 160)">
+     <!-- Result 1 -->
+     <g transform="translate(0,0)">
+        <text x="0" y="0" fill="white" font-family="system-ui" font-size="17" font-weight="600">David Chen</text>
+        <text x="340" y="0" fill="rgba(255,255,255,0.4)" font-size="12">Aug 2, 3:00 PM</text>
+        <text x="0" y="24" fill="rgba(255,255,255,0.6)" font-family="system-ui" font-size="14">Great! I'm up a bit chase advice in <tspan fill="#007AFF" font-weight="700" text-decoration="underline">project</tspan></text>
+        <line x1="0" y1="40" x2="350" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+     </g>
+
+     <!-- Result 2 -->
+     <g transform="translate(0, 60)">
+        <text x="0" y="0" fill="white" font-family="system-ui" font-size="17" font-weight="600">Anya Sharma</text>
+        <text x="340" y="0" fill="rgba(255,255,255,0.4)" font-size="12">Yesterday, 3:00 PM</text>
+        <text x="0" y="24" fill="rgba(255,255,255,0.6)" font-family="system-ui" font-size="14">Should msg you <tspan fill="#007AFF" font-weight="700" text-decoration="underline">project</tspan> details tonight</text>
+        <line x1="0" y1="40" x2="350" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+     </g>
+
+     <!-- Result 3 -->
+     <g transform="translate(0, 120)">
+        <text x="0" y="0" fill="white" font-family="system-ui" font-size="17" font-weight="600">Silena Shaw</text>
+        <text x="340" y="0" fill="rgba(255,255,255,0.4)" font-size="12">Apr 5, 1:20 PM</text>
+        <text x="0" y="24" fill="rgba(255,255,255,0.6)" font-family="system-ui" font-size="14">Do share comments <tspan fill="#007AFF" font-weight="700" text-decoration="underline">project</tspan> two weeks...</text>
+        <line x1="0" y1="40" x2="350" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+     </g>
+     
+     <!-- Result 4 -->
+     <g transform="translate(0, 180)">
+        <text x="0" y="0" fill="white" font-family="system-ui" font-size="17" font-weight="600">Aman Kapoor</text>
+        <text x="340" y="0" fill="rgba(255,255,255,0.4)" font-size="12">Yesterday, 7:11 PM</text>
+        <text x="0" y="24" fill="rgba(255,255,255,0.6)" font-family="system-ui" font-size="14">Share to my public drive <tspan fill="#007AFF" font-weight="700" text-decoration="underline">project</tspan> has mock...</text>
+        <line x1="0" y1="40" x2="350" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+     </g>
+  </g>
+
+  <!-- Start Call Button -->
+  <g transform="translate(24, 760)">
+    <rect width="345" height="50" rx="25" fill="url(#btnGrad)"/>
+    <text x="172.5" y="32" fill="white" font-family="system-ui" font-size="17" font-weight="600" text-anchor="middle">Start Call</text>
+  </g>
+
+  <!-- Home Indicator -->
+  <rect x="120" y="838" width="153" height="5" rx="2.5" fill="white" opacity="0.3"/>
+</svg>

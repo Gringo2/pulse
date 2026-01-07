@@ -6,8 +6,59 @@ final class RootController: UITabBarController {
     private let glassTabBar = GlassNode()
     private let stackView = UIStackView()
     
+    // Track current flow
+    private var isMainApp = false
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        
+        if isLoggedIn {
+            startMainApp()
+        } else {
+            startOnboarding()
+        }
+    }
+    
+    func transitionToMainApp() {
+        // Find the onboarding nav
+        guard let window = self.view.window else { return }
+        
+        // Setup main app structure (in background)
+        setupTabs()
+        setupCustomTabBar()
+        
+        // Animate
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.type = .fade
+        transition.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+        
+        window.layer.add(transition, forKey: kCATransition)
+        
+        // Switch
+        self.selectedIndex = 0
+        self.glassTabBar.alpha = 0
+        UIView.animate(withDuration: 0.5) {
+            self.glassTabBar.alpha = 1
+        }
+    }
+    
+    private func startOnboarding() {
+        let welcome = WelcomeController()
+        let nav = UINavigationController(rootViewController: welcome)
+        nav.modalPresentationStyle = .fullScreen
+        nav.setNavigationBarHidden(true, animated: false)
+        
+        // Present or Add as child
+        addChild(nav)
+        view.addSubview(nav.view)
+        nav.view.frame = view.bounds
+        nav.didMove(toParent: self)
+    }
+    
+    private func startMainApp() {
         setupTabs()
         setupCustomTabBar()
     }
@@ -17,6 +68,9 @@ final class RootController: UITabBarController {
     }
     
     private func setupTabs() {
+        // If we already have tabs, don't redo
+        guard viewControllers == nil || viewControllers?.isEmpty == true else { return }
+        
         let chats = UINavigationController(rootViewController: ChatListController())
         let calls = UINavigationController(rootViewController: CallsController())
         let settings = UINavigationController(rootViewController: SettingsController())
@@ -28,6 +82,8 @@ final class RootController: UITabBarController {
     }
     
     private func setupCustomTabBar() {
+        if glassTabBar.superview != nil { return }
+        
         glassTabBar.backgroundColor = .clear
         glassTabBar.setBlurStyle(.systemUltraThinMaterialDark)
         

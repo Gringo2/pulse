@@ -1,0 +1,68 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definitions -->
+  <defs>
+    <radialGradient id="bgGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(196.5 426) rotate(90) scale(426 196.5)">
+      <stop offset="0" stop-color="#121424"/>
+      <stop offset="1" stop-color="#050505"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="393" height="852" fill="#050505"/>
+  <rect width="393" height="852" fill="url(#bgGradient)" opacity="0.6"/>
+  
+  <!-- Content -->
+  <g transform="translate(24, 70)">
+     <!-- Nav -->
+     <path d="M10 10 L0 20 L10 30" stroke="white" stroke-width="2" fill="none"/>
+     <text x="345" y="25" fill="#007AFF" font-family="system-ui" font-size="24" text-anchor="end">✎</text>
+  </g>
+
+  <g transform="translate(24, 180)">
+    <text x="0" y="0" fill="white" font-family="system-ui" font-size="34" font-weight="700">Enter Code</text>
+    <text x="0" y="32" fill="rgba(255,255,255,0.6)" font-family="system-ui" font-size="17">We sent a 4-digit code to <tspan fill="white" font-weight="600">+1 505-555-5555</tspan></text>
+  </g>
+
+  <!-- OTP Input -->
+  <g transform="translate(24, 260)">
+    <g transform="translate(0,0)">
+        <rect width="70" height="70" rx="16" fill="url(#btnGradient)" opacity="0.2"/>
+        <rect width="70" height="70" rx="16" fill="rgba(255,255,255,0.08)" stroke="#007AFF" stroke-width="1"/>
+        <text x="35" y="45" fill="white" font-family="system-ui" font-size="32" font-weight="600" text-anchor="middle">1</text>
+    </g>
+    <g transform="translate(90,0)">
+        <rect width="70" height="70" rx="16" fill="url(#btnGradient)" opacity="0.2"/>
+        <rect width="70" height="70" rx="16" fill="rgba(255,255,255,0.08)" stroke="#007AFF" stroke-width="1"/>
+        <text x="35" y="45" fill="white" font-family="system-ui" font-size="32" font-weight="600" text-anchor="middle">2</text>
+    </g>
+    <g transform="translate(180,0)">
+        <rect width="70" height="70" rx="16" fill="url(#btnGradient)" opacity="0.2"/>
+        <rect width="70" height="70" rx="16" fill="rgba(255,255,255,0.08)" stroke="#007AFF" stroke-width="1"/>
+        <text x="35" y="45" fill="white" font-family="system-ui" font-size="32" font-weight="600" text-anchor="middle">3</text>
+    </g>
+     <g transform="translate(270,0)">
+        <rect width="70" height="70" rx="16" fill="url(#btnGradient)" opacity="0.2"/>
+        <rect width="70" height="70" rx="16" fill="rgba(255,255,255,0.08)" stroke="#007AFF" stroke-width="1"/>
+        <text x="35" y="45" fill="white" font-family="system-ui" font-size="32" font-weight="600" text-anchor="middle">4</text>
+    </g>
+  </g>
+
+  <!-- Reuse Keypad visual from previous -->
+  <g transform="translate(0, 500)">
+     <!-- Simplified for brevity, same loop -->
+     <text x="65" y="40" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">1</text>
+     <text x="196" y="40" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">2</text>
+     <text x="327" y="40" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">3</text>
+     <text x="65" y="110" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">4</text>
+     <text x="196" y="110" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">5</text>
+     <text x="327" y="110" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">6</text>
+     <text x="65" y="180" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">7</text>
+     <text x="196" y="180" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">8</text>
+     <text x="327" y="180" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">9</text>
+     <text x="196" y="250" fill="white" font-family="system-ui" font-size="28" text-anchor="middle">0</text>
+     <text x="327" y="255" fill="white" font-family="system-ui" font-size="20" text-anchor="middle">⌫</text>
+  </g>
+
+  <!-- Home Indicator -->
+  <rect x="120" y="838" width="153" height="5" rx="2.5" fill="white" opacity="0.3"/>
+</svg>

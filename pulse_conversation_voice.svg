@@ -1,0 +1,76 @@
+<svg width="393" height="852" viewBox="0 0 393 852" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Definitions -->
+  <defs>
+    <radialGradient id="bgGradient" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(196.5 426) rotate(90) scale(426 196.5)">
+      <stop offset="0" stop-color="#121424"/>
+      <stop offset="1" stop-color="#050505"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="393" height="852" fill="#050505"/>
+  <rect width="393" height="852" fill="url(#bgGradient)" opacity="0.6"/>
+  
+  <!-- Nav Bar -->
+  <text x="20" y="60" fill="white" font-size="28">‹</text>
+  <text x="60" y="55" fill="white" font-family="system-ui" font-size="17" font-weight="600">Voice Message</text>
+  <text x="350" y="55" fill="white" font-size="20">🔍</text>
+
+  <!-- User Info (Top) -->
+  <text x="196.5" y="100" fill="white" font-family="system-ui" font-size="15" font-weight="600" text-anchor="middle">Anya Sharma</text>
+  <text x="196.5" y="120" fill="rgba(255,255,255,0.5)" font-family="system-ui" font-size="13" text-anchor="middle">➜ Copilot is creative!</text>
+
+  <!-- Incoming Text -->
+  <g transform="translate(16, 160)">
+    <rect width="280" height="50" rx="16" fill="rgba(255,255,255,0.08)"/>
+    <text x="20" y="30" fill="white" font-family="system-ui" font-size="15">Absosuley, let's catch up soon</text>
+    <text x="10" y="30" fill="white" font-size="15">✔</text>
+  </g>
+
+  <!-- Voice Player -->
+  <g transform="translate(16, 230)">
+    <rect width="361" height="120" rx="24" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+    
+    <!-- Controls -->
+    <text x="36" y="75" fill="white" font-size="24">❚❚</text> <!-- Pause Icon -->
+    
+    <!-- Waveform Visual -->
+    <g transform="translate(80, 50)">
+        <path d="M0 25 L4 10 L8 40 L12 25 L16 15 L20 35 L24 25" stroke="#007AFF" stroke-width="2" fill="none"/>
+        <path d="M28 25 L32 5 L36 45 L40 25" stroke="#007AFF" stroke-width="2" fill="none"/>
+        <path d="M44 25 L48 20 L52 30 L56 25" stroke="rgba(255,255,255,0.3)" stroke-width="2" fill="none"/>
+        <path d="M60 25 L200 25" stroke="rgba(255,255,255,0.1)" stroke-width="2"/>
+    </g>
+    
+    <!-- Progress Bar -->
+    <rect x="80" y="90" width="200" height="4" rx="2" fill="rgba(255,255,255,0.2)"/>
+    <rect x="80" y="90" width="80" height="4" rx="2" fill="#007AFF"/>
+    <circle cx="160" cy="92" r="6" fill="white" filter="url(#glow)"/>
+
+    <text x="300" y="65" fill="rgba(255,255,255,0.5)" font-family="system-ui" font-size="12">10:32</text>
+    <text x="300" y="95" fill="rgba(255,255,255,0.5)" font-family="system-ui" font-size="12">0:22</text>
+  </g>
+
+  <!-- Large Mic Button (Bottom) -->
+  <g transform="translate(0, 650)">
+    <!-- Text Input Area -->
+    <rect x="30" y="0" width="333" height="60" rx="30" fill="rgba(255,255,255,0.1)" stroke="rgba(255,255,255,0.2)" stroke-width="1" filter="url(#glow)"/>
+    <text x="60" y="35" fill="rgba(255,255,255,0.4)" font-family="system-ui" font-size="15">Get explore mountains... text input</text>
+    <text x="330" y="35" fill="white" font-size="18">🎤</text>
+
+    <!-- Pulsing Mic -->
+    <circle cx="196.5" cy="150" r="40" fill="#0055BB" opacity="0.5"/>
+    <circle cx="196.5" cy="150" r="30" fill="#007AFF" filter="url(#glow)"/>
+    <text x="196.5" y="158" fill="white" font-size="28" text-anchor="middle">🎤</text>
+  </g>
+  
+  <!-- Home Indicator -->
+  <rect x="120" y="838" width="153" height="5" rx="2.5" fill="white" opacity="0.3"/>
+</svg>
