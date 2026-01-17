@@ -33,6 +33,10 @@ final class ChatNode: Node {
             self?.onEvent?(.sendMessage(text))
         }
         
+        inputPanelNode.onAttach = { [weak self] in
+            self?.onEvent?(.didTapAttach)
+        }
+        
         setupKeyboardObservers()
     }
     

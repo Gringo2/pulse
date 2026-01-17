@@ -5,6 +5,7 @@ import UIKit
 final class MessageListNode: Node, UITableViewDelegate, UITableViewDataSource {
     
     let tableView = UITableView()
+    private let emptyLabel = UILabel()
     var messages: [Message] = []
     
     override func setup() {
@@ -16,16 +17,26 @@ final class MessageListNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.backgroundColor = .clear
         tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 10, right: 0)
         
+        // Empty State
+        emptyLabel.text = "Say Hello! 👋"
+        emptyLabel.font = .systemFont(ofSize: 18, weight: .semibold)
+        emptyLabel.textColor = UIColor.white.withAlphaComponent(0.3)
+        emptyLabel.textAlignment = .center
+        emptyLabel.isHidden = true
+        
         addSubview(tableView)
+        addSubview(emptyLabel)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         tableView.frame = bounds
+        emptyLabel.frame = bounds
     }
     
     func update(messages: [Message]) {
         self.messages = messages
+        emptyLabel.isHidden = !messages.isEmpty
         tableView.reloadData()
         scrollToBottom()
     }

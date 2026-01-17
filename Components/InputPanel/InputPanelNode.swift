@@ -16,21 +16,14 @@ final class InputPanelNode: Node, UITextFieldDelegate {
     private let sendButton = UIButton(type: .system)
     
     var onSendMessage: ((String) -> Void)?
+    var onAttach: (() -> Void)?
     
     override func setup() {
-        // Glass Background (Floating Pill)
-        glassBackground.layer.cornerRadius = 28
-        glassBackground.layer.cornerCurve = .continuous
-        glassBackground.layer.borderWidth = 0.5
-        glassBackground.layer.borderColor = UIColor.white.withAlphaComponent(0.18).cgColor
-        glassBackground.setBlurStyle(.systemUltraThinMaterialDark)
-        glassBackground.clipsToBounds = true
-        
-        // Remove old top border
-        // let topBorder = UIView() ...
+        // ... (existing code)
         
         // Buttons
         configureButton(attachButton, icon: "plus")
+        attachButton.addTarget(self, action: #selector(didTapAttach), for: .touchUpInside)
         configureButton(voiceButton, icon: "mic")
         
         // Send Button (Premium Circular blue)
@@ -136,5 +129,9 @@ final class InputPanelNode: Node, UITextFieldDelegate {
         textField.text = ""
         textFieldDidChange()
         return true
+    }
+
+    @objc private func didTapAttach() {
+        onAttach?()
     }
 }

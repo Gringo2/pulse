@@ -1,11 +1,10 @@
 import UIKit
+import PhotosUI
 
-final class ChatController: UIViewController {
+final class ChatController: UIViewController, PHPickerViewControllerDelegate {
     
     private var state: ChatState
     private let chat: Chat // The chat context
-    
-    // The main view node
     private let node = ChatNode()
     
     init(chat: Chat) {
@@ -13,10 +12,7 @@ final class ChatController: UIViewController {
         self.state = .initial
         super.init(nibName: nil, bundle: nil)
         
-        // Setup Initial State with some inputs
         self.title = chat.name
-        
-        // Mock loading existing messages
         self.state.messages = [
             Message(id: UUID(), text: "Hello \(chat.name)!", isOutgoing: true, timestamp: Date().addingTimeInterval(-1000)),
             Message(id: UUID(), text: "Welcome to Pulse.", isOutgoing: false, timestamp: Date().addingTimeInterval(-500))
@@ -33,7 +29,7 @@ final class ChatController: UIViewController {
         super.viewDidLoad()
         setupCallbacks()
         setupNavigation()
-        updateUI() // Initial render
+        updateUI()
     }
     
     private func setupNavigation() {
@@ -51,12 +47,11 @@ final class ChatController: UIViewController {
     }
     
     private func setupCallbacks() {
-        // Events from Node -> Controller
         node.onEvent = { [weak self] event in
             self?.handle(event)
         }
     }
-    
+
     // MARK: - Event Loop
     private func handle(_ event: ChatEvent) {
         switch event {
@@ -74,8 +69,42 @@ final class ChatController: UIViewController {
             state.inputMode = mode
             updateUI()
             
+        case .didTapAttach:
+            presentPicker()
+            
         default:
             break
+        }
+    }
+    
+    private func presentPicker() {
+        var config = PHPickerConfiguration()
+        config.filter = .images
+        config.selectionLimit = 1
+        
+        let picker = PHPickerViewController(configuration: config)
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    // MARK: - PHPickerViewControllerDelegate
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true)
+        
+        guard let itemProvider = results.first?.itemProvider,
+              itemProvider.canLoadObject(ofClass: UIImage.self) else { return }
+        
+        itemProvider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+            DispatchQueue.main.async {
+                if let _ = image as? UIImage {
+                    // In a real app, we would upload this and send a message with the URL.
+                    // For now, let's mock sending a message notification.
+                    let msg = Message(id: UUID(), text: "📷 Image Attached", isOutgoing: true, timestamp: Date())
+                    self?.state.messages.append(msg)
+                    self?.updateUI()
+                }
+            }
         }
     }
     

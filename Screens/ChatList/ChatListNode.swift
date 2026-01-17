@@ -6,6 +6,7 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
     
     private let backgroundLayer = CAGradientLayer()
     private let tableView = UITableView()
+    private let emptyLabel = UILabel()
     let searchBar = GlassSearchBar()
     private var chats: [Chat] = []
     
@@ -36,7 +37,15 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         // Padding for floating tab bar
         tableView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 100, right: 0)
         
+        // Empty Label
+        emptyLabel.text = "No Conversations Yet"
+        emptyLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        emptyLabel.textColor = UIColor.white.withAlphaComponent(0.4)
+        emptyLabel.textAlignment = .center
+        emptyLabel.isHidden = true
+        
         addSubview(tableView)
+        addSubview(emptyLabel)
         addSubview(searchBar)
     }
     
@@ -44,13 +53,10 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         tableView.frame = bounds
+        emptyLabel.frame = bounds
         
         // Search Bar Layout
         let padding: CGFloat = 16
-        // Safe area top + nav bar height approx or just under large title
-        // For simplicity, placing it under the large title area (approx 140pt down if large title)
-        // Or fixed at top safe area if we want it pinned.
-        // Let's pin it just below safe area for now.
         let searchY = safeAreaInsets.top
         searchBar.frame = CGRect(x: padding, y: searchY, width: bounds.width - (padding * 2), height: 44)
         
@@ -61,9 +67,8 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
     // MARK: - State Update
     
     func update(state: ChatListState) {
-        // Diffing could go here (Texture/IGListKit style)
-        // For Pulse v1, simple reload
         self.chats = state.chats
+        emptyLabel.isHidden = !chats.isEmpty
         tableView.reloadData()
     }
     
