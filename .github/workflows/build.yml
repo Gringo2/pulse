@@ -68,6 +68,13 @@ jobs:
           BINARY_PATH=$(find build -name "Pulse" -type f | xargs file | grep "Mach-O" | cut -d: -f1 | head -n 1)
           cp "$BINARY_PATH" Payload/Pulse.app/Pulse
           
+          # Find and copy Assets.car (Icon/Assets)
+          ASSETS_CAR=$(find build -name "Assets.car" -type f | head -n 1)
+          if [ -n "$ASSETS_CAR" ]; then cp "$ASSETS_CAR" Payload/Pulse.app/; fi
+          
+          # Find resource bundles and copy contents to root for UIImage(named:) compatibility
+          find build -name "*.bundle" -type d -exec cp -r "{}/." Payload/Pulse.app/ \;
+          
           # Manually create Info.plist for the bundle
           echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleExecutable</key><string>Pulse</string><key>CFBundleIdentifier</key><string>com.pulse.app</string><key>CFBundleName</key><string>Pulse</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>${{ env.APP_VERSION }}</string><key>CFBundleVersion</key><string>${{ env.BUILD_NUMBER }}</string><key>LSRequiresIPhoneOS</key><true/><key>UILaunchScreen</key><dict/></dict></plist>' > Payload/Pulse.app/Info.plist
           
@@ -133,6 +140,13 @@ jobs:
           fi
           
           cp "$BINARY_PATH" Payload/Pulse.app/Pulse
+          
+          # Find and copy Assets.car
+          ASSETS_CAR=$(find build -name "Assets.car" -type f | head -n 1)
+          if [ -n "$ASSETS_CAR" ]; then cp "$ASSETS_CAR" Payload/Pulse.app/; fi
+          
+          # Find resource bundles and copy contents to root for UIImage(named:) compatibility
+          find build -name "*.bundle" -type d -exec cp -r "{}/." Payload/Pulse.app/ \;
           
           # Use fixed version string to avoid environment issues in subshells
           VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["app"]);')
