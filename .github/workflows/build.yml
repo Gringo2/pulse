@@ -6,12 +6,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  simulator:
     runs-on: macos-latest
     permissions:
       contents: write
-    timeout-minutes: 60
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
@@ -21,118 +19,98 @@ jobs:
       - name: Set active Xcode path
         run: |
           XCODE_VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["xcode"]);')
-          
-          if [ -d "/Applications/Xcode_$XCODE_VERSION.app" ]; then
-            sudo xcode-select -s /Applications/Xcode_$XCODE_VERSION.app/Contents/Developer
-          elif [ -d "/Applications/Xcode_${XCODE_VERSION}_beta.app" ]; then
-            sudo xcode-select -s /Applications/Xcode_${XCODE_VERSION}_beta.app/Contents/Developer
-          elif [ -d "/Applications/Xcode_${XCODE_VERSION%%.*}.app" ]; then
-            sudo xcode-select -s /Applications/Xcode_${XCODE_VERSION%%.*}.app/Contents/Developer
-          else
-            echo "ERROR: Xcode $XCODE_VERSION not found"
-            ls -la /Applications/ | grep Xcode
-            exit 1
-          fi
-          
+          sudo xcode-select -s /Applications/Xcode_$XCODE_VERSION.app/Contents/Developer || sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
           xcodebuild -version
 
-      - name: Free up disk space
-        run: |
-          echo "=== Disk space BEFORE cleanup ==="
-          df -h
-          sudo rm -rf /Applications/Xcode_15*.app || true
-          sudo rm -rf /Applications/Xcode_14*.app || true
-          sudo rm -rf ~/Library/Android || true
-          sudo rm -rf /usr/local/Homebrew/Library/Taps || true
-          echo "=== Disk space AFTER cleanup ==="
-          df -h
-
       - name: Build (iOS Simulator)
-        id: build
         run: |
-          export APP_VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["app"]);')
-          export BUILD_NUMBER=${{ github.run_number }}
-          echo "BUILD_NUMBER=$BUILD_NUMBER" >> $GITHUB_ENV
-          echo "APP_VERSION=$APP_VERSION" >> $GITHUB_ENV
-
           xcodebuild build \
             -scheme Pulse \
             -configuration Debug \
             -destination "generic/platform=iOS Simulator" \
             -sdk iphonesimulator \
             -derivedDataPath ./build \
-            ONLY_ACTIVE_ARCH=NO \
             CODE_SIGNING_ALLOWED=NO
-          
-          # Export build settings
-          xcodebuild -scheme Pulse -configuration Debug -destination "generic/platform=iOS Simulator" -sdk iphonesimulator -derivedDataPath ./build -showBuildSettings > settings.txt
-          echo "CODESIGNING_FOLDER_PATH=$(grep -m 1 " CODESIGNING_FOLDER_PATH = " settings.txt | cut -d'=' -f2 | xargs)" >> $GITHUB_ENV
 
-      - name: Package Artifact (Pulse.app.zip)
+      - name: Package Simulator Artifact
         run: |
           mkdir -p Payload
-          if [ -d "$CODESIGNING_FOLDER_PATH" ]; then
-            echo "Found .app folder at $CODESIGNING_FOLDER_PATH"
-            cp -r "$CODESIGNING_FOLDER_PATH" Payload/
-          else
-            echo "Creating manual .app bundle..."
-            BINARY_PATH=$(find build -name "Pulse" -type f | xargs file | grep "Mach-O" | cut -d: -f1 | head -n 1)
-            if [ -z "$BINARY_PATH" ]; then exit 1; fi
-            mkdir -p Payload/Pulse.app
-            cp "$BINARY_PATH" Payload/Pulse.app/Pulse
-            
-            # Find and copy Assets.car for the app icon
-            ASSETS_CAR=$(find build -name "Assets.car" -type f | head -n 1)
-            if [ -n "$ASSETS_CAR" ]; then
-              cp "$ASSETS_CAR" Payload/Pulse.app/
-            fi
-
-            echo '<?xml version="1.0" encoding="UTF-8"?>' > Payload/Pulse.app/Info.plist
-            echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> Payload/Pulse.app/Info.plist
-            echo '<plist version="1.0">' >> Payload/Pulse.app/Info.plist
-            echo '<dict>' >> Payload/Pulse.app/Info.plist
-            echo '    <key>CFBundleExecutable</key>' >> Payload/Pulse.app/Info.plist
-            echo '    <string>Pulse</string>' >> Payload/Pulse.app/Info.plist
-            echo '    <key>CFBundleIdentifier</key>' >> Payload/Pulse.app/Info.plist
-            echo '    <string>com.pulse.app</string>' >> Payload/Pulse.app/Info.plist
-            echo '    <key>CFBundleName</key>' >> Payload/Pulse.app/Info.plist
-            echo '    <string>Pulse</string>' >> Payload/Pulse.app/Info.plist
-            echo '    <key>CFBundlePackageType</key>' >> Payload/Pulse.app/Info.plist
-            echo '    <string>APPL</string>' >> Payload/Pulse.app/Info.plist
-            echo "    <key>CFBundleShortVersionString</key>" >> Payload/Pulse.app/Info.plist
-            echo "    <string>${{ env.APP_VERSION }}</string>" >> Payload/Pulse.app/Info.plist
-            echo "    <key>CFBundleVersion</key>" >> Payload/Pulse.app/Info.plist
-            echo "    <string>${{ env.BUILD_NUMBER }}</string>" >> Payload/Pulse.app/Info.plist
-            echo '    <key>LSRequiresIPhoneOS</key>' >> Payload/Pulse.app/Info.plist
-            echo '    <true/>' >> Payload/Pulse.app/Info.plist
-            echo '    <key>UILaunchScreen</key>' >> Payload/Pulse.app/Info.plist
-            echo '    <dict/>' >> Payload/Pulse.app/Info.plist
-            echo '    <key>CFBundleIconName</key>' >> Payload/Pulse.app/Info.plist
-            echo '    <string>AppIcon</string>' >> Payload/Pulse.app/Info.plist
-            echo '</dict>' >> Payload/Pulse.app/Info.plist
-            echo '</plist>' >> Payload/Pulse.app/Info.plist
-            echo 'APPL????' > Payload/Pulse.app/PkgInfo
+          APP_PATH=$(find build -name "Pulse.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: Pulse.app not found"
+            exit 1
           fi
-          
-          zip -r Pulse.app.zip Payload
+          cp -r "$APP_PATH" Payload/
+          zip -r Pulse-Simulator.app.zip Payload
 
-      - name: Upload Action Artifact
+      - name: Upload Simulator Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Pulse.app.zip
-          path: Pulse.app.zip
-          retention-days: 7
+          name: Pulse-Simulator
+          path: Pulse-Simulator.app.zip
+
+  device:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set active Xcode path
+        run: |
+          XCODE_VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["xcode"]);')
+          sudo xcode-select -s /Applications/Xcode_$XCODE_VERSION.app/Contents/Developer || sudo xcode-select -s /Applications/Xcode_16.app/Contents/Developer
+
+      - name: Build (iOS Device)
+        run: |
+          xcodebuild build \
+            -scheme Pulse \
+            -configuration Debug \
+            -destination "generic/platform=iOS" \
+            -sdk iphoneos \
+            -derivedDataPath ./build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            ENTITLEMENTS_ALLOWED=NO
+
+      - name: Package IPA
+        run: |
+          mkdir -p Payload
+          APP_PATH=$(find build -name "Pulse.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "Error: Pulse.app not found"
+            exit 1
+          fi
+          cp -r "$APP_PATH" Payload/
+          zip -r Pulse.ipa Payload
+
+      - name: Upload IPA Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Pulse-IPA
+          path: Pulse.ipa
+
+  release:
+    needs: [simulator, device]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          merge-multiple: true
 
       - name: Create GitHub Release
-        id: create_release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: build-${{ env.BUILD_NUMBER }}
-          name: Pulse ${{ env.APP_VERSION }} (Build ${{ env.BUILD_NUMBER }})
-          body: |
-            Pulse Simulator Build
-            Version: ${{ env.APP_VERSION }}
-            Build: ${{ env.BUILD_NUMBER }}
-          files: Pulse.app.zip
+          tag_name: build-${{ github.run_number }}
+          name: Pulse Build ${{ github.run_number }}
+          files: |
+            Pulse-Simulator.app.zip
+            Pulse.ipa
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
