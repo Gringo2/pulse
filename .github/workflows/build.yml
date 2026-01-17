@@ -76,7 +76,7 @@ jobs:
           find build -name "*.bundle" -type d -exec cp -r "{}/." Payload/Pulse.app/ \;
           
           # Manually create Info.plist for the bundle
-          echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleExecutable</key><string>Pulse</string><key>CFBundleIdentifier</key><string>com.pulse.app</string><key>CFBundleName</key><string>Pulse</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>${{ env.APP_VERSION }}</string><key>CFBundleVersion</key><string>${{ env.BUILD_NUMBER }}</string><key>LSRequiresIPhoneOS</key><true/><key>UILaunchScreen</key><dict/></dict></plist>' > Payload/Pulse.app/Info.plist
+          echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleExecutable</key><string>Pulse</string><key>CFBundleIdentifier</key><string>com.pulse.app</string><key>CFBundleName</key><string>Pulse</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>${{ env.APP_VERSION }}</string><key>CFBundleVersion</key><string>${{ env.BUILD_NUMBER }}</string><key>LSRequiresIPhoneOS</key><true/><key>UILaunchScreen</key><dict/><key>CFBundleIconName</key><string>AppIcon</string></dict></plist>' > Payload/Pulse.app/Info.plist
           
           zip -r Pulse-Simulator.app.zip Payload
 
@@ -150,7 +150,7 @@ jobs:
           
           # Use fixed version string to avoid environment issues in subshells
           VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["app"]);')
-          echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleExecutable</key><string>Pulse</string><key>CFBundleIdentifier</key><string>com.pulse.app</string><key>CFBundleName</key><string>Pulse</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>'$VERSION'</string><key>CFBundleVersion</key><string>${{ github.run_number }}</string><key>LSRequiresIPhoneOS</key><true/><key>UILaunchScreen</key><dict/></dict></plist>' > Payload/Pulse.app/Info.plist
+          echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleExecutable</key><string>Pulse</string><key>CFBundleIdentifier</key><string>com.pulse.app</string><key>CFBundleName</key><string>Pulse</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>'$VERSION'</string><key>CFBundleVersion</key><string>${{ github.run_number }}</string><key>LSRequiresIPhoneOS</key><true/><key>UILaunchScreen</key><dict/><key>CFBundleIconName</key><string>AppIcon</string></dict></plist>' > Payload/Pulse.app/Info.plist
           
           zip -r Pulse.ipa Payload
 
