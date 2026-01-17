@@ -88,11 +88,13 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      # Safety cleanup (Restored because it was removed in previous failed iteration)
       - name: Free up disk space
         run: |
           sudo rm -rf /Applications/Xcode_15*.app || true
           sudo rm -rf ~/Library/Android || true
 
+      # Restored robust Xcode selection (Removed fallback in previous failed iteration)
       - name: Set active Xcode path
         run: |
           XCODE_VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["xcode"]);')
@@ -118,9 +120,21 @@ jobs:
       - name: Package IPA
         run: |
           mkdir -p Payload/Pulse.app
-          BINARY_PATH=$(find build -name "Pulse" -type f | xargs file | grep "ARM64" | cut -d: -f1 | head -n 1)
+          # FIX: Use case-insensitive grep for 'arm64' to ensure binary is found on runner
+          BINARY_PATH=$(find build -name "Pulse" -type f | xargs file | grep -i "arm64" | cut -d: -f1 | head -n 1)
+          if [ -z "$BINARY_PATH" ]; then
+            echo "Fallback: Trying Mach-O search..."
+            BINARY_PATH=$(find build/Build/Products/Debug-iphoneos -name "Pulse" -type f | head -n 1)
+          fi
+          
+          if [ -z "$BINARY_PATH" ]; then
+             echo "Error: Binary not found at expected location."
+             exit 1
+          fi
+          
           cp "$BINARY_PATH" Payload/Pulse.app/Pulse
           
+          # Use fixed version string to avoid environment issues in subshells
           VERSION=$(cat versions.json | python3 -c 'import json,sys;obj=json.load(sys.stdin);print(obj["app"]);')
           echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>CFBundleExecutable</key><string>Pulse</string><key>CFBundleIdentifier</key><string>com.pulse.app</string><key>CFBundleName</key><string>Pulse</string><key>CFBundlePackageType</key><string>APPL</string><key>CFBundleShortVersionString</key><string>'$VERSION'</string><key>CFBundleVersion</key><string>${{ github.run_number }}</string><key>LSRequiresIPhoneOS</key><true/><key>UILaunchScreen</key><dict/></dict></plist>' > Payload/Pulse.app/Info.plist
           
@@ -151,8 +165,8 @@ jobs:
           name: Pulse ${{ needs.simulator.outputs.app_version }} (Build ${{ needs.simulator.outputs.build_number }})
           body: |
             Pulse Dual Artifact Release
-            - Simulator: Pulse-Simulator.app.zip
-            - Device: Pulse.ipa
+            - Simulator (Mac): Pulse-Simulator.app.zip
+            - Real Device (iPhone): Pulse.ipa (Use Sideloadly to install)
           files: |
             Pulse-Simulator.app.zip
             Pulse.ipa
