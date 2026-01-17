@@ -44,6 +44,10 @@ final class OTPController: UIViewController {
     }
     
     private func completeLogin() {
+        // Haptic feedback
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+        
         // Save login state
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
         

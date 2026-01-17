@@ -46,8 +46,13 @@ final class PremiumController: UIViewController {
     }
     
     private func handleUpgrade() {
-        let alert = UIAlertController(title: "Premium", message: "Upgrade feature is mock-only.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
+        
+        let alert = UIAlertController(title: "Pulse Premium", message: "You are now a Pulse Premium member! ✨", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Awesome", style: .default) { [weak self] _ in
+            self?.dismiss(animated: true)
+        })
         present(alert, animated: true)
     }
 }

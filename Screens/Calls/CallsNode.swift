@@ -4,6 +4,7 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
     
     private let backgroundLayer = CAGradientLayer()
     private let tableView = UITableView()
+    private let emptyLabel = UILabel()
     private let segmentControl = UISegmentedControl(items: ["All", "Missed"])
     private var allCalls: [Call] = []
     private var filteredCalls: [Call] = []
@@ -40,13 +41,23 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
         segmentControl.setTitleTextAttributes([.foregroundColor: UIColor.white, .font: UIFont.systemFont(ofSize: 13, weight: .semibold)], for: .selected)
         segmentControl.addTarget(self, action: #selector(segmentChanged), for: .valueChanged)
         
+        // Empty Label
+        emptyLabel.text = "No Recent Calls"
+        emptyLabel.font = .systemFont(ofSize: 17, weight: .medium)
+        emptyLabel.textColor = UIColor.white.withAlphaComponent(0.4)
+        emptyLabel.textAlignment = .center
+        emptyLabel.isHidden = true
+        
         addSubview(segmentControl)
         addSubview(tableView)
+        addSubview(emptyLabel)
         
         tableView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 100, right: 0)
     }
     
     @objc private func segmentChanged() {
+        let generator = UISelectionFeedbackGenerator()
+        generator.selectionChanged()
         filterCalls()
     }
     
@@ -56,6 +67,7 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
         } else {
             filteredCalls = allCalls
         }
+        emptyLabel.isHidden = !filteredCalls.isEmpty
         tableView.reloadData()
     }
     
@@ -63,6 +75,7 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         tableView.frame = bounds
+        emptyLabel.frame = bounds
         
         let segmentWidth: CGFloat = 200
         segmentControl.frame = CGRect(x: (bounds.width - segmentWidth)/2, y: safeAreaInsets.top + 10, width: segmentWidth, height: 32)

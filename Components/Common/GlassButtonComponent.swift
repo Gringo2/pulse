@@ -92,6 +92,9 @@ final class GlassButtonComponent: Node {
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         highlightAnimator.animateHighlight(true)
+        
+        let generator = UIImpactFeedbackGenerator(style: .light)
+        generator.impactOccurred(intensity: 0.6)
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
