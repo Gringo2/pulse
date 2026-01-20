@@ -68,9 +68,15 @@ jobs:
           BINARY_PATH=$(find build -name "Pulse" -type f | xargs file | grep "Mach-O" | cut -d: -f1 | head -n 1)
           cp "$BINARY_PATH" Payload/Pulse.app/Pulse
           
-          # Find and copy Assets.car (Icon/Assets)
+          # Find and copy Assets.car
           ASSETS_CAR=$(find build -name "Assets.car" -type f | head -n 1)
           if [ -n "$ASSETS_CAR" ]; then cp "$ASSETS_CAR" Payload/Pulse.app/; fi
+          
+          # FIX: Explicitly copy app icon PNGs to root for home screen visibility
+          ICON_DIR="Resources/Assets.xcassets/AppIcon.appiconset"
+          if [ -d "$ICON_DIR" ]; then
+            cp "$ICON_DIR"/*.png Payload/Pulse.app/ 2>/dev/null || true
+          fi
           
           # Find resource bundles and copy contents to root for UIImage(named:) compatibility
           find build -name "*.bundle" -type d -exec cp -r "{}/." Payload/Pulse.app/ \;
@@ -144,6 +150,12 @@ jobs:
           # Find and copy Assets.car
           ASSETS_CAR=$(find build -name "Assets.car" -type f | head -n 1)
           if [ -n "$ASSETS_CAR" ]; then cp "$ASSETS_CAR" Payload/Pulse.app/; fi
+          
+          # FIX: Explicitly copy app icon PNGs to root for home screen visibility
+          ICON_DIR="Resources/Assets.xcassets/AppIcon.appiconset"
+          if [ -d "$ICON_DIR" ]; then
+            cp "$ICON_DIR"/*.png Payload/Pulse.app/ 2>/dev/null || true
+          fi
           
           # Find resource bundles and copy contents to root for UIImage(named:) compatibility
           find build -name "*.bundle" -type d -exec cp -r "{}/." Payload/Pulse.app/ \;

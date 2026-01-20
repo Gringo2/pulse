@@ -55,13 +55,19 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.frame = bounds
         emptyLabel.frame = bounds
         
-        // Search Bar Layout
-        let padding: CGFloat = 16
-        let searchY = safeAreaInsets.top
-        searchBar.frame = CGRect(x: padding, y: searchY, width: bounds.width - (padding * 2), height: 44)
+        // Search Bar Layout - Responsive padding
+        let padding = Theme.Spacing.horizontalPadding
+        let searchY = max(safeAreaInsets.top, 10)
+        let maxSearchWidth: CGFloat = 600 // Cap search width for iPad/Landscape
+        let searchWidth = min(bounds.width - (padding * 2), maxSearchWidth)
+        let searchX = (bounds.width - searchWidth) / 2
         
-        // Adjust table inset to account for search bar
-        tableView.contentInset = UIEdgeInsets(top: searchY + 44 + 10, left: 0, bottom: 100, right: 0)
+        searchBar.frame = CGRect(x: searchX, y: searchY, width: searchWidth, height: 44)
+        
+        // Adjust table inset to account for search bar and safe area
+        let searchBarFullHeight = searchY + 44 + 10
+        tableView.contentInset = UIEdgeInsets(top: searchBarFullHeight, left: 0, bottom: safeAreaInsets.bottom + 100, right: 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsets(top: searchBarFullHeight, left: 0, bottom: safeAreaInsets.bottom, right: 0)
     }
     
     // MARK: - State Update

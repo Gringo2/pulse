@@ -93,28 +93,41 @@ final class OTPNode: Node {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         
-        let cardPadding: CGFloat = 24
-        let cardWidth = bounds.width - (cardPadding * 2)
-        let cardHeight: CGFloat = 320
+        // Responsiveness: Use Theme spacing and dynamic heights
+        let horizontalPadding = Theme.Spacing.horizontalPadding
+        let maxCardWidth: CGFloat = 400
+        let cardWidth = min(bounds.width - (horizontalPadding * 2), maxCardWidth)
         
-        // Center vertically but slightly higher for keyboard
+        // Dynamic content height
+        let minContentHeight: CGFloat = 280
+        let verticalOffset: CGFloat = bounds.height > 500 ? -40 : 0 // Less offset on small screens/landscape
+        let cardHeight = min(bounds.height - (safeAreaInsets.top + safeAreaInsets.bottom + 20), minContentHeight + 40)
+        
+        // Center vertically but slightly higher for keyboard, with safety for small screens
         glassCard.frame = CGRect(
-            x: cardPadding,
-            y: (bounds.height - cardHeight) / 2 - 40,
+            x: (bounds.width - cardWidth) / 2,
+            y: max(safeAreaInsets.top + 10, (bounds.height - cardHeight) / 2 + verticalOffset),
             width: cardWidth,
             height: cardHeight
         )
         
-        let contentWidth = cardWidth // Use calculated width directly
+        let contentWidth = cardWidth
         
-        titleLabel.frame = CGRect(x: 0, y: 40, width: contentWidth, height: 34)
+        titleLabel.frame = CGRect(x: 0, y: 30, width: contentWidth, height: 34)
         subtitleLabel.frame = CGRect(x: 20, y: titleLabel.frame.maxY + 8, width: contentWidth - 40, height: 40)
         
-        let inputWidth = contentWidth - 60
-        inputField.frame = CGRect(x: 30, y: subtitleLabel.frame.maxY + 30, width: inputWidth, height: 44)
-        inputUnderline.frame = CGRect(x: 30, y: inputField.frame.maxY + 2, width: inputWidth, height: 1)
+        let inputWidth = min(contentWidth - 60, 300)
+        let inputX = (contentWidth - inputWidth) / 2
+        inputField.frame = CGRect(x: inputX, y: subtitleLabel.frame.maxY + 20, width: inputWidth, height: 44)
+        inputUnderline.frame = CGRect(x: inputX, y: inputField.frame.maxY + 2, width: inputWidth, height: 1)
         
         let buttonHeight: CGFloat = 54
-        actionButton.frame = CGRect(x: 30, y: cardHeight - buttonHeight - 30, width: inputWidth, height: buttonHeight)
+        let actionButtonWidth = min(inputWidth, 280)
+        actionButton.frame = CGRect(
+            x: (contentWidth - actionButtonWidth) / 2,
+            y: cardHeight - buttonHeight - 30,
+            width: actionButtonWidth,
+            height: buttonHeight
+        )
     }
 }

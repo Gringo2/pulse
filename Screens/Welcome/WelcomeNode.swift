@@ -62,29 +62,43 @@ final class WelcomeNode: Node {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         
-        let cardPadding: CGFloat = 24
-        let cardWidth = bounds.width - (cardPadding * 2)
-        let cardHeight: CGFloat = 400
+        // Responsiveness: Use Theme spacing and dynamic heights
+        let horizontalPadding = Theme.Spacing.horizontalPadding
+        let maxCardWidth: CGFloat = 400
+        let cardWidth = min(bounds.width - (horizontalPadding * 2), maxCardWidth)
+        
+        // Dynamic content height calculation
+        let logoSize: CGFloat = 80
+        let buttonHeight: CGFloat = 54
+        let verticalSpacing: CGFloat = 20
+        let bottomPadding: CGFloat = 40
+        
+        // Estimated content height: logo (80) + gap (20) + title (50) + gap (8) + subtitle (24) + gap (adaptive) + button (54) + bottom (40)
+        let minContentHeight: CGFloat = 340
+        let cardHeight = min(bounds.height - (safeAreaInsets.top + safeAreaInsets.bottom + 40), minContentHeight + 60)
         
         // Center the card
         glassCard.frame = CGRect(
-            x: cardPadding,
+            x: (bounds.width - cardWidth) / 2,
             y: (bounds.height - cardHeight) / 2,
             width: cardWidth,
             height: cardHeight
         )
         
-        // Layout inside card
-        let contentWidth = cardWidth // Use calculated width directly
+        // Layout inside card - Content is centered within glassCard's contentView
+        let contentWidth = cardWidth
         
-        let logoSize: CGFloat = 80
-        logoImageView.frame = CGRect(x: (contentWidth - logoSize)/2, y: 60, width: logoSize, height: logoSize)
+        logoImageView.frame = CGRect(x: (contentWidth - logoSize)/2, y: 40, width: logoSize, height: logoSize)
         
-        titleLabel.frame = CGRect(x: 0, y: logoImageView.frame.maxY + 20, width: contentWidth, height: 50)
-        subtitleLabel.frame = CGRect(x: 0, y: titleLabel.frame.maxY + 8, width: contentWidth, height: 24)
+        titleLabel.frame = CGRect(x: 0, y: logoImageView.frame.maxY + verticalSpacing, width: contentWidth, height: 50)
+        subtitleLabel.frame = CGRect(x: 20, y: titleLabel.frame.maxY + 8, width: contentWidth - 40, height: 24)
         
-        let buttonHeight: CGFloat = 54
-        let buttonWidth = contentWidth - 60
-        actionButton.frame = CGRect(x: 30, y: cardHeight - buttonHeight - 40, width: buttonWidth, height: buttonHeight)
+        let buttonWidth = min(contentWidth - 60, 280)
+        actionButton.frame = CGRect(
+            x: (contentWidth - buttonWidth) / 2,
+            y: cardHeight - buttonHeight - bottomPadding,
+            width: buttonWidth,
+            height: buttonHeight
+        )
     }
 }

@@ -94,7 +94,7 @@ final class ChatListCellNode: Node {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let horizontalPadding: CGFloat = 16
+        let horizontalPadding = Theme.Spacing.horizontalPadding
         let avatarSize: CGFloat = 48
         let avatarY = (bounds.height - avatarSize) / 2
         
@@ -104,20 +104,22 @@ final class ChatListCellNode: Node {
         avatarBorder.frame = avatarContainer.frame
         
         let textLeft = avatarView.frame.maxX + 14
-        let textRight = bounds.width - horizontalPadding
+        let textRightPadding: CGFloat = horizontalPadding
         
         // Time
         timeLabel.sizeToFit()
         let timeWidth = timeLabel.frame.width
-        timeLabel.frame = CGRect(x: bounds.width - horizontalPadding - timeWidth, y: 20, width: timeWidth, height: 18)
+        timeLabel.frame = CGRect(x: bounds.width - textRightPadding - timeWidth, y: 18, width: timeWidth, height: 18)
         
-        // Name
-        nameLabel.frame = CGRect(x: textLeft, y: 18, width: timeLabel.frame.minX - textLeft - 8, height: 22)
+        // Name - Responsive width calculation
+        let maxNameWidth = timeLabel.frame.minX - textLeft - 12
+        nameLabel.frame = CGRect(x: textLeft, y: 18, width: maxNameWidth, height: 22)
         
-        // Message
-        messageLabel.frame = CGRect(x: textLeft, y: nameLabel.frame.maxY + 2, width: textRight - textLeft, height: 20)
+        // Message - Responsive width calculation
+        let messageWidth = bounds.width - textLeft - textRightPadding
+        messageLabel.frame = CGRect(x: textLeft, y: nameLabel.frame.maxY + 2, width: messageWidth, height: 20)
         
-        // Separator
+        // Separator - Glassmorphic style
         separator.frame = CGRect(x: textLeft, y: bounds.height - 0.5, width: bounds.width - textLeft, height: 0.5)
     }
     
