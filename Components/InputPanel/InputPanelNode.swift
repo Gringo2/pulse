@@ -66,10 +66,10 @@ final class InputPanelNode: Node, UITextFieldDelegate {
         super.layoutSubviews()
         
         _ = safeAreaInsets.bottom
-        let panelHeight: CGFloat = 56 // Matches SVG height
+        let panelHeight: CGFloat = 52 // standard height
         
         // Floating Layout
-        let horizontalPadding: CGFloat = 32
+        let horizontalPadding: CGFloat = 16 // reduced padding for better fit
         let verticalPadding: CGFloat = 8
         
         // Calculate frame for the pill

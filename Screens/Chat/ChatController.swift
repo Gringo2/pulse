@@ -13,6 +13,7 @@ final class ChatController: UIViewController, PHPickerViewControllerDelegate {
         super.init(nibName: nil, bundle: nil)
         
         self.title = chat.name
+        node.headerTitle.text = chat.name
         self.state.messages = [
             Message(id: UUID(), text: "Hello \(chat.name)!", isOutgoing: true, timestamp: Date().addingTimeInterval(-1000)),
             Message(id: UUID(), text: "Welcome to Pulse.", isOutgoing: false, timestamp: Date().addingTimeInterval(-500))
@@ -25,10 +26,20 @@ final class ChatController: UIViewController, PHPickerViewControllerDelegate {
         self.view = node
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCallbacks()
-        setupNavigation()
+        // Custom header requested later, system nav hidden above
         updateUI()
     }
     
@@ -71,6 +82,9 @@ final class ChatController: UIViewController, PHPickerViewControllerDelegate {
             
         case .didTapAttach:
             presentPicker()
+            
+        case .didTapBack:
+            navigationController?.popViewController(animated: true)
             
         default:
             break

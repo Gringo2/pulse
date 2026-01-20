@@ -11,6 +11,8 @@ final class ChatListCellNode: Node {
     private let nameLabel = UILabel()
     private let messageLabel = UILabel()
     private let timeLabel = UILabel()
+    private let unreadBadge = UIView()
+    private let unreadLabel = UILabel()
     private let separator = UIView()
     
     // Props
@@ -65,10 +67,18 @@ final class ChatListCellNode: Node {
         timeLabel.font = .systemFont(ofSize: 13, weight: .regular)
         timeLabel.textColor = UIColor.white.withAlphaComponent(0.4)
         
-        // Separator - Glassmorphic style
-        separator.backgroundColor = UIColor.white.withAlphaComponent(0.08)
+        // Unread Badge
+        unreadBadge.backgroundColor = Theme.Colors.accent
+        unreadBadge.layer.cornerRadius = 10
+        unreadBadge.clipsToBounds = true
+        unreadBadge.isHidden = true
         
-        addSubnodes([avatarContainer, avatarView, avatarBorder, nameLabel, messageLabel, timeLabel, separator])
+        unreadLabel.font = .systemFont(ofSize: 11, weight: .bold)
+        unreadLabel.textColor = .white
+        unreadLabel.textAlignment = .center
+        unreadBadge.addSubview(unreadLabel)
+        
+        addSubnodes([avatarContainer, avatarView, avatarBorder, nameLabel, messageLabel, timeLabel, unreadBadge, separator])
         
         self.isUserInteractionEnabled = true
     }
@@ -78,6 +88,13 @@ final class ChatListCellNode: Node {
         nameLabel.text = chat.name
         messageLabel.text = chat.messagePreview
         timeLabel.text = chat.timeString
+        
+        if chat.unreadCount > 0 {
+            unreadBadge.isHidden = false
+            unreadLabel.text = "\(chat.unreadCount)"
+        } else {
+            unreadBadge.isHidden = true
+        }
         
         if let avatar = chat.avatarName {
             avatarView.image = UIImage(systemName: avatar)?.withConfiguration(UIImage.SymbolConfiguration(pointSize: 18, weight: .bold))
@@ -110,6 +127,12 @@ final class ChatListCellNode: Node {
         timeLabel.sizeToFit()
         let timeWidth = timeLabel.frame.width
         timeLabel.frame = CGRect(x: bounds.width - textRightPadding - timeWidth, y: 18, width: timeWidth, height: 18)
+        
+        // Unread Badge
+        if !unreadBadge.isHidden {
+            unreadBadge.frame = CGRect(x: bounds.width - textRightPadding - 20, y: timeLabel.frame.maxY + 6, width: 20, height: 20)
+            unreadLabel.frame = unreadBadge.bounds
+        }
         
         // Name - Responsive width calculation
         let maxNameWidth = timeLabel.frame.minX - textLeft - 12

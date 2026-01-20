@@ -29,9 +29,9 @@ final class PerformanceMonitor {
     func start() {
         guard window == nil else { return }
         
-        let width: CGFloat = 140
-        let height: CGFloat = 50
-        let w = UIWindow(frame: CGRect(x: UIScreen.main.bounds.width - width - 10, y: 50, width: width, height: height)) // Top Right
+        let width: CGFloat = 130
+        let height: CGFloat = 46
+        let w = UIWindow(frame: CGRect(x: UIScreen.main.bounds.width - width - 12, y: 60, width: width, height: height)) // Top Right, below status bar
         w.windowLevel = .alert + 1
         w.backgroundColor = UIColor.black.withAlphaComponent(0.4)
         w.layer.cornerRadius = 12

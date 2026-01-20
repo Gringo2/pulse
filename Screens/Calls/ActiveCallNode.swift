@@ -86,16 +86,24 @@ final class ActiveCallNode: Node {
         blurView.frame = bounds
         
         let centerX = bounds.midX
+        let topPadding = safeAreaInsets.top + 40
+        let bottomPadding = safeAreaInsets.bottom + 40
         
-        avatarContainer.frame = CGRect(x: centerX - 80, y: bounds.height * 0.25, width: 160, height: 160)
+        // Avatar - Scale based on height
+        let avatarSize: CGFloat = min(bounds.height * 0.2, 160)
+        avatarContainer.frame = CGRect(x: centerX - avatarSize/2, y: topPadding, width: avatarSize, height: avatarSize)
+        avatarContainer.layer.cornerRadius = avatarSize / 2
         avatarImageView.frame = avatarContainer.bounds
+        avatarImageView.layer.cornerRadius = avatarSize / 2
         pulseLayer.frame = avatarContainer.bounds
+        pulseLayer.cornerRadius = avatarSize / 2
         
-        nameLabel.frame = CGRect(x: 20, y: avatarContainer.frame.maxY + 40, width: bounds.width - 40, height: 40)
+        nameLabel.frame = CGRect(x: 20, y: avatarContainer.frame.maxY + 30, width: bounds.width - 40, height: 40)
         statusLabel.frame = CGRect(x: 20, y: nameLabel.frame.maxY + 8, width: bounds.width - 40, height: 24)
         
         let stackWidth: CGFloat = 280
-        controlsStack.frame = CGRect(x: (bounds.width - stackWidth)/2, y: bounds.height - 140, width: stackWidth, height: 80)
+        let stackHeight: CGFloat = 80
+        controlsStack.frame = CGRect(x: (bounds.width - stackWidth)/2, y: bounds.height - bottomPadding - stackHeight, width: stackWidth, height: stackHeight)
     }
     
     private func startPulseAnimation() {

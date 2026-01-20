@@ -4,6 +4,9 @@ final class ChatNode: Node {
     
     private let messageListNode = MessageListNode()
     private let inputPanelNode = InputPanelNode()
+    private let backButton = UIButton(type: .system)
+    private let headerTitle = UILabel()
+    private let headerBlur = GlassNode()
     
     // Events
     var onEvent: ((ChatEvent) -> Void)?
@@ -24,9 +27,19 @@ final class ChatNode: Node {
         backgroundLayer.startPoint = CGPoint(x: 0, y: 0)
         backgroundLayer.endPoint = CGPoint(x: 1, y: 1)
         backgroundLayer.locations = [0.0, 0.4, 1.0]
-        layer.insertSublayer(backgroundLayer, at: 0)
+        addSubnodes([backgroundLayer, messageListNode, headerBlur, inputPanelNode])
+        headerBlur.contentView.addSubnodes([backButton, headerTitle])
         
-        addSubnodes([messageListNode, inputPanelNode])
+        // Header Setup
+        headerBlur.setBlurStyle(.systemUltraThinMaterialDark)
+        headerTitle.font = .systemFont(ofSize: 17, weight: .bold)
+        headerTitle.textColor = .white
+        headerTitle.textAlignment = .center
+        
+        let backConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .semibold)
+        backButton.setImage(UIImage(systemName: "chevron.left", withConfiguration: backConfig), for: .normal)
+        backButton.tintColor = Theme.Colors.accent
+        backButton.addTarget(self, action: #selector(didTapBack), for: .touchUpInside)
         
         // Component Callbacks (Wiring)
         inputPanelNode.onSendMessage = { [weak self] text in
@@ -48,15 +61,28 @@ final class ChatNode: Node {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         
+        let safeTop = safeAreaInsets.top
         let safeBottom = safeAreaInsets.bottom
+        let headerHeight = safeTop + 44
+        
+        headerBlur.frame = CGRect(x: 0, y: 0, width: bounds.width, height: headerHeight)
+        backButton.frame = CGRect(x: 8, y: safeTop, width: 44, height: 44)
+        headerTitle.frame = CGRect(x: 60, y: safeTop, width: bounds.width - 120, height: 44)
+        
         let inputHeaderHeight: CGFloat = 52
-        let inputTotalHeight = inputHeaderHeight + bottomInset + (bottomInset > 0 ? 0 : safeBottom)
+        let inputTotalHeight = inputHeaderHeight + bottomInset + (bottomInset > 0 ? 8 : safeBottom + 8)
         
         inputPanelNode.frame = CGRect(x: 0, y: bounds.height - inputTotalHeight, width: bounds.width, height: inputTotalHeight)
         
-        // Ensure message list is below any header blur if we add one, 
-        // but for now, it fills the remaining space.
-        messageListNode.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height - inputTotalHeight)
+        // Message list fills the rest
+        messageListNode.frame = CGRect(x: 0, y: 0, width: bounds.width, height: bounds.height)
+        // Set insets so content doesn't hide under header/input
+        messageListNode.tableView.contentInset = UIEdgeInsets(top: headerHeight, left: 0, bottom: inputTotalHeight, right: 0)
+        messageListNode.tableView.scrollIndicatorInsets = messageListNode.tableView.contentInset
+    }
+    
+    @objc private func didTapBack() {
+        onEvent?(.didTapBack)
     }
     
     // MARK: - Update
