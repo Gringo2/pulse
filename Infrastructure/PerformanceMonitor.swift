@@ -29,10 +29,12 @@ final class PerformanceMonitor {
     func start() {
         guard window == nil else { return }
         
-        let w = UIWindow(frame: CGRect(x: 10, y: 50, width: 200, height: 60)) // Top left
+        let width: CGFloat = 140
+        let height: CGFloat = 50
+        let w = UIWindow(frame: CGRect(x: UIScreen.main.bounds.width - width - 10, y: 50, width: width, height: height)) // Top Right
         w.windowLevel = .alert + 1
-        w.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        w.layer.cornerRadius = 8
+        w.backgroundColor = UIColor.black.withAlphaComponent(0.4)
+        w.layer.cornerRadius = 12
         w.clipsToBounds = true
         w.isUserInteractionEnabled = false // Pass through
         

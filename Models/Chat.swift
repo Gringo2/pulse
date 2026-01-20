@@ -12,7 +12,7 @@ struct Chat: Identifiable, Equatable {
     // Derived for UI
     var timeString: String {
         let formatter = DateFormatter()
-        formatter.timeStyle = .short
+        formatter.dateFormat = "h:mm a"
         return formatter.string(from: timestamp)
     }
     

@@ -33,6 +33,7 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.rowHeight = 82 // Increased for premium feel
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
+        tableView.contentInsetAdjustmentBehavior = .never // Fix double-insetting gap
         
         // Padding for floating tab bar
         tableView.contentInset = UIEdgeInsets(top: 60, left: 0, bottom: 100, right: 0)
@@ -57,17 +58,21 @@ final class ChatListNode: Node, UITableViewDelegate, UITableViewDataSource {
         
         // Search Bar Layout - Responsive padding
         let padding = Theme.Spacing.horizontalPadding
-        let searchY = max(safeAreaInsets.top, 10)
+        // When using Large Titles, the node's top inset is often already accounting for the nav bar.
+        // However, we are a passive node, so we use safeAreaInsets.top carefully.
+        let searchY = safeAreaInsets.top + 8
         let maxSearchWidth: CGFloat = 600 // Cap search width for iPad/Landscape
         let searchWidth = min(bounds.width - (padding * 2), maxSearchWidth)
         let searchX = (bounds.width - searchWidth) / 2
         
         searchBar.frame = CGRect(x: searchX, y: searchY, width: searchWidth, height: 44)
         
-        // Adjust table inset to account for search bar and safe area
-        let searchBarFullHeight = searchY + 44 + 10
-        tableView.contentInset = UIEdgeInsets(top: searchBarFullHeight, left: 0, bottom: safeAreaInsets.bottom + 100, right: 0)
-        tableView.scrollIndicatorInsets = UIEdgeInsets(top: searchBarFullHeight, left: 0, bottom: safeAreaInsets.bottom, right: 0)
+        // Adjust table inset: search bar (44) + top offset (8) + gap (8)
+        // With prefersLargeTitles, the title is ABOVE the search bar when scrolled to top.
+        // We need enough inset to push the first cell below the search bar.
+        let topInset = searchY + 44 + 10
+        tableView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: safeAreaInsets.bottom + 100, right: 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsets(top: topInset, left: 0, bottom: safeAreaInsets.bottom, right: 0)
     }
     
     // MARK: - State Update

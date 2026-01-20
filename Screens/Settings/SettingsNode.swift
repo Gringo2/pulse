@@ -114,19 +114,19 @@ final class SettingsNode: Node {
         
         let padding: CGFloat = 16
         let itemHeight: CGFloat = 44
+        let innerPadding: CGFloat = 16
         
-        // Container - Increased height for 4 items
-        // Container - Height for 5 items
-        let containerHeight: CGFloat = 280
-        // Premium Card
+        // Premium Card - Start below safe area
         let premiumHeight: CGFloat = 60
-        premiumCard.frame = CGRect(x: padding, y: 120, width: bounds.width - (padding * 2), height: premiumHeight)
+        let premiumY = safeAreaInsets.top + 20
+        premiumCard.frame = CGRect(x: padding, y: premiumY, width: bounds.width - (padding * 2), height: premiumHeight)
         premiumLabel.frame = CGRect(x: 20, y: 0, width: premiumCard.bounds.width - 40, height: premiumHeight)
         
-        let containerY: CGFloat = premiumCard.frame.maxY + 20
+        // Items Container - Tighten gap to 12
+        let containerHeight: CGFloat = 280
+        let containerY = premiumCard.frame.maxY + 12
         glassContainer.frame = CGRect(x: padding, y: containerY, width: bounds.width - (padding * 2), height: containerHeight)
         
-        let innerPadding: CGFloat = 16
         let switchWidth: CGFloat = 51
         let switchHeight: CGFloat = 31
         
@@ -154,8 +154,9 @@ final class SettingsNode: Node {
         appearanceLabel.frame = CGRect(x: innerPadding, y: appY, width: 200, height: itemHeight)
         appearanceValue.frame = CGRect(x: glassContainer.bounds.width - 40 - innerPadding, y: appY, width: 40, height: itemHeight)
         
+        // Logout Card - Tighten gap to 12
         let logoutHeight: CGFloat = 54
-        logoutCard.frame = CGRect(x: padding, y: glassContainer.frame.maxY + 20, width: bounds.width - (padding * 2), height: logoutHeight)
+        logoutCard.frame = CGRect(x: padding, y: glassContainer.frame.maxY + 12, width: bounds.width - (padding * 2), height: logoutHeight)
         logoutLabel.frame = logoutCard.contentView.bounds
     }
 }

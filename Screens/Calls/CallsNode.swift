@@ -31,6 +31,7 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.rowHeight = 82
         tableView.separatorStyle = .none
         tableView.backgroundColor = .clear
+        tableView.contentInsetAdjustmentBehavior = .never // Fix double-insetting
         tableView.contentInset = UIEdgeInsets(top: 10, left: 0, bottom: 100, right: 0)
         
         // Segment Control
@@ -77,8 +78,15 @@ final class CallsNode: Node, UITableViewDelegate, UITableViewDataSource {
         tableView.frame = bounds
         emptyLabel.frame = bounds
         
+        // Segment Control
         let segmentWidth: CGFloat = 200
-        segmentControl.frame = CGRect(x: (bounds.width - segmentWidth)/2, y: safeAreaInsets.top + 10, width: segmentWidth, height: 32)
+        let segmentY = safeAreaInsets.top + 8
+        segmentControl.frame = CGRect(x: (bounds.width - segmentWidth)/2, y: segmentY, width: segmentWidth, height: 32)
+        
+        // Adjust table insets
+        let topInset = segmentY + 32 + 12
+        tableView.contentInset = UIEdgeInsets(top: topInset, left: 0, bottom: safeAreaInsets.bottom + 100, right: 0)
+        tableView.scrollIndicatorInsets = UIEdgeInsets(top: topInset, left: 0, bottom: safeAreaInsets.bottom, right: 0)
     }
     
     func update(calls: [Call]) {
@@ -232,22 +240,24 @@ final class CallCellNode: UITableViewCell {
         avatarContainer.frame = CGRect(x: horizontalPadding, y: (bounds.height - avatarSize)/2, width: avatarSize, height: avatarSize)
         avatarView.frame = avatarContainer.frame
         
-        let textLeft = avatarView.frame.maxX + 14
-        let infoWidth: CGFloat = 44
-        let textRight = bounds.width - infoWidth
-        
-        nameLabel.frame = CGRect(x: textLeft, y: 18, width: textRight - textLeft, height: 22)
-        
-        statusIcon.frame = CGRect(x: textLeft, y: nameLabel.frame.maxY + 4, width: 14, height: 14)
-        statusLabel.frame = CGRect(x: statusIcon.frame.maxX + 4, y: nameLabel.frame.maxY + 2, width: 100, height: 18)
-        
         let iconSize: CGFloat = 36
-        
         videoButton.frame = CGRect(x: bounds.width - horizontalPadding - iconSize, y: (bounds.height - iconSize)/2, width: iconSize, height: iconSize)
         phoneButton.frame = CGRect(x: videoButton.frame.minX - iconSize - 8, y: (bounds.height - iconSize)/2, width: iconSize, height: iconSize)
         
         timeLabel.sizeToFit()
-        timeLabel.frame = CGRect(x: phoneButton.frame.minX - timeLabel.frame.width - 12, y: (bounds.height - 18)/2, width: timeLabel.frame.width, height: 18)
+        let timeWidth = timeLabel.frame.width
+        timeLabel.frame = CGRect(x: phoneButton.frame.minX - timeWidth - 12, y: (bounds.height - 18)/2, width: timeWidth, height: 18)
+        
+        let textLeft = avatarView.frame.maxX + 14
+        let textRightLimit = timeLabel.frame.minX - 8
+        
+        // Name - Truncate if needed
+        nameLabel.frame = CGRect(x: textLeft, y: 18, width: textRightLimit - textLeft, height: 22)
+        
+        // Status row
+        statusIcon.frame = CGRect(x: textLeft, y: nameLabel.frame.maxY + 4, width: 14, height: 14)
+        let statusLabelMaxWidth = textRightLimit - statusIcon.frame.maxX - 4
+        statusLabel.frame = CGRect(x: statusIcon.frame.maxX + 4, y: nameLabel.frame.maxY + 2, width: statusLabelMaxWidth, height: 18)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
