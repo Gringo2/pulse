@@ -57,6 +57,7 @@ jobs:
       - name: Generate Protobuf Files
         run: |
           echo "/opt/homebrew/bin" >> $GITHUB_PATH
+          export PATH="/opt/homebrew/bin:$PATH"
           mkdir -p Models/Generated
           # Plugins should now be in PATH via GITHUB_PATH update (for subsequent steps)
           # but in THIS step we still need to refer to them or use the full path
