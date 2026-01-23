@@ -60,7 +60,6 @@ jobs:
           protoc --swift_out=./Models/Generated --swift_opt=Visibility=Public --grpc-swift_out=./Models/Generated --grpc-swift_opt=Visibility=Public model.proto
 
       - name: Build (iOS Simulator)
-      - name: Build (iOS Simulator)
         run: |
           xcodebuild build \
             -scheme Pulse \
