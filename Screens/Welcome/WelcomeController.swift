@@ -15,6 +15,13 @@ final class WelcomeController: UIViewController {
         node.actionButton.onTap = { [weak self] in
             self?.didTapStart()
         }
+        
+        node.signUpButton.onTap = { [weak self] in
+            let registration = RegistrationController()
+            let nav = UINavigationController(rootViewController: registration)
+            nav.modalPresentationStyle = .fullScreen
+            self?.present(nav, animated: true)
+        }
     }
     
     @objc private func didTapStart() {

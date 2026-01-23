@@ -8,6 +8,8 @@ final class MessageListNode: Node, UITableViewDelegate, UITableViewDataSource {
     private let emptyLabel = UILabel()
     var messages: [Message] = []
     
+    var onScrollToTop: (() -> Void)?
+    
     override func setup() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -35,16 +37,33 @@ final class MessageListNode: Node, UITableViewDelegate, UITableViewDataSource {
     }
     
     func update(messages: [Message]) {
+        let isAtBottom = tableView.contentOffset.y >= (tableView.contentSize.height - tableView.frame.size.height - 20)
+        let oldContentHeight = tableView.contentSize.height
+        
         self.messages = messages
         emptyLabel.isHidden = !messages.isEmpty
         tableView.reloadData()
-        scrollToBottom()
+        
+        if !messages.isEmpty {
+            if isAtBottom || messages.count < 5 {
+                // If previously at bottom (or first load), stick to bottom
+                scrollToBottom(animated: oldContentHeight > 0)
+            } else {
+                // Maintained position (approximate for history load)
+                // In a real app we'd calculate exact height diff
+                let newHeight = tableView.contentSize.height
+                let diff = newHeight - oldContentHeight
+                if diff > 0 {
+                    tableView.contentOffset = CGPoint(x: 0, y: tableView.contentOffset.y + diff)
+                }
+            }
+        }
     }
     
-    private func scrollToBottom() {
+    private func scrollToBottom(animated: Bool) {
         guard !messages.isEmpty else { return }
         let indexPath = IndexPath(row: messages.count - 1, section: 0)
-        tableView.scrollToRow(at: indexPath, at: .bottom, animated: true)
+        tableView.scrollToRow(at: indexPath, at: .bottom, animated: animated)
     }
     
     // MARK: - TableView
@@ -79,6 +98,17 @@ final class MessageListNode: Node, UITableViewDelegate, UITableViewDataSource {
         override func layoutSubviews() {
             super.layoutSubviews()
             node.frame = contentView.bounds
+        }
+    }
+    
+    // MARK: - Scroll Detection
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        // Trigger pagination when scrolled near top
+        if offsetY < 100 && contentHeight > 0 {
+            onScrollToTop?()
         }
     }
 }

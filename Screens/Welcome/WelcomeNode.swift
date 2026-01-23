@@ -13,6 +13,7 @@ final class WelcomeNode: Node {
     
     // Actions
     let actionButton = GlassButtonComponent(title: "Get Started", iconName: "arrow.right")
+    let signUpButton = GlassButtonComponent(title: "Sign Up", iconName: "person.badge.plus")
     
     override func setup() {
         backgroundColor = Theme.Colors.background
@@ -56,6 +57,7 @@ final class WelcomeNode: Node {
         glassCard.contentView.addSubview(titleLabel)
         glassCard.contentView.addSubview(subtitleLabel)
         glassCard.contentView.addSubview(actionButton)
+        glassCard.contentView.addSubview(signUpButton)
     }
     
     override func layoutSubviews() {
@@ -96,7 +98,14 @@ final class WelcomeNode: Node {
         let buttonWidth = min(contentWidth - 60, 280)
         actionButton.frame = CGRect(
             x: (contentWidth - buttonWidth) / 2,
-            y: cardHeight - buttonHeight - bottomPadding,
+            y: cardHeight - (buttonHeight * 2) - bottomPadding - 10,
+            width: buttonWidth,
+            height: buttonHeight
+        )
+        
+        signUpButton.frame = CGRect(
+            x: (contentWidth - buttonWidth) / 2,
+            y: actionButton.frame.maxY + 10,
             width: buttonWidth,
             height: buttonHeight
         )

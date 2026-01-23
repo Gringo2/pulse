@@ -25,12 +25,15 @@ final class OTPController: UIViewController {
         
         switch currentState {
         case .phone:
-            // Simulate sending code
+            // Request OTP via Tinode {acc scheme="code"}
+            let secret = Data(text.utf8)
+            TinodeClient.shared.login(scheme: "code", secret: secret)
+            
             // Transition to Code state
             currentState = .code
             node.update(state: .code)
             
-            // Animation for transition (optional polish)
+            // Animation for transition
             let transition = CATransition()
             transition.duration = 0.3
             transition.type = .push
@@ -38,8 +41,19 @@ final class OTPController: UIViewController {
             node.inputField.layer.add(transition, forKey: nil)
             
         case .code:
-            // Simulate verifying code
-            completeLogin()
+            // Verify OTP via Tinode {login scheme="code"}
+            let secret = Data(text.utf8)
+            TinodeClient.shared.login(scheme: "code", secret: secret)
+            
+            // Observe the result via callback
+            TinodeClient.shared.onCtrl = { [weak self] ctrl in
+                if ctrl.code == 200 {
+                    self?.completeLogin()
+                } else {
+                    // Handle error (e.g., show "Invalid Code")
+                    print("Auth error: \(ctrl.text)")
+                }
+            }
         }
     }
     
@@ -50,6 +64,11 @@ final class OTPController: UIViewController {
         
         // Save login state
         UserDefaults.standard.set(true, forKey: "isLoggedIn")
+        
+        // Save persistent token
+        if let token = TinodeClient.shared.sessionToken {
+            UserDefaults.standard.set(token, forKey: "tinode_token")
+        }
         
         // Tell Root to switch
         if let root = self.view.window?.rootViewController as? RootController {

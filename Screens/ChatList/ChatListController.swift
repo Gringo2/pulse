@@ -41,15 +41,46 @@ final class ChatListController: UIViewController {
         navigationController?.navigationBar.tintColor = Theme.Colors.accent
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "Edit",
+            image: UIImage(systemName: "plus"),
             style: .plain,
             target: self,
-            action: #selector(didTapEdit)
+            action: #selector(didTapNewChat)
         )
     }
     
-    @objc private func didTapEdit() {
-        // Implement edit logic
+    @objc private func didTapNewChat() {
+        let search = UserSearchController()
+        search.onSelectUser = { [weak self] userId in
+            self?.startChat(topic: userId)
+        }
+        
+        let nav = UINavigationController(rootViewController: search)
+        // Match main nav appearance if possible, or default
+        nav.navigationBar.barStyle = .black
+        nav.navigationBar.tintColor = Theme.Colors.accent
+        
+        present(nav, animated: true)
+    }
+    
+    private func startChat(topic: String) {
+        // Optimistically nav to chat. 
+        // In a real app, we'd wait for 'ctrl' success or 'pres' existence.
+        // For verifying integration, we just try to subscribe then open.
+        
+        let chat = Chat(
+            id: topic,
+            name: topic, // Will update when we get info
+            messagePreview: "New conversation",
+            timestamp: Date(),
+            unreadCount: 0,
+            isOnline: false,
+            avatarName: "person.circle"
+        )
+        
+        // Subscription will happen inside ChatController.init or via the navigation flow logic?
+        // Current implementation: ChatController.init -> subscribes.
+        // So just navigating is enough.
+        navigateToChat(chat)
     }
     
     private func setupNodeCallbacks() {
@@ -96,29 +127,50 @@ final class ChatListController: UIViewController {
     private func handle(_ event: ChatListEvent) {
         switch event {
         case .loadData:
-            // Simulate Side Effect (API Call)
             state.isLoading = true
-            updateUI() // Show loading if node supports it
+            updateUI()
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-                guard let self = self else { return }
-                // Generate more data for scrolling
-                var mockChats = Chat.mockData()
-                // Duplicate to fill list
-                mockChats.append(contentsOf: mockChats.map { 
-                    var copy = $0
-                    copy.id = UUID()
-                    return copy 
-                })
-                mockChats.append(contentsOf: mockChats.map { 
-                    var copy = $0
-                    copy.id = UUID()
-                    return copy 
-                })
+            // Subscribe to 'me' to get our chat list
+            TinodeClient.shared.subscribe(to: "me")
+            
+            // Handle incoming metadata
+            TinodeClient.shared.onMeta = { [weak self] meta in
+                guard let self = self, meta.topic == "me" else { return }
                 
-                self.state.chats = mockChats
+                let chats = meta.sub.map { sub in
+                    var name = sub.topic
+                    if let publicData = try? JSONSerialization.jsonObject(with: sub.public) as? [String: Any],
+                       let fn = publicData["fn"] as? String {
+                        name = fn
+                    }
+                    
+                    return Chat(
+                        id: sub.topic,
+                        name: name,
+                        messagePreview: "Seq: \(sub.seqID)", 
+                        timestamp: Date(), // Ideally track .touched
+                        unreadCount: Int(sub.seqID - sub.readID),
+                        isOnline: sub.online,
+                        avatarName: "person.circle"
+                    )
+                }
+                
+                self.state.chats = chats
                 self.state.isLoading = false
                 self.updateUI()
+            }
+            
+            // Handle presence updates
+            TinodeClient.shared.onPres = { [weak self] pres in
+                guard let self = self else { return }
+                
+                // Find the chat and update its online status
+                if let index = self.state.chats.firstIndex(where: { $0.id == pres.topic }) {
+                    var updatedChat = self.state.chats[index]
+                    updatedChat.isOnline = TinodeClient.shared.getPresence(for: pres.topic)
+                    self.state.chats[index] = updatedChat
+                    self.updateUI()
+                }
             }
             
         case .didSelectChat(let chat):

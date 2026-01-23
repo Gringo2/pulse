@@ -27,4 +27,6 @@ enum ChatEvent: Event {
     case messageReceived(Message)
     case setInputMode(ChatInputMode)
     case didTapAttach
+    case didTapBack
+    case loadMoreHistory
 }

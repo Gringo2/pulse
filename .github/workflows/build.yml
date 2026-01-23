@@ -50,6 +50,16 @@ jobs:
           echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
 
       # Primary Build: Compiles for Simulator
+      - name: Install Protobuf Dependencies
+        run: |
+          brew install protobuf swift-protobuf grpc-swift
+
+      - name: Generate Protobuf Files
+        run: |
+          mkdir -p Models/Generated
+          protoc --swift_out=./Models/Generated --swift_opt=Visibility=Public --grpc-swift_out=./Models/Generated --grpc-swift_opt=Visibility=Public model.proto
+
+      - name: Build (iOS Simulator)
       - name: Build (iOS Simulator)
         run: |
           xcodebuild build \
@@ -119,6 +129,11 @@ jobs:
 
       - name: Build (iOS Device)
         run: |
+          # Install dependencies and generate also for device build
+          brew install protobuf swift-protobuf grpc-swift
+          mkdir -p Models/Generated
+          protoc --swift_out=./Models/Generated --swift_opt=Visibility=Public --grpc-swift_out=./Models/Generated --grpc-swift_opt=Visibility=Public model.proto
+
           xcodebuild build \
             -scheme Pulse \
             -configuration Debug \

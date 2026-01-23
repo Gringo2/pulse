@@ -15,10 +15,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = RootController()
         window?.makeKeyAndVisible()
         
-        // Start Debug Overlay
-        #if DEBUG
-        PerformanceMonitor.shared.start()
-        #endif
+        // Initialize and connect to Tinode backend
+        TinodeClient.shared.connect()
+        TinodeClient.shared.handshake()
         
         return true
     }

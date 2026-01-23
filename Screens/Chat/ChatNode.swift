@@ -7,6 +7,7 @@ final class ChatNode: Node {
     private let backButton = UIButton(type: .system)
     private let headerTitle = UILabel()
     private let headerBlur = GlassNode()
+    private let typingIndicator = TypingIndicatorNode()
     
     // Events
     var onEvent: ((ChatEvent) -> Void)?
@@ -27,8 +28,10 @@ final class ChatNode: Node {
         backgroundLayer.startPoint = CGPoint(x: 0, y: 0)
         backgroundLayer.endPoint = CGPoint(x: 1, y: 1)
         backgroundLayer.locations = [0.0, 0.4, 1.0]
-        addSubnodes([backgroundLayer, messageListNode, headerBlur, inputPanelNode])
+        addSubnodes([backgroundLayer, messageListNode, typingIndicator, headerBlur, inputPanelNode])
         headerBlur.contentView.addSubnodes([backButton, headerTitle])
+        
+        typingIndicator.isHidden = true
         
         // Header Setup
         headerBlur.setBlurStyle(.systemUltraThinMaterialDark)
@@ -48,6 +51,10 @@ final class ChatNode: Node {
         
         inputPanelNode.onAttach = { [weak self] in
             self?.onEvent?(.didTapAttach)
+        }
+        
+        messageListNode.onScrollToTop = { [weak self] in
+            self?.onEvent?(.loadMoreHistory)
         }
         
         setupKeyboardObservers()
@@ -79,6 +86,10 @@ final class ChatNode: Node {
         // Set insets so content doesn't hide under header/input
         messageListNode.tableView.contentInset = UIEdgeInsets(top: headerHeight, left: 0, bottom: inputTotalHeight, right: 0)
         messageListNode.tableView.scrollIndicatorInsets = messageListNode.tableView.contentInset
+        
+        // Typing indicator just above input panel
+        let typingY = bounds.height - inputTotalHeight - 44
+        typingIndicator.frame = CGRect(x: 0, y: typingY, width: bounds.width, height: 44)
     }
     
     @objc private func didTapBack() {
@@ -90,6 +101,15 @@ final class ChatNode: Node {
     func update(state: ChatState) {
         // Pass data down to components
         messageListNode.update(messages: state.messages)
+        
+        // Typing indicator
+        if state.isTyping {
+            typingIndicator.isHidden = false
+            typingIndicator.startAnimating()
+        } else {
+            typingIndicator.isHidden = true
+            typingIndicator.stopAnimating()
+        }
         
         // Input Panel State
         // inputPanelNode.setInputMode(state.inputMode) // Logic not implemented in component yet

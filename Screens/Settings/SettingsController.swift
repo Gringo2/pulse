@@ -37,6 +37,21 @@ final class SettingsController: UIViewController {
         // Premium Tap
         let premiumTap = UITapGestureRecognizer(target: self, action: #selector(didTapPremium))
         settingsNode.premiumCard.addGestureRecognizer(premiumTap)
+        
+        // Fetch Profile from Tinode
+        TinodeClient.shared.subscribe(to: "me")
+        TinodeClient.shared.onMeta = { [weak self] meta in
+            guard meta.topic == "me", let desc = meta.desc else { return }
+            
+            // Parse 'public' vCard for FN (Full Name)
+            if let publicData = try? JSONSerialization.jsonObject(with: desc.public) as? [String: Any],
+               let fn = publicData["fn"] as? String {
+                DispatchQueue.main.async {
+                    self?.title = fn
+                    // In a real app, we'd update a profile header node here
+                }
+            }
+        }
     }
     
     @objc private func didTapPremium() {

@@ -11,6 +11,7 @@ final class MessageBubbleNode: Node {
     private let bubbleBackground = UIView()
     private let gradientLayer = CAGradientLayer()
     private let timeLabel = UILabel()
+    private let statusIcon = UILabel()
     
     var message: Message? {
         didSet {
@@ -38,7 +39,11 @@ final class MessageBubbleNode: Node {
         timeLabel.font = .systemFont(ofSize: 11, weight: .medium)
         timeLabel.textAlignment = .right
         
-        addSubnodes([bubbleBackground, textLabel, timeLabel])
+        // Status icon (checkmarks)
+        statusIcon.font = .systemFont(ofSize: 12, weight: .medium)
+        statusIcon.textAlignment = .right
+        
+        addSubnodes([bubbleBackground, textLabel, timeLabel, statusIcon])
         
         // Interactions
         isUserInteractionEnabled = true
@@ -63,6 +68,20 @@ final class MessageBubbleNode: Node {
             timeLabel.textColor = UIColor.white.withAlphaComponent(0.7)
             bubbleBackground.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMinXMaxYCorner]
             bubbleBackground.layer.borderWidth = 0
+            
+            // Show status icon for outgoing messages
+            statusIcon.isHidden = false
+            switch message.status {
+            case .sent:
+                statusIcon.text = "✓"
+                statusIcon.textColor = UIColor.white.withAlphaComponent(0.6)
+            case .delivered:
+                statusIcon.text = "✓✓"
+                statusIcon.textColor = UIColor.white.withAlphaComponent(0.6)
+            case .read:
+                statusIcon.text = "✓✓"
+                statusIcon.textColor = Theme.Colors.accent
+            }
         } else {
             bubbleBackground.backgroundColor = Theme.Colors.glassBackground
             gradientLayer.isHidden = true
@@ -71,6 +90,7 @@ final class MessageBubbleNode: Node {
             bubbleBackground.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner, .layerMaxXMaxYCorner]
             bubbleBackground.layer.borderColor = Theme.Colors.glassBorder.cgColor
             bubbleBackground.layer.borderWidth = 0.5
+            statusIcon.isHidden = true
         }
         setNeedsLayout()
     }
@@ -94,6 +114,7 @@ final class MessageBubbleNode: Node {
         
         textLabel.frame = CGRect(x: x + padding.left, y: 4 + padding.top, width: textSize.width, height: textSize.height)
         timeLabel.frame = CGRect(x: x + bubbleWidth - 46 - padding.right, y: 4 + bubbleHeight - 20, width: 46, height: 14)
+        statusIcon.frame = CGRect(x: x + bubbleWidth - 20 - padding.right, y: 4 + bubbleHeight - 20, width: 16, height: 14)
     }
     
     static func calculateHeight(for message: Message, width: CGFloat) -> CGFloat {

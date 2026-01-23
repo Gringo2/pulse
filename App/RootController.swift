@@ -12,9 +12,11 @@ final class RootController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let isLoggedIn = UserDefaults.standard.bool(forKey: "isLoggedIn")
-        
-        if isLoggedIn {
+        if let token = UserDefaults.standard.string(forKey: "tinode_token") {
+            // Attempt auto-login with stored token
+            let secret = Data(token.utf8)
+            TinodeClient.shared.login(scheme: "token", secret: secret)
+            
             startMainApp()
         } else {
             startOnboarding()
