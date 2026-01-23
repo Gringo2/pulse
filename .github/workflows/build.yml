@@ -56,9 +56,14 @@ jobs:
 
       - name: Generate Protobuf Files
         run: |
-          export PATH="/opt/homebrew/bin:$PATH"
           mkdir -p Models/Generated
-          protoc --swift_out=./Models/Generated --swift_opt=Visibility=Public --grpc-swift_out=./Models/Generated --grpc-swift_opt=Visibility=Public model.proto
+          protoc \
+            --swift_out=./Models/Generated \
+            --swift_opt=Visibility=Public \
+            --plugin=/opt/homebrew/opt/protoc-gen-grpc-swift/bin/protoc-gen-grpc-swift \
+            --grpc-swift_out=./Models/Generated \
+            --grpc-swift_opt=Visibility=Public \
+            model.proto
 
       - name: Build (iOS Simulator)
         run: |
@@ -131,9 +136,14 @@ jobs:
         run: |
           # Install dependencies and generate also for device build
           brew install protobuf swift-protobuf grpc-swift
-          export PATH="/opt/homebrew/bin:$PATH"
           mkdir -p Models/Generated
-          protoc --swift_out=./Models/Generated --swift_opt=Visibility=Public --grpc-swift_out=./Models/Generated --grpc-swift_opt=Visibility=Public model.proto
+          protoc \
+            --swift_out=./Models/Generated \
+            --swift_opt=Visibility=Public \
+            --plugin=/opt/homebrew/opt/protoc-gen-grpc-swift/bin/protoc-gen-grpc-swift \
+            --grpc-swift_out=./Models/Generated \
+            --grpc-swift_opt=Visibility=Public \
+            model.proto
 
           xcodebuild build \
             -scheme Pulse \
