@@ -56,28 +56,35 @@ jobs:
 
       - name: Generate Protobuf Files
         run: |
-          # 1. Setup PATH
-          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
-          echo "/opt/homebrew/bin" >> $GITHUB_PATH
+          # 1. Broad Discovery in Homebrew
+          echo "Locating Protobuf binaries..."
           
-          # 2. Deep Discovery
-          echo "Finding plugins in Homebrew..."
-          PROTOC_BIN=$(find /opt/homebrew/Cellar/protobuf -name "protoc" -type f | head -n 1)
-          SWIFT_BIN=$(find /opt/homebrew/Cellar/swift-protobuf -name "protoc-gen-swift" -type f | head -n 1)
-          GRPC_BIN=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
-          
-          echo "Discovered Protoc: $PROTOC_BIN"
-          echo "Discovered Swift: $SWIFT_BIN"
-          echo "Discovered gRPC: $GRPC_BIN"
-          
-          # 3. Ensure Executable
-          chmod +x "$PROTOC_BIN" "$SWIFT_BIN" "$GRPC_BIN"
-          
-          # 4. Generate
+          # Attempt to find binaries anywhere in /opt/homebrew that are in a 'bin' folder
+          PROTOC_PATH=$(find /opt/homebrew -name protoc -type f | grep "/bin/protoc" | head -n 1)
+          SWIFT_PLUGIN=$(find /opt/homebrew -name protoc-gen-swift -type f | grep "/bin/protoc-gen-swift" | head -n 1)
+          GRPC_PLUGIN=$(find /opt/homebrew -name protoc-gen-grpc-swift -type f | grep "/bin/protoc-gen-grpc-swift" | head -n 1)
+
+          # Fallback to which
+          if [ -z "$PROTOC_PATH" ]; then PROTOC_PATH=$(which protoc); fi
+          if [ -z "$SWIFT_PLUGIN" ]; then SWIFT_PLUGIN=$(which protoc-gen-swift); fi
+          if [ -z "$GRPC_PLUGIN" ]; then GRPC_PLUGIN=$(which protoc-gen-grpc-swift); fi
+
+          echo "Final paths:"
+          echo "Protoc: $PROTOC_PATH"
+          echo "Swift Plugin: $SWIFT_PLUGIN"
+          echo "gRPC Plugin: $GRPC_PLUGIN"
+
+          if [ -z "$PROTOC_PATH" ] || [ -z "$SWIFT_PLUGIN" ] || [ -z "$GRPC_PLUGIN" ]; then
+            echo "Error: One or more binaries not found. Build environment in-flight discovery failed."
+            exit 1
+          fi
+
           mkdir -p Models/Generated
-          $PROTOC_BIN \
-            --plugin=protoc-gen-swift=$SWIFT_BIN \
-            --plugin=protoc-gen-grpc-swift=$GRPC_BIN \
+          chmod +x "$PROTOC_PATH" "$SWIFT_PLUGIN" "$GRPC_PLUGIN"
+          
+          $PROTOC_PATH \
+            --plugin=protoc-gen-swift=$SWIFT_PLUGIN \
+            --plugin=protoc-gen-grpc-swift=$GRPC_PLUGIN \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
             --grpc-swift_out=./Models/Generated \
@@ -157,16 +164,25 @@ jobs:
           brew install protobuf swift-protobuf grpc-swift
           
           # Discovery
-          PROTOC_BIN=$(find /opt/homebrew/Cellar/protobuf -name "protoc" -type f | head -n 1)
-          SWIFT_BIN=$(find /opt/homebrew/Cellar/swift-protobuf -name "protoc-gen-swift" -type f | head -n 1)
-          GRPC_BIN=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
-          
-          chmod +x "$PROTOC_BIN" "$SWIFT_BIN" "$GRPC_BIN"
-          
+          PROTOC_PATH=$(find /opt/homebrew -name protoc -type f | grep "/bin/protoc" | head -n 1)
+          SWIFT_PLUGIN=$(find /opt/homebrew -name protoc-gen-swift -type f | grep "/bin/protoc-gen-swift" | head -n 1)
+          GRPC_PLUGIN=$(find /opt/homebrew -name protoc-gen-grpc-swift -type f | grep "/bin/protoc-gen-grpc-swift" | head -n 1)
+
+          if [ -z "$PROTOC_PATH" ]; then PROTOC_PATH=$(which protoc); fi
+          if [ -z "$SWIFT_PLUGIN" ]; then SWIFT_PLUGIN=$(which protoc-gen-swift); fi
+          if [ -z "$GRPC_PLUGIN" ]; then GRPC_PLUGIN=$(which protoc-gen-grpc-swift); fi
+
+          if [ -z "$PROTOC_PATH" ] || [ -z "$SWIFT_PLUGIN" ] || [ -z "$GRPC_PLUGIN" ]; then
+            echo "Error: Binaries not found."
+            exit 1
+          fi
+
           mkdir -p Models/Generated
-          $PROTOC_BIN \
-            --plugin=protoc-gen-swift=$SWIFT_BIN \
-            --plugin=protoc-gen-grpc-swift=$GRPC_BIN \
+          chmod +x "$PROTOC_PATH" "$SWIFT_PLUGIN" "$GRPC_PLUGIN"
+          
+          $PROTOC_PATH \
+            --plugin=protoc-gen-swift=$SWIFT_PLUGIN \
+            --plugin=protoc-gen-grpc-swift=$GRPC_PLUGIN \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
             --grpc-swift_out=./Models/Generated \
