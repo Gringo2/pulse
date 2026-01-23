@@ -56,29 +56,17 @@ jobs:
 
       - name: Generate Protobuf Files
         run: |
-          # Robust PATH setup for both arm64 and x64
-          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
-          echo "/opt/homebrew/bin" >> $GITHUB_PATH
-          echo "/usr/local/bin" >> $GITHUB_PATH
+          # Fetch absolute paths from Homebrew
+          PROTOC=$(brew --prefix protobuf)/bin/protoc
+          SWIFT_PLUGIN=$(brew --prefix swift-protobuf)/bin/protoc-gen-swift
+          GRPC_PLUGIN=$(brew --prefix protoc-gen-grpc-swift)/bin/protoc-gen-grpc-swift
           
-          echo "Listing /opt/homebrew/bin for debugging:"
-          ls /opt/homebrew/bin | grep protoc || true
-          
-          PROTOC_PATH=$(which protoc)
-          SWIFT_PLUGIN=$(which protoc-gen-swift)
-          GRPC_PLUGIN=$(which protoc-gen-grpc-swift)
-          
-          echo "Protoc: $PROTOC_PATH"
-          echo "Swift Plugin: $SWIFT_PLUGIN"
-          echo "gRPC Plugin: $GRPC_PLUGIN"
-          
-          if [ -z "$SWIFT_PLUGIN" ] || [ -z "$GRPC_PLUGIN" ]; then
-            echo "Critical Error: Plugins not found in PATH."
-            exit 1
-          fi
+          echo "Using Protoc: $PROTOC"
+          echo "Using Swift Plugin: $SWIFT_PLUGIN"
+          echo "Using gRPC Plugin: $GRPC_PLUGIN"
           
           mkdir -p Models/Generated
-          $PROTOC_PATH \
+          $PROTOC \
             --plugin=protoc-gen-swift=$SWIFT_PLUGIN \
             --plugin=protoc-gen-grpc-swift=$GRPC_PLUGIN \
             --swift_out=./Models/Generated \
@@ -159,22 +147,20 @@ jobs:
           # Install dependencies
           brew install protobuf swift-protobuf grpc-swift
           
-          # Robust PATH setup
-          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
-          echo "/opt/homebrew/bin" >> $GITHUB_PATH
-          echo "/usr/local/bin" >> $GITHUB_PATH
+          # Force link to ensure prefixes work
+          brew link --overwrite protobuf swift-protobuf grpc-swift
           
-          PROTOC_PATH=$(which protoc)
-          SWIFT_PLUGIN=$(which protoc-gen-swift)
-          GRPC_PLUGIN=$(which protoc-gen-grpc-swift)
+          # Fetch absolute paths
+          PROTOC=$(brew --prefix protobuf)/bin/protoc
+          SWIFT_PLUGIN=$(brew --prefix swift-protobuf)/bin/protoc-gen-swift
+          GRPC_PLUGIN=$(brew --prefix protoc-gen-grpc-swift)/bin/protoc-gen-grpc-swift
           
-          if [ -z "$SWIFT_PLUGIN" ] || [ -z "$GRPC_PLUGIN" ]; then
-            echo "Error: Plugins not found in PATH."
-            exit 1
-          fi
+          echo "Using Protoc: $PROTOC"
+          echo "Using Swift Plugin: $SWIFT_PLUGIN"
+          echo "Using gRPC Plugin: $GRPC_PLUGIN"
           
           mkdir -p Models/Generated
-          $PROTOC_PATH \
+          $PROTOC \
             --plugin=protoc-gen-swift=$SWIFT_PLUGIN \
             --plugin=protoc-gen-grpc-swift=$GRPC_PLUGIN \
             --swift_out=./Models/Generated \
