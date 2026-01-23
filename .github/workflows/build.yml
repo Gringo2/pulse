@@ -56,19 +56,28 @@ jobs:
 
       - name: Generate Protobuf Files
         run: |
-          # Fetch absolute paths from Homebrew
-          PROTOC=$(brew --prefix protobuf)/bin/protoc
-          SWIFT_PLUGIN=$(brew --prefix swift-protobuf)/bin/protoc-gen-swift
-          GRPC_PLUGIN=$(brew --prefix protoc-gen-grpc-swift)/bin/protoc-gen-grpc-swift
+          # 1. Setup PATH
+          export PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+          echo "/opt/homebrew/bin" >> $GITHUB_PATH
           
-          echo "Using Protoc: $PROTOC"
-          echo "Using Swift Plugin: $SWIFT_PLUGIN"
-          echo "Using gRPC Plugin: $GRPC_PLUGIN"
+          # 2. Deep Discovery
+          echo "Finding plugins in Homebrew..."
+          PROTOC_BIN=$(find /opt/homebrew/Cellar/protobuf -name "protoc" -type f | head -n 1)
+          SWIFT_BIN=$(find /opt/homebrew/Cellar/swift-protobuf -name "protoc-gen-swift" -type f | head -n 1)
+          GRPC_BIN=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
           
+          echo "Discovered Protoc: $PROTOC_BIN"
+          echo "Discovered Swift: $SWIFT_BIN"
+          echo "Discovered gRPC: $GRPC_BIN"
+          
+          # 3. Ensure Executable
+          chmod +x "$PROTOC_BIN" "$SWIFT_BIN" "$GRPC_BIN"
+          
+          # 4. Generate
           mkdir -p Models/Generated
-          $PROTOC \
-            --plugin=protoc-gen-swift=$SWIFT_PLUGIN \
-            --plugin=protoc-gen-grpc-swift=$GRPC_PLUGIN \
+          $PROTOC_BIN \
+            --plugin=protoc-gen-swift=$SWIFT_BIN \
+            --plugin=protoc-gen-grpc-swift=$GRPC_BIN \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
             --grpc-swift_out=./Models/Generated \
@@ -147,22 +156,17 @@ jobs:
           # Install dependencies
           brew install protobuf swift-protobuf grpc-swift
           
-          # Force link to ensure prefixes work
-          brew link --overwrite protobuf swift-protobuf grpc-swift
+          # Discovery
+          PROTOC_BIN=$(find /opt/homebrew/Cellar/protobuf -name "protoc" -type f | head -n 1)
+          SWIFT_BIN=$(find /opt/homebrew/Cellar/swift-protobuf -name "protoc-gen-swift" -type f | head -n 1)
+          GRPC_BIN=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
           
-          # Fetch absolute paths
-          PROTOC=$(brew --prefix protobuf)/bin/protoc
-          SWIFT_PLUGIN=$(brew --prefix swift-protobuf)/bin/protoc-gen-swift
-          GRPC_PLUGIN=$(brew --prefix protoc-gen-grpc-swift)/bin/protoc-gen-grpc-swift
-          
-          echo "Using Protoc: $PROTOC"
-          echo "Using Swift Plugin: $SWIFT_PLUGIN"
-          echo "Using gRPC Plugin: $GRPC_PLUGIN"
+          chmod +x "$PROTOC_BIN" "$SWIFT_BIN" "$GRPC_BIN"
           
           mkdir -p Models/Generated
-          $PROTOC \
-            --plugin=protoc-gen-swift=$SWIFT_PLUGIN \
-            --plugin=protoc-gen-grpc-swift=$GRPC_PLUGIN \
+          $PROTOC_BIN \
+            --plugin=protoc-gen-swift=$SWIFT_BIN \
+            --plugin=protoc-gen-grpc-swift=$GRPC_BIN \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
             --grpc-swift_out=./Models/Generated \
