@@ -57,11 +57,18 @@ jobs:
       - name: Generate Protobuf Files
         run: |
           mkdir -p Models/Generated
+          # Find and ensure plugin is executable
           PLUGIN_PATH=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
+          echo "Plugin path: $PLUGIN_PATH"
+          if [ -z "$PLUGIN_PATH" ]; then
+            echo "Error: Plugin not found!"
+            exit 1
+          fi
+          chmod +x "$PLUGIN_PATH"
           protoc \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
-            --plugin=$PLUGIN_PATH \
+            --plugin=protoc-gen-grpc-swift="$PLUGIN_PATH" \
             --grpc-swift_out=./Models/Generated \
             --grpc-swift_opt=Visibility=Public \
             model.proto
@@ -138,11 +145,18 @@ jobs:
           # Install dependencies and generate also for device build
           brew install protobuf swift-protobuf grpc-swift
           mkdir -p Models/Generated
+          # Find and ensure plugin is executable
           PLUGIN_PATH=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
+          echo "Plugin path: $PLUGIN_PATH"
+          if [ -z "$PLUGIN_PATH" ]; then
+            echo "Error: Plugin not found!"
+            exit 1
+          fi
+          chmod +x "$PLUGIN_PATH"
           protoc \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
-            --plugin=$PLUGIN_PATH \
+            --plugin=protoc-gen-grpc-swift="$PLUGIN_PATH" \
             --grpc-swift_out=./Models/Generated \
             --grpc-swift_opt=Visibility=Public \
             model.proto
