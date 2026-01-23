@@ -57,10 +57,11 @@ jobs:
       - name: Generate Protobuf Files
         run: |
           mkdir -p Models/Generated
+          PLUGIN_PATH=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
           protoc \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
-            --plugin=/opt/homebrew/opt/protoc-gen-grpc-swift/bin/protoc-gen-grpc-swift \
+            --plugin=$PLUGIN_PATH \
             --grpc-swift_out=./Models/Generated \
             --grpc-swift_opt=Visibility=Public \
             model.proto
@@ -137,10 +138,11 @@ jobs:
           # Install dependencies and generate also for device build
           brew install protobuf swift-protobuf grpc-swift
           mkdir -p Models/Generated
+          PLUGIN_PATH=$(find /opt/homebrew/Cellar/protoc-gen-grpc-swift -name "protoc-gen-grpc-swift" -type f | head -n 1)
           protoc \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
-            --plugin=/opt/homebrew/opt/protoc-gen-grpc-swift/bin/protoc-gen-grpc-swift \
+            --plugin=$PLUGIN_PATH \
             --grpc-swift_out=./Models/Generated \
             --grpc-swift_opt=Visibility=Public \
             model.proto
