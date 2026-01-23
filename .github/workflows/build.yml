@@ -139,6 +139,7 @@ jobs:
           # Install dependencies and generate also for device build
           brew install protobuf swift-protobuf grpc-swift
           echo "/opt/homebrew/bin" >> $GITHUB_PATH
+          export PATH="/opt/homebrew/bin:$PATH"
           mkdir -p Models/Generated
           /opt/homebrew/bin/protoc \
             --swift_out=./Models/Generated \
