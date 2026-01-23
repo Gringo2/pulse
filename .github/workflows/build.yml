@@ -56,12 +56,11 @@ jobs:
 
       - name: Generate Protobuf Files
         run: |
-          echo "/opt/homebrew/bin" >> $GITHUB_PATH
           export PATH="/opt/homebrew/bin:$PATH"
           mkdir -p Models/Generated
-          # Plugins should now be in PATH via GITHUB_PATH update (for subsequent steps)
-          # but in THIS step we still need to refer to them or use the full path
           /opt/homebrew/bin/protoc \
+            --plugin=protoc-gen-swift=/opt/homebrew/bin/protoc-gen-swift \
+            --plugin=protoc-gen-grpc-swift=/opt/homebrew/bin/protoc-gen-grpc-swift \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
             --grpc-swift_out=./Models/Generated \
@@ -139,10 +138,11 @@ jobs:
         run: |
           # Install dependencies and generate also for device build
           brew install protobuf swift-protobuf grpc-swift
-          echo "/opt/homebrew/bin" >> $GITHUB_PATH
           export PATH="/opt/homebrew/bin:$PATH"
           mkdir -p Models/Generated
           /opt/homebrew/bin/protoc \
+            --plugin=protoc-gen-swift=/opt/homebrew/bin/protoc-gen-swift \
+            --plugin=protoc-gen-grpc-swift=/opt/homebrew/bin/protoc-gen-grpc-swift \
             --swift_out=./Models/Generated \
             --swift_opt=Visibility=Public \
             --grpc-swift_out=./Models/Generated \
